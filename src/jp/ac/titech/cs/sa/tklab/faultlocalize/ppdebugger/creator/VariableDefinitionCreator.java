@@ -13,8 +13,10 @@ class VariableDefinitionCreator {
 		em.addStatementData(new StatementData(def.getSourcePath(),def.getLineNumber(),def.getThread()));
 	}
 	
-	/*
-	 * 変数名がわからないものは飛ばす
+	/**
+	 * 変数名がわからない場合は無視する
+	 * @param def
+	 * @return　無視するときにtrue
 	 */
 	private static boolean isSkip(VariableDefinition def){
 		if(def.getDefinedVariable().getFieldInfo() != null

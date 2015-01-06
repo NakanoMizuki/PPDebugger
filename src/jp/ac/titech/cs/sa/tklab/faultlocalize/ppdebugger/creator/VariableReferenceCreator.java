@@ -37,6 +37,11 @@ public class VariableReferenceCreator {
 		lineVar.add(currentSd, em.getVariable(varName));
 	}
 	
+	/**
+	 * 変数名がわからない場合は無視する
+	 * @param ref
+	 * @return　無視するときにtrue
+	 */
 	private static boolean isSkip(VariableReference ref){
 		if(ref.getReferredVariable().getFieldInfo() != null
 				&& ref.getReferredVariable().getFieldInfo().getVariableName() == null){
