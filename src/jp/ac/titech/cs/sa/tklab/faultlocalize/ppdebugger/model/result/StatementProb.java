@@ -38,7 +38,7 @@ public class StatementProb implements Comparable<StatementProb>{
 					return 1;
 				}
 			}else{
-				return 0;
+				return statementData.getSourcePath().compareTo(o.statementData.getSourcePath());
 			}
 		}
 	}
