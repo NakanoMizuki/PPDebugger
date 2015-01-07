@@ -3,14 +3,14 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.Creator;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass.PassedModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
 
@@ -21,17 +21,14 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  */
 public class PPDebugger{
 	private final int NUM_THREAD = 8;
-	private final ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 	
 	private final int hopNum;
 	private final PassedModel passedModel;
-	private final Creator creator;
 	
 	
 	public PPDebugger(int hopNum){
 		this.hopNum = Math.max(hopNum,0);
 		passedModel = new PassedModel();
-		creator = new Creator();
 	}
 	
 	
@@ -39,6 +36,7 @@ public class PPDebugger{
 		passedModel.init();
 		System.out.println("PPDebugger starts learning. (" + passedFiles.length + "passedFiles) hop=" + hopNum);
 		//成功実行の学習
+		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 		for(File file : passedFiles){
 			executorService.submit(new Executor(passedModel, file, hopNum));
 		}
@@ -56,12 +54,28 @@ public class PPDebugger{
 	
 	public List<Result> createResults(File[] failedFailes) throws JAXBException{
 		List<Result> results = new ArrayList<Result>();
+		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
+		List<Future<Result>> futures = new ArrayList<Future<Result>>();
 		for(File file:failedFailes){
-			ExecutionModel em = creator.createExecutionModel(file,hopNum);
-			Result result =  passedModel.createResults(em,file.getName());
-			results.add(result);
+			futures.add(executorService.submit(new CreateResult(passedModel, file,hopNum)));
 		}
-		
+		executorService.shutdown();
+		while(!executorService.isTerminated()){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for(Future<Result> future : futures){
+			try {
+				results.add(future.get());
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return results;
 	}
 

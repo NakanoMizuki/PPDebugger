@@ -24,13 +24,13 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 1;
-	private final PPDebugger ppDebugger;
+	private static final int HOPNUM = 0;
+	private final PPDebugger ppdebugger;
 	private final String projectPath;
 	
 	private CUIMain(String path,int hopNum){
 		projectPath = (path+"/").replaceAll("//$", "/");
-		ppDebugger = new PPDebugger(hopNum);
+		ppdebugger = new PPDebugger(hopNum);
 		File dir = new File(projectPath + "result");
 		if(dir.exists()){
 			for(File file : dir.listFiles()){
@@ -96,8 +96,8 @@ public class CUIMain {
 			return null;
 		}
 		
-		ppDebugger.learn(passedFiles);
-		ppDebugger.printAllRanking(out);
+		ppdebugger.learn(passedFiles);
+		ppdebugger.printAllRanking(out);
 
 		
 		out.println(failedFiles.length + "failedFiles----------" );
@@ -105,7 +105,7 @@ public class CUIMain {
 		List<StatementData> faults = readFaults(faultFile);
 		int max=0,min=Integer.MAX_VALUE,sum=0;
 		boolean flag=false;
-		for(Result result: ppDebugger.createResults(failedFiles)){
+		for(Result result: ppdebugger.createResults(failedFiles)){
 			out.println(result.toString());
 			int score = result.calcScore(faults);
 			if(score != -1){

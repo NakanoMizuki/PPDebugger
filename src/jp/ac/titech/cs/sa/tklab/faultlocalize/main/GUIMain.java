@@ -51,9 +51,7 @@ public class GUIMain {
 			//tarantula.printAllRanking();
 			ppdebugger.learn(passedFiles);
 			ppdebugger.printAllRanking(out);
-			for(File file : failedFiles){
-				Result result = ppdebugger.check(file);
-				out.println("Result from " + file.getName());
+			for(Result result: ppdebugger.createResults(failedFiles)){
 				out.println(result.toString());
 			}
 			out.flush();
