@@ -1,6 +1,9 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
@@ -116,7 +119,9 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 			str += "L";
 		}
 		str += ":\n";
-		for(DataDependency dd : set){
+		List<DataDependency> ddList = new ArrayList<DataDependency>(set);
+		Collections.sort(ddList);
+		for(DataDependency dd : ddList){
 			str += "\t" + dd.toString() + ",\n";
 		}
 		return str;
@@ -125,7 +130,12 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	@Override
 	public int compareTo(DataDependencySet o) {
 		if(sd.equals(o.sd)){
-			return varName.compareTo(o.varName);
+			if(varName.equals(o.varName)){
+				if (set.size() < o.set.size()) return 1;
+				else return -1;
+			}else{
+				return varName.compareTo(o.varName);
+			}
 		}else{
 			return sd.compareTo(o.sd);
 		}

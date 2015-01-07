@@ -8,7 +8,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
  * @author nakano
  *
  */
-public class DataDependency {
+public class DataDependency implements Comparable<DataDependency>{
 	private String varName;
 	private final StatementData sd;
 	
@@ -44,5 +44,14 @@ public class DataDependency {
 	@Override
 	public String toString(){
 		return "d(" + varName + ")=" + sd.toString();
+	}
+
+	@Override
+	public int compareTo(DataDependency o) {
+		if(sd.equals(o.sd)){
+			return varName.compareTo(o.varName);
+		}else{
+			return sd.compareTo(o.sd);
+		}
 	}
 }
