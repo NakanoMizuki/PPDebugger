@@ -26,7 +26,7 @@ public class PassedModel {
 		statementStates.clear();
 	}
 	
-	public void merge(ExecutionModel em){
+	public synchronized void merge(ExecutionModel em){
 		++ numCase;
 		List<Statement> statements = em.getStatements();
 		for(Statement st : statements){

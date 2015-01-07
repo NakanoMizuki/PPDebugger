@@ -1,7 +1,9 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
@@ -50,8 +52,9 @@ public class StatementState implements Comparable<StatementState> {
 	 */
 	public void printState(IOut out){
 		out.println(sd.toString());
-		for(Iterator<DataDependencySet> it = ddsMap.keySet().iterator(); it.hasNext(); ){
-			DataDependencySet dds = it.next();
+		List<DataDependencySet> ddslist = new ArrayList<DataDependencySet>(ddsMap.keySet());
+		Collections.sort(ddslist);
+		for(DataDependencySet dds: ddslist ){
 			out.println("\t" + dds.toString().replaceAll("\n", "\n\t") + "\tcount=" + ddsMap.get(dds));
 		}
 	}

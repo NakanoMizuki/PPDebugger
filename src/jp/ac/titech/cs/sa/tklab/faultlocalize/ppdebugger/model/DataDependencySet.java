@@ -2,16 +2,14 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 
-public class DataDependencySet{
+public class DataDependencySet implements Comparable<DataDependencySet>{
 	private String varName;
 	private final StatementData sd;
 	private Set<DataDependency> set;
 	private boolean label=false;
-	private Set<Long> eventNumbers;
 	
 	
 	/**
@@ -27,7 +25,6 @@ public class DataDependencySet{
 		if(dd.getStatementData().equals(sd)){
 			label = true;
 		}
-		eventNumbers = new TreeSet<Long>();
 	}
 	
 	/**
@@ -123,6 +120,15 @@ public class DataDependencySet{
 			str += "\t" + dd.toString() + ",\n";
 		}
 		return str;
+	}
+
+	@Override
+	public int compareTo(DataDependencySet o) {
+		if(sd.equals(o.sd)){
+			return varName.compareTo(o.varName);
+		}else{
+			return sd.compareTo(o.sd);
+		}
 	}
 
 }
