@@ -24,7 +24,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 0;
+	private static final int HOPNUM = 1;
 	private final PPDebugger ppDebugger;
 	private final String projectPath;
 	
@@ -105,8 +105,7 @@ public class CUIMain {
 		List<StatementData> faults = readFaults(faultFile);
 		int max=0,min=Integer.MAX_VALUE,sum=0;
 		boolean flag=false;
-		for(File file : failedFiles){
-			Result result = ppDebugger.check(file);
+		for(Result result: ppDebugger.createResults(failedFiles)){
 			out.println(result.toString());
 			int score = result.calcScore(faults);
 			if(score != -1){
