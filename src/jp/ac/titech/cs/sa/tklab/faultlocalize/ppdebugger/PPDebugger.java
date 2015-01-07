@@ -1,6 +1,8 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.xml.bind.JAXBException;
 
@@ -16,6 +18,8 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class PPDebugger{
+	private final int NUM_THREAD = 8;
+	
 	private final int hopNum;
 	private final PassedModel passedModel;
 	private final Creator creator;
@@ -29,12 +33,21 @@ public class PPDebugger{
 	
 	
 	public void learn(File[] passedFiles)throws JAXBException {
+		ExecutorService es = Executors.newFixedThreadPool(NUM_THREAD);
 		passedModel.init();
 		System.out.println("PPDebugger starts learning. (" + passedFiles.length + "passedFiles) hop=" + hopNum);
 		//成功実行の学習
 		for(File file : passedFiles){
-			ExecutionModel em = creator.createExecutionModel(file,hopNum);
-			passedModel.merge(em);
+			es.submit(new Executor(passedModel, file, hopNum));
+		}
+		es.shutdown();
+		while(!es.isTerminated()){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		System.out.println("PPDebugger ended learning.");
 	}

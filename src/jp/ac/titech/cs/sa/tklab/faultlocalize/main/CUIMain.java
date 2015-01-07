@@ -24,7 +24,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 5;
+	private static final int HOPNUM = 0;
 	private final PPDebugger ppDebugger;
 	private final String projectPath;
 	
@@ -55,7 +55,7 @@ public class CUIMain {
 		CUIMain main = new CUIMain(args[0],HOPNUM);
 		
 		long start = System.currentTimeMillis();
-		main.execute(7);
+		main.execute(1);
 		//main.executeAllVersion();
 		
 		long end = System.currentTimeMillis();
