@@ -33,6 +33,9 @@ class TStatement{
 	public int getLineNumber(){
 		return statementData.getLineNumber();
 	}
+	public String getSourcePath(){
+		return statementData.getSourcePath();
+	}
 	public double getSuspicious(){
 		return suspicious;
 	}
