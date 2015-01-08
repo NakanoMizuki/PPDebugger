@@ -33,8 +33,17 @@ public class TarantulaMain {
 	}
 
 	public static void main(String[] args) {
+		if(args.length != 1){
+			System.out.println("Illegal Arguments");
+			System.out.println("arg[0] = projectPath");
+			return;
+		}
 		TarantulaMain launch = new TarantulaMain(args[0]);
+		
+		long start = System.currentTimeMillis();
 		launch.executeAllVersion();
+		long end = System.currentTimeMillis();
+		System.out.println("Time:" + (end - start)+ " (ms)." );
 	}
 	
 	
@@ -47,7 +56,13 @@ public class TarantulaMain {
 			int verNum = new File(projectPath + "trace").listFiles().length;
 			for(int i=1; i <= verNum; i++){
 				int score = execute(i);
-				pw.println("ver" + i + " score=" + score);
+				if(score == 0){
+					pw.println("ver" + i + "doesn't have fault.");
+				}else if(score == -1){
+					pw.println("ver" + i + ":error!");
+				}else{
+					pw.println("ver" + i + "'s score=" + score);
+				}
 			}
 			pw.flush();
 		} catch (IOException e) {
@@ -57,13 +72,18 @@ public class TarantulaMain {
 	}
 	
 	private int execute(int ver){
-		IOut out = new OutToFile(projectPath + DIRNAME + "ver" + ver + "result");
-		File[] passedFiles = new File(projectPath + "trace/v" + ver + " pass").listFiles();
-		File[] failedFiles = new File(projectPath + "trace/v" + ver + "fail").listFiles();
+		System.out.println("Ver" + ver + "start");
+		OutToFile out = new OutToFile(projectPath + DIRNAME + "/ver" + ver + "-result.txt");
+		File[] passedFiles = new File(projectPath + "trace/v" + ver + "/pass").listFiles();
+		File[] failedFiles = new File(projectPath + "trace/v" + ver + "/fail").listFiles();
 		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
+		if(faults == null || faults.isEmpty()){
+			return 0;
+		}
 		try {
 			tarantula.learn(passedFiles, failedFiles);
 			tarantula.printAllRanking(out);
+			out.flush();
 			return tarantula.calcScore(faults);
 			
 		} catch (JAXBException e) {

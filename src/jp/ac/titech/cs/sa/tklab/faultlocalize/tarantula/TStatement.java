@@ -10,7 +10,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
  *
  */
 class TStatement{
-	private StatementData statementData;
+	private final StatementData statementData;
 	private int passedCount;
 	private int failedCount;
 	private double suspicious;

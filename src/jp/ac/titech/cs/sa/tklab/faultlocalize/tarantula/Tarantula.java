@@ -27,7 +27,7 @@ public class Tarantula {
 	}
 
 	public void learn(File[] passedFiles, File[] failedFiles) throws JAXBException{
-		System.out.println("Tarantula starts learning."
+		System.out.println("Tarantula starts."
 						+ " (" + passedFiles.length + "passedFiles," + failedFiles.length + "failedFiles)");
 		
 		tsHolder.init();
@@ -54,7 +54,7 @@ public class Tarantula {
 		}
 		tsHolder.sort();
 		
-		System.out.println("Tarantula ended learning.");
+		System.out.println("Tarantula ended.");
 	}
 
 	//実行されたステートメントの集合を返す

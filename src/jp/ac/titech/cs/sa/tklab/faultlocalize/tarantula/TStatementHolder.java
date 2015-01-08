@@ -52,7 +52,7 @@ class TStatementHolder{
 		int score=0;
 		for(TStatement tst :list){
 			score ++;
-			if(tst.getStatementData().equals(fault)){
+			if(tst.getStatementData().isSame(fault)){
 				return score;
 			}
 		}
