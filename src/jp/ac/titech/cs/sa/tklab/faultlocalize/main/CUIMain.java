@@ -24,7 +24,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 1;
+	private static final int HOPNUM = 0;
 	private final PPDebugger ppdebugger;
 	private final String projectPath;
 	
@@ -101,8 +101,7 @@ public class CUIMain {
 
 		
 		out.println(failedFiles.length + "failedFiles----------" );
-		File faultFile = new File(projectPath + "faults/v" + ver + ".txt");
-		List<StatementData> faults = readFaults(faultFile);
+		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
 		int max=0,min=Integer.MAX_VALUE,sum=0;
 		boolean flag=false;
 		for(Result result: ppdebugger.createResults(failedFiles)){
@@ -129,29 +128,6 @@ public class CUIMain {
 	}
 	
 	
-	private List<StatementData> readFaults(File faultFile){
-		List<StatementData> faults = new ArrayList<StatementData>();
-		if(!faultFile.exists()){
-			return faults;
-		}
-		try {
-			@SuppressWarnings("resource")
-			BufferedReader reader = new BufferedReader(new FileReader(faultFile));
-			String line;
-			while((line = reader.readLine()) != null){
-				if(line.isEmpty()) break;
-				String[] tokens = line.split(",");
-				faults.add(new StatementData(tokens[0],tokens[1]));
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return faults;
-	}
+	
 	
 }
