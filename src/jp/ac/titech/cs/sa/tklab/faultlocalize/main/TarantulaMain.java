@@ -10,7 +10,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.tarantula.Tarantula;
 
