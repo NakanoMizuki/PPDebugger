@@ -25,25 +25,20 @@ public class Creator {
 		scope = new Scope();
 	}
 	
-	//処理効率を上げるために一度インスタンスを作成したらそれ以降はinitで初期化だけするようにする
-	private void init(){
-		model.init();		
-		lineStack.clear();
-		scope.clear();
-	}
-	
 	public ExecutionModel createExecutionModel(File file,int hopNum) throws JAXBException{
-		init();
 		BPDGHolder holder = new BPDGHolder(file);
 		Node node;
 		while((node = holder.getNextNode()) != null){
 			createDataDependency(node);
 		}
+		file = null;
+		holder = null;
+		lineStack.clear();
+		scope.clear();
 		
 		//データ依存を伝搬させる
 		Propagator.propagate(model, hopNum);
 		Compressor.compress(model);
-//		System.out.println("scope max=" + scope.getMax());
 
 		return model;
 	}

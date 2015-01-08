@@ -41,6 +41,9 @@ public class PPDebugger{
 			executorService.submit(new Executor(passedModel, file, hopNum));
 		}
 		executorService.shutdown();
+		passedFiles = null;
+		
+		//すべて終わるまで待つ
 		while(!executorService.isTerminated()){
 			try {
 				Thread.sleep(100);
@@ -60,6 +63,9 @@ public class PPDebugger{
 			futures.add(executorService.submit(new CreateResult(passedModel, file,hopNum)));
 		}
 		executorService.shutdown();
+		failedFailes = null;
+		
+		//すべて終わるまで待つ
 		while(!executorService.isTerminated()){
 			try {
 				Thread.sleep(100);

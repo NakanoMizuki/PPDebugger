@@ -15,21 +15,10 @@ public class ExecutionModel {
 	private List<Statement> statements;
 	private VariableSet vs;
 	
-	/**
-	 * コンストラクタ
-	 * @param numHop　伝搬回数
-	 */
+	
 	public ExecutionModel(){
 		statements = new ArrayList<Statement>();
 		vs = new VariableSet();
-	}
-	
-	/**
-	 * 処理効率を上げるために一度インスタンスを作成したらそれ以降はinitで初期化だけするようにする
-	 */
-	public void init(){
-		statements.clear();
-		vs.init();
 	}
 	
 	public void setStatements(List<Statement> statements){
