@@ -1,7 +1,6 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.tarantula;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,16 +20,17 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
  *
  */
 public class Tarantula {
-	private List<TStatement> tsList;
+	TStatementHolder tsHolder;
 	
 	public Tarantula(){
+		tsHolder = new TStatementHolder();
 	}
 
 	public void learn(File[] passedFiles, File[] failedFiles) throws JAXBException{
 		System.out.println("Tarantula starts learning."
 						+ " (" + passedFiles.length + "passedFiles," + failedFiles.length + "failedFiles)");
-		TStatementHolder tsHolder = new TStatementHolder();
 		
+		tsHolder.init();
 		//成功実行を学習
 		for(File f : passedFiles){
 			BPDGHolder holder = new BPDGHolder(f);
@@ -52,10 +52,8 @@ public class Tarantula {
 		for(TStatement tst:tsHolder.getList()){
 			tst.calcSuspicious(passedFiles.length, failedFiles.length);
 		}
-
-		//Rankingにリストをセット＆怪しい順にランキング
-		tsList = tsHolder.getList();
-		Collections.sort(tsList,new TStatementComparator());
+		tsHolder.sort();
+		
 		System.out.println("Tarantula ended learning.");
 	}
 
@@ -65,6 +63,9 @@ public class Tarantula {
 		Set<StatementData> sdSet = new HashSet<StatementData>();
 		while((node = holder.getNextNode()) != null){
 			EventSignature es = BXModelUtility.getEventSignature(node);
+			if(es.getSourcePath() == null || es.getLineNumber() == null){
+				continue;
+			}
 			StatementData sd = new StatementData(es);
 			sdSet.add(sd);
 		}
@@ -72,6 +73,7 @@ public class Tarantula {
 	}
 
 	public void printRanking(IOut out,int num) {
+		List<TStatement> tsList = tsHolder.getList();
 		int tmp = (num > tsList.size()) ? tsList.size() : num;
 		for(int i=0; i < tmp; i++){
 			out.println("\t" + i + ":\t" + tsList.get(i).toString());
@@ -79,12 +81,14 @@ public class Tarantula {
 	}
 
 	public void printAllRanking(IOut out) {
-		printRanking(out,tsList.size());
+		printRanking(out,tsHolder.getList().size());
 	}
 
-	public int getScore(List<StatementData> faults) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int calcScore(StatementData fault) {
+		return tsHolder.calcScore(fault);
+	}
+	public int calcScore(List<StatementData> faults) {
+		return tsHolder.calcScore(faults);
 	}
 
 }

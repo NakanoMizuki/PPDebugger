@@ -22,30 +22,10 @@ class TStatement{
 		failedCount = 0;
 		suspicious = 0;
 	}
-
 	TStatement(EventSignature es){
 		this(new StatementData(es));
 	}
 
-
-	@Override
-	public boolean equals(Object o){
-		if(o == null || !(o instanceof TStatement)){
-			return false;
-		}
-		TStatement ts = (TStatement) o;
-		return statementData.equals(ts.getStatementData());
-	}
-	@Override
-	public int hashCode(){
-		String temp = statementData.getSourcePath() + statementData.getLineNumber();
-		return temp.hashCode();
-	}
-	@Override
-	public String toString(){
-		return statementData.getSourcePath() + "@line" + statementData.getLineNumber()
-				+ "\tnPassed=" + passedCount + "  nFailed=" + failedCount + "  suspicious=" + suspicious;
-	}
 
 	public StatementData getStatementData(){
 		return statementData;
@@ -70,4 +50,23 @@ class TStatement{
 		suspicious = failedRate / (passedRate + failedRate);
 	}
 
+	
+	@Override
+	public boolean equals(Object o){
+		if(o == null || !(o instanceof TStatement)){
+			return false;
+		}
+		TStatement ts = (TStatement) o;
+		return statementData.equals(ts.getStatementData());
+	}
+	@Override
+	public int hashCode(){
+		String temp = statementData.getSourcePath() + statementData.getLineNumber();
+		return temp.hashCode();
+	}
+	@Override
+	public String toString(){
+		return statementData.getSourcePath() + "@line" + statementData.getLineNumber()
+				+ "\tnPassed=" + passedCount + "  nFailed=" + failedCount + "  suspicious=" + suspicious;
+	}
 }
