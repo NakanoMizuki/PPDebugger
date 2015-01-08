@@ -7,7 +7,6 @@ public class Scope {
 	private static final String DELIMITER="-";
 	private List<Integer> list;
 	private int next;
-	private int max=0;
 	
 	public Scope(){
 		list = new ArrayList<Integer>();
@@ -26,12 +25,8 @@ public class Scope {
 	public void exit(){
 		next = list.get(list.size()-1) +1;
 		list.remove(list.size() -1);
-		max = Math.max(max, next);
 	}
 	
-	public int getMax(){
-		return max;
-	}
 	
 	@Override
 	public String toString(){
