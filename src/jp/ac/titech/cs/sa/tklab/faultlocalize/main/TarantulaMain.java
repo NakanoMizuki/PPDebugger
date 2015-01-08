@@ -56,11 +56,11 @@ public class TarantulaMain {
 			for(int i=1; i <= verNum; i++){
 				int score = execute(i);
 				if(score == 0){
-					pw.println("ver" + i + "doesn't have fault.");
+					pw.println("v" + i + ": doesn't have fault.");
 				}else if(score == -1){
-					pw.println("ver" + i + ":error!");
+					pw.println("v" + i + ": error!");
 				}else{
-					pw.println("ver" + i + "'s score=" + score);
+					pw.println("v" + i + ": score=" + score);
 				}
 			}
 			pw.flush();
@@ -75,6 +75,9 @@ public class TarantulaMain {
 		OutToFile out = new OutToFile(projectPath + DIRNAME + "/ver" + ver + "-result.txt");
 		File[] passedFiles = new File(projectPath + "trace/v" + ver + "/pass").listFiles();
 		File[] failedFiles = new File(projectPath + "trace/v" + ver + "/fail").listFiles();
+		if(failedFiles.length == 0){
+			return 0;
+		}
 		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
 		if(faults == null || faults.isEmpty()){
 			return 0;
