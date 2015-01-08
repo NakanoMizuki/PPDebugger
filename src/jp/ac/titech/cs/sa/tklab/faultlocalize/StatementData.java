@@ -12,11 +12,12 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 public class StatementData implements Comparable<StatementData>{
 	private final String sourcePath;
 	private final int lineNumber;
-	private Thread thread;
+	private final Thread thread;
 	
 	public StatementData(String sourcePath,String lineNumber){
 		this.sourcePath = sourcePath;
 		this.lineNumber = Integer.valueOf(lineNumber);
+		thread = null;
 	}
 
 	public StatementData(String sourcePath,String lineNumber,Thread thread){
