@@ -91,7 +91,7 @@ public class CUIMain {
 			out.println("This version doesn't have failed traces.");
 			return null;
 		}
-		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + "result.txt");
+		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
 		if(faults == null || faults.isEmpty()){
 			System.out.println("This version doesn't have faults.");
 			out.println("This version doesn't have faults.");
