@@ -45,6 +45,7 @@ public class CUIMain {
 	public static void main(String[] args) throws JAXBException {
 		if(args.length != 1){
 			System.out.println("Illeagal arguments");
+			System.out.println("arg[0] = projectPath");
 			return;
 		}
 		
@@ -82,9 +83,8 @@ public class CUIMain {
 	
 	private Score execute(int ver) throws JAXBException{
 		System.out.println("Ver" + ver + " start");
-		String dirPath = projectPath + "trace/v" + ver + "/";
-		File[] passedFiles = new File(dirPath + "pass").listFiles();
-		File[] failedFiles = new File(dirPath + "fail").listFiles();
+		File[] passedFiles = new File(projectPath + "trace/v" + ver + "/pass").listFiles();
+		File[] failedFiles = new File(projectPath + "trace/v" + ver + "/fail").listFiles();
 		OutToFile out = new OutToFile(projectPath + "result/ver" + ver + "-result.txt");
 		if(failedFiles.length == 0){
 			System.out.println("This version doesn't have failed traces.");
@@ -93,11 +93,12 @@ public class CUIMain {
 		}
 		
 		ppdebugger.learn(passedFiles);
+		passedFiles = null;
 		ppdebugger.printAllRanking(out);
 
 		
 		out.println(failedFiles.length + "failedFiles----------" );
-		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
+		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + "result.txt");
 		int max=0,min=Integer.MAX_VALUE,sum=0;
 		boolean flag=false;
 		for(Result result: ppdebugger.createResults(failedFiles)){
