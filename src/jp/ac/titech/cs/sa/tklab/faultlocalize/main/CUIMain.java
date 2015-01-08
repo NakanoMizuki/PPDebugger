@@ -20,7 +20,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 0;
+	private static final int HOPNUM = 1;
 	private final PPDebugger ppdebugger;
 	private final String projectPath;
 	
@@ -69,9 +69,9 @@ public class CUIMain {
 			for(int i=1; i <= verNum; i++){
 				Score score = execute(i);
 				if(score == null){
-					writer.println("ver" + i + " : This version doesn't have failed traces.");
+					writer.println("v" + i + " : This version doesn't have failed traces or faults.");
 				}else{
-					writer.println("ver" + i + " : " + score.toString());
+					writer.println("v" + i + " : " + score.toString());
 				}
 			}
 			writer.flush();
@@ -91,6 +91,12 @@ public class CUIMain {
 			out.println("This version doesn't have failed traces.");
 			return null;
 		}
+		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + "result.txt");
+		if(faults == null || faults.isEmpty()){
+			System.out.println("This version doesn't have faults.");
+			out.println("This version doesn't have faults.");
+			return null;
+		}
 		
 		ppdebugger.learn(passedFiles);
 		passedFiles = null;
@@ -98,7 +104,6 @@ public class CUIMain {
 
 		
 		out.println(failedFiles.length + "failedFiles----------" );
-		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + "result.txt");
 		int max=0,min=Integer.MAX_VALUE,sum=0;
 		boolean flag=false;
 		for(Result result: ppdebugger.createResults(failedFiles)){
