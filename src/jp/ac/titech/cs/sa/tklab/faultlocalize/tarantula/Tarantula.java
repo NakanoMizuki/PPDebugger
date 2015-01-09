@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Node;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BPDGHolder;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BXModelUtility;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
@@ -20,10 +21,12 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
  *
  */
 public class Tarantula {
-	TStatementHolder tsHolder;
+	private final TStatementHolder tsHolder;
+	private final StatementDataFactory factory;
 	
 	public Tarantula(){
 		tsHolder = new TStatementHolder();
+		factory = StatementDataFactory.getInstance();
 	}
 
 	public void learn(File[] passedFiles, File[] failedFiles) throws JAXBException{
@@ -66,7 +69,7 @@ public class Tarantula {
 			if(es.getSourcePath() == null || es.getLineNumber() == null){
 				continue;
 			}
-			StatementData sd = new StatementData(es);
+			StatementData sd = factory.genStatementData(es);
 			sdSet.add(sd);
 		}
 		return sdSet;

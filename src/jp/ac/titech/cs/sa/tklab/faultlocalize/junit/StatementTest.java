@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Statement;
@@ -19,7 +20,9 @@ public class StatementTest {
 		Thread th = new Thread();
 		th.setThreadId("1");
 		th.setThreadName("test");
-		StatementData sd = new StatementData("test","1",th);
+		
+		StatementDataFactory factory = StatementDataFactory.getInstance();
+		StatementData sd = factory.genStatementData("test","1",th);
 		DataDependency dd = new DataDependency("x",sd);
 		DataDependencySet dds1 = new DataDependencySet(sd,dd);
 		DataDependencySet dds2 = new DataDependencySet(sd,dd);

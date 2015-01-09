@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 
 public class ReadFaults {
 	public static List<StatementData> genFaults(String path){
@@ -21,10 +22,11 @@ public class ReadFaults {
 			@SuppressWarnings("resource")
 			BufferedReader reader = new BufferedReader(new FileReader(faultFile));
 			String line;
+			StatementDataFactory factory = StatementDataFactory.getInstance();
 			while((line = reader.readLine()) != null){
 				if(line.isEmpty()) break;
 				String[] tokens = line.split(",");
-				faults.add(new StatementData(tokens[0],tokens[1]));
+				faults.add(factory.genStatementData(tokens[0],tokens[1]));
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

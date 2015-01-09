@@ -3,6 +3,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.junit;
 import static org.junit.Assert.*;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 
 import org.junit.Test;
 
@@ -25,12 +26,14 @@ public class StatementDataTest {
 		th3.setThreadId("1");
 		th3.setThreadName("dummy");
 		
-		StatementData sd1 = new StatementData("test","1",th1);
-		StatementData sd2 = new StatementData("test","2",th1);
-		StatementData sd3 = new StatementData("test","1",th1);
-		StatementData sd4 = new StatementData("hoge","1",th1);
-		StatementData sd5 = new StatementData("test","1",th2);
-		StatementData sd6 = new StatementData("test","1",th3);
+		StatementDataFactory factory = StatementDataFactory.getInstance();
+		
+		StatementData sd1 = factory.genStatementData("test","1",th1);
+		StatementData sd2 = factory.genStatementData("test","2",th1);
+		StatementData sd3 = factory.genStatementData("test","1",th1);
+		StatementData sd4 = factory.genStatementData("hoge","1",th1);
+		StatementData sd5 = factory.genStatementData("test","1",th2);
+		StatementData sd6 = factory.genStatementData("test","1",th3);
 		
 		assertFalse(sd1.equals(sd2));
 		assertTrue(sd1.equals(sd3));

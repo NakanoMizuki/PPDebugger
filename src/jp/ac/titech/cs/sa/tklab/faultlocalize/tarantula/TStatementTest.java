@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
 
 import org.junit.Test;
@@ -23,10 +24,12 @@ public class TStatementTest {
 		th.setThreadId("1");
 		th.setThreadName("name");
 		
-		StatementData sd1 = new StatementData("test","1",th);
-		StatementData sd2 = new StatementData("test","2",th);
-		StatementData sd3 = new StatementData("test","1",th);
-		StatementData sd4 = new StatementData("hoge","1",th);
+		StatementDataFactory factory = StatementDataFactory.getInstance();
+		
+		StatementData sd1 = factory.genStatementData("test","1",th);
+		StatementData sd2 = factory.genStatementData("test","2",th);
+		StatementData sd3 = factory.genStatementData("test","1",th);
+		StatementData sd4 = factory.genStatementData("hoge","1",th);
 
 		TStatement tst1 = new TStatement(sd1);
 		TStatement tst2 = new TStatement(sd2);

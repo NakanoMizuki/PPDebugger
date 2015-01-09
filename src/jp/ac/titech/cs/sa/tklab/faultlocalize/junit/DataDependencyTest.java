@@ -2,6 +2,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.junit;
 
 import static org.junit.Assert.*;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
@@ -20,9 +21,10 @@ public class DataDependencyTest {
 		Thread th = new Thread();
 		th.setThreadId("1");
 		th.setThreadName("name");
+		StatementDataFactory factory = StatementDataFactory.getInstance();
 		
-		StatementData sd1 = new StatementData("sample","1",th);
-		StatementData sd2 = new StatementData("sample","2",th);
+		StatementData sd1 = factory.genStatementData("sample","1",th);
+		StatementData sd2 = factory.genStatementData("sample","2",th);
 		DataDependency dd1 = new DataDependency("x",sd1);
 		DataDependency dd2 = new DataDependency("x",sd1);
 		DataDependency dd3 = new DataDependency("y",sd2);

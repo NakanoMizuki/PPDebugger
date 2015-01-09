@@ -1,7 +1,6 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.tarantula;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 
 /**
@@ -21,9 +20,6 @@ class TStatement{
 		passedCount = 0;
 		failedCount = 0;
 		suspicious = 0;
-	}
-	TStatement(EventSignature es){
-		this(new StatementData(es));
 	}
 
 
