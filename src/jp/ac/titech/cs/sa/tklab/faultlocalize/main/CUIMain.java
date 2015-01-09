@@ -43,17 +43,21 @@ public class CUIMain {
 	 * @throws JAXBException 
 	 */
 	public static void main(String[] args) throws JAXBException {
-		if(args.length != 1){
+		CUIMain main = null;
+		if(args.length == 1){
+			main = new CUIMain(args[0],HOPNUM);
+		}else if(args.length == 2){
+			main = new CUIMain(args[0], Integer.valueOf(args[1]));
+		}else{
 			System.out.println("Illeagal arguments");
 			System.out.println("arg[0] = projectPath");
+			System.out.println("(arg[1] = hopNum)");
 			return;
 		}
 		
-		CUIMain main = new CUIMain(args[0],HOPNUM);
-		
 		long start = System.currentTimeMillis();
-		main.execute(1);
-		//main.executeAllVersion();
+		//main.execute(1);
+		main.executeAllVersion();
 		
 		long end = System.currentTimeMillis();
 		System.out.println("Time:" + (end - start)+ " (ms)." );
@@ -128,8 +132,5 @@ public class CUIMain {
 		out.flush();
 		return score;
 	}
-	
-	
-	
 	
 }
