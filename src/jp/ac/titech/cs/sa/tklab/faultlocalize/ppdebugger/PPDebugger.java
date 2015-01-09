@@ -38,15 +38,16 @@ public class PPDebugger{
 	public void learn(File[] passedFiles)throws JAXBException {
 		passedModel.init();
 		System.out.println("PPDebugger starts learning. (" + passedFiles.length + "passedFiles) hop=" + hopNum);
-		//成功実行の学習
+		
+		//成功実行の学習(複数スレッド)
 		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 		for(File file : passedFiles){
 			executorService.submit(new Executor(passedModel,file,factory,hopNum));
 		}
-		executorService.shutdown();
 		passedFiles = null;
 		
 		//すべて終わるまで待つ
+		executorService.shutdown();
 		while(!executorService.isTerminated()){
 			try {
 				Thread.sleep(100);
@@ -55,28 +56,21 @@ public class PPDebugger{
 				e.printStackTrace();
 			}
 		}
+		
 		System.out.println("PPDebugger ended learning.");
 	}
 	
 	public List<Result> createResults(File[] failedFailes) throws JAXBException{
-		List<Result> results = new ArrayList<Result>();
 		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 		List<Future<Result>> futures = new ArrayList<Future<Result>>();
 		for(File file:failedFailes){
 			futures.add(executorService.submit(new CreateResult(passedModel,file,factory,hopNum)));
 		}
-		executorService.shutdown();
 		failedFailes = null;
+		executorService.shutdown();
 		
-		//すべて終わるまで待つ
-		while(!executorService.isTerminated()){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		//結果の取得
+		List<Result> results = new ArrayList<Result>();
 		for(Future<Result> future : futures){
 			try {
 				results.add(future.get());
