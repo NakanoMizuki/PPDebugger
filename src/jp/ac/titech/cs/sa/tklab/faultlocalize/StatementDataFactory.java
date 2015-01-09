@@ -1,6 +1,5 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize;
 
-import java.awt.Event;
 import java.util.HashSet;
 import java.util.Set;
 
