@@ -3,6 +3,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodExit;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -10,10 +11,10 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodExitCreator {
-	static void create(ExecutionModel em,MethodExit me,LineVariable lineVar){
+	static void create(ExecutionModel em,MethodExit me,LineVariable lineVar,StatementDataFactory factory){
 		if(isSkip(me, lineVar))return;
 		
-		StatementData toSd = new StatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
+		StatementData toSd = factory.genStatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
 		for(Variable variable: lineVar.getVariables()){
 			VariableDefinition def = variable.getLatestDefinition();
 			StatementData fromSd = new StatementData(def.getSourcePath(),def.getLineNumber(),def.getThread());

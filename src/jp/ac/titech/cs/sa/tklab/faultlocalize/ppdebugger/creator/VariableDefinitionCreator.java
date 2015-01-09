@@ -1,16 +1,16 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class VariableDefinitionCreator {
-	static void create(ExecutionModel em,VariableDefinition def,String scope){
+	static void create(ExecutionModel em,VariableDefinition def,String scope,StatementDataFactory factory){
 		if(isSkip(def)) return;
 		Variable variable = new Variable(NameCreator.createVariableName(def, scope),def);
 		em.getVariableSet().updateVariable(variable);
-		em.addStatementData(new StatementData(def.getSourcePath(),def.getLineNumber(),def.getThread()));
+		em.addStatementData(factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread()));
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.util.Stack;
 import javax.xml.bind.JAXBException;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Node;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BPDGHolder;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BXModelUtility;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.NodeKind;
@@ -18,11 +19,13 @@ public class Creator {
 	private ExecutionModel model;
 	private Stack<LineVariable> lineStack;
 	private Scope scope;
+	private StatementDataFactory factory;
 	
 	public Creator(){
 		model = new ExecutionModel();
 		lineStack = new Stack<LineVariable>();
 		scope = new Scope();
+		factory = new StatementDataFactory();
 	}
 	
 	public ExecutionModel createExecutionModel(File file,int hopNum) throws JAXBException{
@@ -48,10 +51,10 @@ public class Creator {
 		LineVariable lineVar;
 		switch(kind){
 		case VARIABLE_REFERENCE:
-			VariableReferenceCreator.create(model,node.getVariableReference(),scope.toString(),lineStack.peek());
+			VariableReferenceCreator.create(model,node.getVariableReference(),scope.toString(),lineStack.peek(),factory);
 			break;
 		case VARIABLE_DEFINITION:
-			VariableDefinitionCreator.create(model, node.getVariableDefinition(),scope.toString());
+			VariableDefinitionCreator.create(model, node.getVariableDefinition(),scope.toString(),factory);
 			break;
 		case METHOD_ENTRY:
 			lineStack.push(new LineVariable());
@@ -61,7 +64,7 @@ public class Creator {
 		case METHOD_EXIT:
 			lineVar = lineStack.pop();
 			scope.exit();
-			MethodExitCreator.create(model,node.getMethodExit(),lineVar);
+			MethodExitCreator.create(model,node.getMethodExit(),lineVar,factory);
 			break;
 		case CONSTRUCTOR_ENTRY:
 			lineStack.push(new LineVariable());

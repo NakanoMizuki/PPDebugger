@@ -14,22 +14,22 @@ public class StatementData implements Comparable<StatementData>{
 	private final int lineNumber;
 	private final Thread thread;
 	
-	public StatementData(String sourcePath,String lineNumber){
-		this.sourcePath = sourcePath;
-		this.lineNumber = Integer.valueOf(lineNumber);
-		thread = null;
-	}
-
+	
 	public StatementData(String sourcePath,String lineNumber,Thread thread){
 		this.sourcePath = sourcePath;
 		this.lineNumber = Integer.valueOf(lineNumber);
 		this.thread = thread;
 	}
-
+	public StatementData(String sourcePath,String lineNumber){
+		this.sourcePath = sourcePath;
+		this.lineNumber = Integer.valueOf(lineNumber);
+		thread = null;
+	}
 	public StatementData(EventSignature es){
 		this(es.getSourcePath(),es.getLineNumber(),es.getThread());
 	}
 
+	
 	public String getSourcePath(){
 		return sourcePath;
 	}
@@ -44,8 +44,7 @@ public class StatementData implements Comparable<StatementData>{
 
 	//Threadは違ってもよい
 	public boolean isSame(StatementData sd){
-		if(this.sourcePath.equals(sd.sourcePath)
-				&& this.lineNumber == sd.lineNumber)
+		if(this.sourcePath.equals(sd.sourcePath) && this.lineNumber == sd.lineNumber)
 			return true;
 		
 		return false;
