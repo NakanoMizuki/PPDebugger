@@ -1,7 +1,7 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize;
 
+
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 /**
  * ステートメントの基本情報を保存するクラス
@@ -53,15 +53,36 @@ public class StatementData implements Comparable<StatementData>{
 			return false;
 		}
 		StatementData sd = (StatementData)o;
-		if(sourcePath.equals(sd.sourcePath)
-				&& (lineNumber==sd.lineNumber)
-				&& thread.getThreadId().equals(sd.thread.getThreadId())
-				&& ((thread.getThreadName() == null && sd.thread.getThreadName() == null)		//どちらも名無しか同じ名前
-					 || thread.getThreadName().equals(sd.thread.getThreadName())) ){
-			return true;
+		if(sourcePath.equals(sd.sourcePath) && (lineNumber==sd.lineNumber)		//同一ファイルの同一行
+			&& isSameThread(sd.thread)){
+				return true;
 		}
 		return false;
 	}
+	
+	private boolean isSameThread(Thread compare){
+		if(thread == null && compare == null){				//どちらもスレッドを持たない
+			return true;
+		}else if(thread == null || compare == null){		//一方のみスレッドを持つ
+			return false;
+		}
+		if(thread.getThreadId() != null && compare.getThreadId() != null
+				&& thread.getThreadId().equals(compare.getThreadId())){			//IDが同じなら同じスレッド
+			return true;
+		}
+		if(thread.getThreadId() == null && compare.getThreadId() == null){		//IDが存在しないなら名前で比較
+			if(thread.getThreadName() == null && compare.getThreadName() == null){
+				return true;
+			}
+			if(thread.getThreadName() != null && compare.getThreadName() != null 
+					&& thread.getThreadName().equals(compare.getThreadName())){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public int hashCode(){
 		return sourcePath.hashCode() + lineNumber;
