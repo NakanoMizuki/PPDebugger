@@ -67,7 +67,7 @@ public class StatementData implements Comparable<StatementData>{
 	}
 	@Override
 	public int hashCode(){
-		return (sourcePath+lineNumber).hashCode();
+		return sourcePath.hashCode() + lineNumber;
 	}
 	@Override
 	public String toString(){

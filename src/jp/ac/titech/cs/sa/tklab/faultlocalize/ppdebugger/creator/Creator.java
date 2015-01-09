@@ -21,11 +21,11 @@ public class Creator {
 	private Scope scope;
 	private StatementDataFactory factory;
 	
-	public Creator(){
+	public Creator(StatementDataFactory factory){
 		model = new ExecutionModel();
 		lineStack = new Stack<LineVariable>();
 		scope = new Scope();
-		factory = new StatementDataFactory();
+		this.factory = factory;
 	}
 	
 	public ExecutionModel createExecutionModel(File file,int hopNum) throws JAXBException{
