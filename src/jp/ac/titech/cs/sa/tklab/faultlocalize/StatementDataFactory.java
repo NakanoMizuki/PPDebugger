@@ -1,21 +1,26 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 
 public class StatementDataFactory {
-	private static final int DATA_NUM = 1000;			//Setの初期サイズに影響。最終的に格納されるデータサイズ以上の値を指定しておくとhashの再計算が行われずに済む
-	
 	private static StatementDataFactory instance = null;
-	private Set<StatementData> sdSet;
+	private TreeSet<StatementData> sdSet;
 	
 	
 	private StatementDataFactory(){
-		sdSet = new HashSet<StatementData>(DATA_NUM * 4/3);
+		sdSet = new TreeSet<StatementData>(new Comparator<StatementData>() {
+			@Override
+			public int compare(StatementData sd1,StatementData sd2){
+				if(sd1.hashCode() == sd2.hashCode()) return 0;
+				if(sd1.hashCode() < sd2.hashCode()) return -1;
+				return 1;
+			}
+		});
 	}
 	
 	public static StatementDataFactory getInstance(){
@@ -31,12 +36,10 @@ public class StatementDataFactory {
 	
 	public StatementData genStatementData(String sourcePath,int lineNumber,Thread thread){
 		StatementData newSD = new StatementData(sourcePath,Integer.toString(lineNumber),thread);
-		int hash = newSD.hashCode();
 		synchronized (sdSet) {
-			for(StatementData sd : sdSet){
-				if(hash == sd.hashCode() && sd.equals(newSD)){
-					return sd;
-				}
+			StatementData tmp = sdSet.floor(newSD);
+			if(tmp != null && tmp.equals(newSD)){
+				return tmp;
 			}
 			sdSet.add(newSD);
 		}
