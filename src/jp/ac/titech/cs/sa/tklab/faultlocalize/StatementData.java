@@ -66,20 +66,21 @@ public class StatementData implements Comparable<StatementData>{
 		}else if(thread == null || compare == null){		//一方のみスレッドを持つ
 			return false;
 		}
-		if(thread.getThreadId() != null && compare.getThreadId() != null
-				&& thread.getThreadId().equals(compare.getThreadId())){			//IDが同じなら同じスレッド
-			return true;
-		}
-		if(thread.getThreadId() == null && compare.getThreadId() == null){		//IDが存在しないなら名前で比較
-			if(thread.getThreadName() == null && compare.getThreadName() == null){
-				return true;
-			}
-			if(thread.getThreadName() != null && compare.getThreadName() != null 
-					&& thread.getThreadName().equals(compare.getThreadName())){
-				return true;
-			}
-		}
 		
+		boolean sameId=false,sameName=false;
+		if(thread.getThreadId() == null && compare.getThreadId() == null){
+			sameId = true;
+		}else if(thread.getThreadId() != null && compare.getThreadId() != null
+				&& thread.getThreadId().equals(compare.getThreadId())){
+			sameId = true;
+		}
+		if(thread.getThreadName() == null && compare.getThreadName() == null){
+			sameName = true;
+		}else if(thread.getThreadName() != null && compare.getThreadName() != null 
+				&& thread.getThreadName().equals(compare.getThreadName())){
+			sameName = true;
+		}
+		if(sameId && sameName) return true;
 		return false;
 	}
 	

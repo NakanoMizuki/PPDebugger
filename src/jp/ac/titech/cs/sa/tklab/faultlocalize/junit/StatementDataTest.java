@@ -37,9 +37,12 @@ public class StatementDataTest {
 		
 		assertFalse(sd1.equals(sd2));
 		assertTrue(sd1.equals(sd3));
+		assertTrue(sd1 == sd3);				//同一インスタンスのはず
 		assertFalse(sd1.equals(sd4));
 		assertFalse(sd1.equals(sd5));
-		assertFalse(sd1.equals(sd6));
+		assertFalse(sd1.equals(sd6));		//IDが同じスレッドなら名前は違くても等しい
+		assertTrue(sd1 != sd6);				//スレッドが異なるので同一インスタンスではない
+		
 	}
 
 }
