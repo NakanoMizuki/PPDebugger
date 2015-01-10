@@ -1,6 +1,7 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize;
 
 import java.util.Comparator;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
@@ -9,7 +10,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 public class StatementDataFactory {
 	private static StatementDataFactory instance = null;
-	private TreeSet<StatementData> sdSet;
+	private SortedSet<StatementData> sdSet;
 	
 	
 	private StatementDataFactory(){
@@ -30,17 +31,19 @@ public class StatementDataFactory {
 		return instance;
 	}
 	
-	public int getSize(){
-		return sdSet.size();
-	}
-	
 	public StatementData genStatementData(String sourcePath,int lineNumber,Thread thread){
 		StatementData newSD = new StatementData(sourcePath,Integer.toString(lineNumber),thread);
+		//hashCodeが1だけ異なるインスタンスを生成。これは比較のためだけに用いる
+		StatementData dummy = new StatementData(sourcePath, Integer.toString(lineNumber+1),thread);
 		synchronized (sdSet) {
-			StatementData tmp = sdSet.floor(newSD);			//hashCodeが最も近いものを取り出す
-			if(tmp != null && tmp.hashCode() == newSD.hashCode() && tmp.equals(newSD)){
-				return tmp;
-			}
+			try{
+				SortedSet<StatementData> sameHashSet = sdSet.subSet(newSD,dummy);	//hashCodeが等しい要素を取り出す
+				for(StatementData tmp: sameHashSet){
+					if(tmp.equals(newSD)){
+						return tmp;					//既にセット内にある場合はセットの中身を返す
+					}
+				}
+			}catch(IllegalArgumentException e){}	//同じhashCodeのものがないとき
 			sdSet.add(newSD);
 		}
 		return newSD;
