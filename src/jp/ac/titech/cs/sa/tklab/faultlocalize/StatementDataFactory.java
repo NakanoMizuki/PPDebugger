@@ -15,7 +15,7 @@ public class StatementDataFactory {
 	private StatementDataFactory(){
 		sdSet = new TreeSet<StatementData>(new Comparator<StatementData>() {
 			@Override
-			public int compare(StatementData sd1,StatementData sd2){
+			public int compare(StatementData sd1,StatementData sd2){	//hashCodeの昇順
 				if(sd1.hashCode() == sd2.hashCode()) return 0;
 				if(sd1.hashCode() < sd2.hashCode()) return -1;
 				return 1;
@@ -37,8 +37,8 @@ public class StatementDataFactory {
 	public StatementData genStatementData(String sourcePath,int lineNumber,Thread thread){
 		StatementData newSD = new StatementData(sourcePath,Integer.toString(lineNumber),thread);
 		synchronized (sdSet) {
-			StatementData tmp = sdSet.floor(newSD);
-			if(tmp != null && tmp.equals(newSD)){
+			StatementData tmp = sdSet.floor(newSD);			//hashCodeが最も近いものを取り出す
+			if(tmp != null && tmp.hashCode() == newSD.hashCode() && tmp.equals(newSD)){
 				return tmp;
 			}
 			sdSet.add(newSD);
