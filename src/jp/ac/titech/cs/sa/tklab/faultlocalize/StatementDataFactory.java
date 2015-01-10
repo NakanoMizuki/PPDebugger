@@ -8,12 +8,14 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 
 public class StatementDataFactory {
+	private static final int DATA_NUM = 1000;			//Setの初期サイズに影響。最終的に格納されるデータサイズ以上の値を指定しておくとhashの再計算が行われずに済む
+	
 	private static StatementDataFactory instance = null;
 	private Set<StatementData> sdSet;
 	
 	
 	private StatementDataFactory(){
-		sdSet = new HashSet<StatementData>();
+		sdSet = new HashSet<StatementData>(DATA_NUM * 4/3);
 	}
 	
 	public static StatementDataFactory getInstance(){
@@ -21,6 +23,10 @@ public class StatementDataFactory {
 			instance = new StatementDataFactory();
 		}
 		return instance;
+	}
+	
+	public int getSize(){
+		return sdSet.size();
 	}
 	
 	public StatementData genStatementData(String sourcePath,int lineNumber,Thread thread){
