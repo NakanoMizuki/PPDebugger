@@ -39,7 +39,7 @@ public class DataDependency implements Comparable<DataDependency>{
 	}
 	@Override
 	public int hashCode(){
-		return (varName + sd.toString()).hashCode();
+		return varName.hashCode() + sd.hashCode();
 	}
 	@Override
 	public String toString(){
