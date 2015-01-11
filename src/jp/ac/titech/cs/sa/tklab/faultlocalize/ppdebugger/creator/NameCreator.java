@@ -43,7 +43,7 @@ public class NameCreator {
 	}
 	
 	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,String scope){
-		if(fieldInfo != null){
+		if(fieldInfo != null && fieldInfo.getOwnerObject() != null){
 			if(fieldInfo.getOwnerObject().getObjectId() != null){
 				return fieldInfo.getVariableName() + DELIMITER + fieldInfo.getOwnerObject().getObjectId();
 			}else{
