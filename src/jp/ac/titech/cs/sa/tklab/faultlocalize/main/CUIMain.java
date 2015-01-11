@@ -20,14 +20,19 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 1;
+	private static final int HOPNUM = 0;
 	private final PPDebugger ppdebugger;
-	private final String projectPath;
+	private final String tracePath;
+	private final String faultPath;
+	private final String resultPath;
 	
 	private CUIMain(String path,int hopNum){
-		projectPath = (path+"/").replaceAll("//$", "/");
 		ppdebugger = new PPDebugger(hopNum);
-		File dir = new File(projectPath + "result");
+		String projectPath = (path+"/").replaceAll("//$", "/");
+		tracePath = projectPath + "trace";
+		faultPath = projectPath + "faults";
+		resultPath = projectPath + "result/hop" + hopNum;
+		File dir = new File(resultPath);
 		if(dir.exists()){
 			for(File file : dir.listFiles()){
 				file.delete();
@@ -56,8 +61,8 @@ public class CUIMain {
 		}
 		
 		long start = System.currentTimeMillis();
-		//main.execute(1);
-		main.executeAllVersion();
+		main.execute(1);
+		//main.executeAllVersion();
 		
 		long end = System.currentTimeMillis();
 		System.out.println("Time:" + (end - start)+ " (ms)." );
@@ -65,8 +70,8 @@ public class CUIMain {
 
 
 	private void executeAllVersion() throws JAXBException{
-		int verNum = new File(projectPath+"trace").listFiles().length;
-		File resultScore = new File(projectPath + "result/score.txt");
+		int verNum = new File(tracePath).listFiles().length;
+		File resultScore = new File(resultPath + "/score.txt");
 		try {
 			@SuppressWarnings("resource")
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(resultScore)));
@@ -87,15 +92,15 @@ public class CUIMain {
 	
 	private Score execute(int ver) throws JAXBException{
 		System.out.println("Ver" + ver + " start");
-		File[] passedFiles = new File(projectPath + "trace/v" + ver + "/pass").listFiles();
-		File[] failedFiles = new File(projectPath + "trace/v" + ver + "/fail").listFiles();
-		OutToFile out = new OutToFile(projectPath + "result/ver" + ver + "-result.txt");
+		File[] passedFiles = new File(tracePath + "/v" + ver + "/pass").listFiles();
+		File[] failedFiles = new File(tracePath + "/v" + ver + "/fail").listFiles();
+		OutToFile out = new OutToFile(resultPath +  "/ver" + ver + "-result.txt");
 		if(failedFiles.length == 0){
 			System.out.println("This version doesn't have failed traces.");
 			out.println("This version doesn't have failed traces.");
 			return null;
 		}
-		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
+		List<StatementData> faults = ReadFaults.genFaults(faultPath + "/v" + ver + ".txt");
 		if(faults == null || faults.isEmpty()){
 			System.out.println("This version doesn't have faults.");
 			out.println("This version doesn't have faults.");
