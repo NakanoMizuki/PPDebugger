@@ -43,11 +43,15 @@ public class NameCreator {
 	}
 	
 	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,String scope){
-		if(fieldInfo != null && fieldInfo.getOwnerObject() != null){
-			if(fieldInfo.getOwnerObject().getObjectId() != null){
-				return fieldInfo.getVariableName() + DELIMITER + fieldInfo.getOwnerObject().getObjectId();
+		if(fieldInfo != null){
+			if(fieldInfo.getOwnerObject() != null){	//普通のフィールド
+				if(fieldInfo.getOwnerObject().getObjectId() != null){
+					return fieldInfo.getVariableName() + DELIMITER + fieldInfo.getOwnerObject().getObjectId();
+				}else{
+					return fieldInfo.getVariableName() + DELIMITER  + fieldInfo.getOwnerObject().getClassName() + DELIMITER + STATIC;
+				}
 			}else{
-				return fieldInfo.getVariableName() + DELIMITER  + fieldInfo.getOwnerObject().getClassName() + DELIMITER + STATIC;
+				return fieldInfo.getVariableName();
 			}
 		}else if(localInfo != null){
 			return localInfo.getVariableName() + DELIMITER + scope;
