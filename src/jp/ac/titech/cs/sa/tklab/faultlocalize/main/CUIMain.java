@@ -20,7 +20,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 0;
+	private static final int HOPNUM = 2;
 	private final PPDebugger ppdebugger;
 	private final String tracePath;
 	private final String faultPath;

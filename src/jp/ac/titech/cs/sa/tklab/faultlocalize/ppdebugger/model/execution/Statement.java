@@ -1,9 +1,12 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
@@ -13,8 +16,9 @@ public class Statement {
 	private final StatementData sd;
 	/**
 	 * 一段階のデータ依存で作られたものを保存する。
+	 * イベント番号順に並べて保存
 	 */
-	private List<DataDependencySet> originals;
+	private SortedSet<DataDependencySet> originals;
 	
 	/**
 	 * すべてのデータ依存を保存。伝播後の結果も持つ
@@ -37,7 +41,14 @@ public class Statement {
 	
 	public Statement(StatementData sd){
 		this.sd = sd;
-		originals = new ArrayList<DataDependencySet>();
+		originals = new TreeSet<DataDependencySet>(new Comparator<DataDependencySet>() {
+			@Override
+			public int compare(DataDependencySet dds1,DataDependencySet dds2){
+				if(dds1.getEventNumber() == dds2.getEventNumber()) return 0;
+				if(dds1.getEventNumber() < dds2.getEventNumber()) return -1;
+				return 1;
+			}
+		});
 		ddsList = new ArrayList<DataDependencySet>();
 		propagatables = new HashSet<DataDependencySet>();
 		nextPropagations = new HashSet<DataDependencySet>();
@@ -53,7 +64,7 @@ public class Statement {
 	public StatementData getStatementData(){
 		return sd;
 	}
-	public List<DataDependencySet> getOriginals(){
+	public SortedSet<DataDependencySet> getOriginals(){
 		return originals;
 	}
 	public Set<DataDependencySet> getPropagatables(){

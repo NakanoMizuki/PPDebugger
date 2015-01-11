@@ -12,7 +12,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	private String varName;
 	private final StatementData sd;
 	private Set<DataDependency> set;
-	private boolean label=false;
+	private final boolean label;
 	private int eventNumber;
 	
 	
@@ -29,6 +29,8 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		this.eventNumber = eventNumber;
 		if(dd.getStatementData().equals(sd)){
 			label = true;
+		}else{
+			label = false;
 		}
 	}
 	
@@ -38,11 +40,13 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 * @param varName
 	 * @param set
 	 */
-	public DataDependencySet(StatementData sd,String varName,Set<DataDependency> set,boolean label){
+	public DataDependencySet(StatementData sd,String varName,int eventNumber ,Set<DataDependency> set,boolean label){
 		this.sd = sd;
 		this.varName = varName;
+		this.eventNumber = eventNumber;
 		this.set = set;
 		this.label = label;
+		eventNumber = -1;
 	}
 	
 	
@@ -71,6 +75,10 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 
 	public boolean isLabeled(){
 		return label;
+	}
+	
+	public void setEventNumber(int eventNumber){
+		this.eventNumber = eventNumber;
 	}
 	
 	public int getEventNumber(){
