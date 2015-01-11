@@ -13,6 +13,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	private final StatementData sd;
 	private Set<DataDependency> set;
 	private boolean label=false;
+	private int eventNumber;
 	
 	
 	/**
@@ -20,11 +21,12 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 * @param sd
 	 * @param dd
 	 */
-	public DataDependencySet(StatementData sd,DataDependency dd){
+	public DataDependencySet(StatementData sd,DataDependency dd,int eventNumber){
 		this.sd = sd;
 		this.varName = dd.getVarName();
 		set = new HashSet<DataDependency>();
 		set.add(dd);
+		this.eventNumber = eventNumber;
 		if(dd.getStatementData().equals(sd)){
 			label = true;
 		}
@@ -71,45 +73,47 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		return label;
 	}
 	
-	/**
-	 * 名前が一致するか調べる
-	 * ただし、ラベルがついているものとついていないものは別物とする
-	 * @param dds 比較するインスタンス
-	 * @return 同様の名前ならtrue、それ以外でfalse
-	 */
-	public boolean isSameName(DataDependencySet dds){
-		if(dds.label != label) return false;
-		if(dds.sd.equals(sd) && dds.varName.equals(varName)) return true;
-		return false;
+	public int getEventNumber(){
+		return eventNumber;
 	}
 	
 	/**
-	 * 中身もすべて等しい
+	 * eventNumbersは異なってよい
+	 * @param dds 比較するインスタンス
+	 * @return 同様ならtrue、それ以外でfalse
+	 */
+	public boolean isSame(DataDependencySet comparedds){
+		if(comparedds.label != label) return false;
+		if(!sd.equals(comparedds.sd) ||  !varName.equals(comparedds.varName)) return false;
+		
+		//セットの中身の比較
+		if(set.size() != comparedds.set.size()) return false;
+		label:for(DataDependency dd1 :set){
+			for(DataDependency dd2 : comparedds.set){			//同一のDataDependencyが存在するか
+				if(dd1.equals(dd2)){
+					continue label;
+				}
+			}
+			return false;				//中身のDataDependencyがひとつでも違ったら別の物
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * eventNumberも等しい
 	 */
 	@Override
 	public boolean equals(Object o){
 		if(! (o instanceof DataDependencySet)) return false;
 		DataDependencySet comparedds = (DataDependencySet) o;
-		if(sd.equals(comparedds.sd) && varName.equals(comparedds.varName)){
-			//セットの中身の比較
-			if(set.size() == comparedds.set.size()){
-				label:for(DataDependency dd1 :set){
-					for(DataDependency dd2 : comparedds.set){			//同一のDataDependencyが存在するか
-						if(dd1.equals(dd2)){
-							continue label;
-						}
-					}
-					return false;				//中身のDataDependencyがひとつでも違ったら別の物
-				}
-				return true;
-			}
-		}	
-		
-		return false;
+		if(eventNumber != comparedds.eventNumber) return false;
+		return isSame(comparedds);
 	}
+	
 	@Override
 	public int hashCode(){
-		return (sd.toString() + varName).hashCode();
+		return sd.hashCode() + varName.hashCode();
 	}
 	
 	@Override

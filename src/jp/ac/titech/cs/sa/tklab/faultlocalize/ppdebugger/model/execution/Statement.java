@@ -12,7 +12,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet
 public class Statement {
 	private final StatementData sd;
 	/**
-	 * 一段階のデータ依存で作られたものを保存する。つまり伝播がおきる前のもの
+	 * 一段階のデータ依存で作られたものを保存する。
 	 */
 	private List<DataDependencySet> originals;
 	
@@ -67,10 +67,10 @@ public class Statement {
 	 * @return　重複する要素がすでに存在するときにtrue、初めての要素ならfalseを返す
 	 */
 	private boolean addDuplication(DataDependencySet dds){
-		for(DataDependencySet tmp : ddsList){
-			if(tmp.isSameName(dds)){
+		for(DataDependencySet contentdds : ddsList){
+			if(contentdds.isSame(dds)){
 				for(DataDependency dd :dds.getSet()){
-					tmp.addDataDependency(dd);
+					contentdds.addDataDependency(dd);
 				}
 				return true;
 			}

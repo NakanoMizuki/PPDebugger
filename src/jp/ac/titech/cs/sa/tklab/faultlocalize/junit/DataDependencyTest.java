@@ -33,9 +33,9 @@ public class DataDependencyTest {
 		assertFalse(dd1.equals(dd3));
 		
 		
-		DataDependencySet dds1 = new DataDependencySet(sd1,dd1);
-		DataDependencySet dds2 = new DataDependencySet(sd1,dd2);
-		DataDependencySet dds3 = new DataDependencySet(sd1,dd3);
+		DataDependencySet dds1 = new DataDependencySet(sd1,dd1,1);
+		DataDependencySet dds2 = new DataDependencySet(sd1,dd2,1);
+		DataDependencySet dds3 = new DataDependencySet(sd1,dd3,1);
 		assertTrue(dds1.isLabeled());
 		assertFalse(dds3.isLabeled());
 		assertTrue(dds1.equals(dds2));
@@ -43,10 +43,10 @@ public class DataDependencyTest {
 		
 		dds1.addDataDependency(dd3);
 		assertNotEquals(dds1,dds2);				//イコールではないが
-		assertTrue(dds1.isSameName(dds2));		//名前は同じ
+		assertTrue(dds1.isSame(dds2));		//名前は同じ
 		dds2.addDataDependency(dd3);
 		assertEquals(dds1,dds2);
-		assertTrue(dds1.isSameName(dds2));
+		assertTrue(dds1.isSame(dds2));
 	
 		
 	}

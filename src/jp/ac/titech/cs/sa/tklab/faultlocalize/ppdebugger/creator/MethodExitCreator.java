@@ -19,7 +19,7 @@ class MethodExitCreator {
 			VariableDefinition def = variable.getLatestDefinition();
 			StatementData fromSd = factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread());
 			DataDependency dd = new DataDependency(variable.getVarName(),fromSd);
-			DataDependencySet dds = new DataDependencySet(toSd, dd);
+			DataDependencySet dds = new DataDependencySet(toSd, dd,Integer.valueOf(me.getEventNumber()));
 			em.addDataDependencySet(toSd, dds);
 		}
 	}

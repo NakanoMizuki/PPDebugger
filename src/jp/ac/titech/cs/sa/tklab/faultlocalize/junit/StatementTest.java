@@ -24,8 +24,8 @@ public class StatementTest {
 		StatementDataFactory factory = StatementDataFactory.getInstance();
 		StatementData sd = factory.genStatementData("test","1",th);
 		DataDependency dd = new DataDependency("x",sd);
-		DataDependencySet dds1 = new DataDependencySet(sd,dd);
-		DataDependencySet dds2 = new DataDependencySet(sd,dd);
+		DataDependencySet dds1 = new DataDependencySet(sd,dd,1);
+		DataDependencySet dds2 = new DataDependencySet(sd,dd,1);
 		
 		Statement st = new Statement(sd);
 		

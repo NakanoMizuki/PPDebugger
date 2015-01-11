@@ -31,7 +31,7 @@ public class VariableReferenceCreator {
 		
 		//データ依存を作成
 		DataDependency dd = new DataDependency(NameCreator.createVariableName(ref, scope),fromSd);
-		DataDependencySet dds = new DataDependencySet(currentSd,dd);
+		DataDependencySet dds = new DataDependencySet(currentSd,dd,Integer.valueOf(ref.getEventNumber()));
 		
 		//依存先のステートメントにデータ依存を追加
 		em.addDataDependencySet(currentSd, dds);
