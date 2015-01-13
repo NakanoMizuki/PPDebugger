@@ -20,9 +20,9 @@ public class NameCreator {
 	public static String createMethodName(MethodEntry entry){
 		String name = "";
 		if(entry.getCallerSourcePath() != null){	//mainメソッドはCallerSourcePathを持たない
-			name += entry.getCallerSourcePath();
+			name += entry.getCallerSourcePath() + METHODNAME_DELIMITER;
 		}
-		name += METHODNAME_DELIMITER + entry.getMethodSignature().getMethodName();
+		name += entry.getMethodSignature().getMethodName();
 		name += METHODNAME_DELIMITER + entry.getMethodSignature().getReturnType();
 		name += METHODNAME_DELIMITER;
 		return name;
@@ -31,9 +31,9 @@ public class NameCreator {
 	public static String createMethodName(ConstructorEntry entry){
 		String name = "";
 		if(entry.getCallerSourcePath() != null){	//mainメソッドはCallerSourcePathを持たない
-			name += entry.getCallerSourcePath();
+			name += entry.getCallerSourcePath() + METHODNAME_DELIMITER;
 		}
-		name += METHODNAME_DELIMITER + entry.getMethodSignature().getMethodName();
+		name += entry.getMethodSignature().getMethodName();
 		name += METHODNAME_DELIMITER + entry.getMethodSignature().getReturnType();
 		name += METHODNAME_DELIMITER;
 		return name;
