@@ -11,6 +11,7 @@ public class NameCreator {
 	private static final String DELIMITER = "#";
 	private static final String METHODNAME_DELIMITER = ":";
 	private static final String STATIC = "Static";
+	private static final String LOCALNAME = "*Local";
 	
 	
 	public static String getOriginalName(String name){
@@ -48,7 +49,7 @@ public class NameCreator {
 	}
 	
 	public static String createVariableName(Scope scope,int stackAddress){
-		return scope.getMethodName() + stackAddress + DELIMITER + scope.getScope();
+		return scope.getMethodName() + LOCALNAME + stackAddress + DELIMITER + scope.getScope();
 	}
 	
 	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,Scope scope){

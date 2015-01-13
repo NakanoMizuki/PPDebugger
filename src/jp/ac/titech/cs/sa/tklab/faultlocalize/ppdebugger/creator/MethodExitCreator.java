@@ -11,16 +11,17 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodExitCreator {
-	static void create(ExecutionModel em,MethodExit me,LineVariable lineVar,StatementDataFactory factory){
-		if(isSkip(me, lineVar,factory))return;
+	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,StatementDataFactory factory){
+		if(isSkip(me, calleeLine,factory))return;
 		
 		StatementData toSd = factory.genStatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
-		for(Variable variable: lineVar.getVariables()){
+		for(Variable variable: calleeLine.getVariables()){
 			VariableDefinition def = variable.getLatestDefinition();
 			StatementData fromSd = factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread());
 			DataDependency dd = new DataDependency(variable.getVarName(),fromSd);
 			DataDependencySet dds = new DataDependencySet(toSd, dd,Integer.valueOf(me.getEventNumber()));
 			em.addDataDependencySet(toSd, dds);
+			calleeLine.add(toSd,variable);
 		}
 	}
 	

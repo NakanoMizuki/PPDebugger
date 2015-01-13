@@ -67,7 +67,9 @@ public class Creator {
 		case METHOD_EXIT:
 			lineVar = lineStack.pop();
 			scope.exit();
-			MethodExitCreator.create(model,node.getMethodExit(),lineVar,factory);
+			if(!lineStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
+				MethodExitCreator.create(model,node.getMethodExit(),lineVar,lineStack.peek(),factory);
+			}
 			break;
 		case CONSTRUCTOR_ENTRY:
 			lineStack.push(new LineVariable());

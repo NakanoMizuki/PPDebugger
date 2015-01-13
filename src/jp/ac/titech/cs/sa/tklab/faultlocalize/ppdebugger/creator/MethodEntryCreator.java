@@ -70,7 +70,7 @@ class MethodEntryCreator {
 		return true;
 	}
 	
-	private static void createDataDependency(ExecutionModel em,MethodEntry me,LineVariable lineVar,Scope scope){
+	private static void createDataDependency(ExecutionModel model,MethodEntry me,LineVariable lineVar,Scope scope){
 		MethodSignature signature = me.getMethodSignature();
 		List<String> argumentTypes = signature.getArgumentTypes().getTypeNames();
 		List<Object> argumentValues = me.getArgumentValues().getPrimitiveValueInfosAndObjectInfos();
@@ -79,7 +79,6 @@ class MethodEntryCreator {
 		int stackAddress = start;		//スタックの何番目に格納される引数か。
 		for(int i=start; i < argumentTypes.size(); i++){
 			String type = argumentTypes.get(i);
-			stackAddress += getByteSize(type);
 			int index = -1;
 			if(isPrimitiveType(type)){
 				PrimitiveValueInfo value = (PrimitiveValueInfo)argumentValues.get(i);
@@ -90,8 +89,9 @@ class MethodEntryCreator {
 			}
 			if(index != -1){
 				Variable variable = new Variable(NameCreator.createVariableName(scope, stackAddress), lineVar.getVariable(i).getLatestDefinition());
-				em.getVariableSet().updateVariable(variable);
+				model.getVariableSet().updateVariable(variable);
 			}
+			stackAddress += getByteSize(type);
 		}
 	}
 	
@@ -110,19 +110,19 @@ class MethodEntryCreator {
 	 * @return なければ-1、あればリスト内のインデックスを返す。
 	 */
 	private static int match(PrimitiveValueInfo valueInfo,List<Variable> variables){
+		if(valueInfo.getPrimitiveValue() == null) return -1;
 		for(int i= 0; i < variables.size(); i++){
 			VariableInfoLeafType varInfo = variables.get(i).getLatestDefinition().getDefinedVariable();
-			PrimitiveValueInfo current;
+			PrimitiveValueInfo current = null;
 			if(varInfo.getFieldInfo() != null){
 				current = varInfo.getFieldInfo().getValue().getPrimitiveValueInfo();
 			}else if(varInfo.getLocalVariableInfo() != null){
 				current = varInfo.getLocalVariableInfo().getValue().getPrimitiveValueInfo();
-			}else {
-				continue;
 			}
+			if(current == null || current.getPrimitiveValue() == null){ continue;}
 			if(isSameType(valueInfo.getPrimitiveTypeName(), current.getPrimitiveTypeName())
-					&& isSameValue(valueInfo.getPrimitiveValue(), current.getPrimitiveValue()))
-				return i;
+						&& isSameValue(valueInfo.getPrimitiveValue(), current.getPrimitiveValue()))
+					return i;
 		}
 		return -1;
 	}
