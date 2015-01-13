@@ -7,10 +7,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodEntry;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodSignature;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.ObjectInfoType;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.PrimitiveValueInfo;
-import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.ValueInfoLeafType;
-import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableInfoLeafType;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
@@ -137,6 +134,11 @@ class MethodEntryCreator {
 		if(value1.equals(value2)) return true;
 		if(value1.equals("true") && value2.equals("1")) return true;
 		if(value1.equals("1") && value2.equals("true")) return true;
+		if(value1.equals("false") && value2.equals("0")) return true;
+		if(value1.equals("0") && value2.equals("false")) return true;
+		if(value1.length() == 1 && value2.length() == 1){	//char
+			if(Character.getNumericValue(value1.charAt(0)) == Character.getNumericValue(value2.charAt(0))) return true;
+		}
 		return false;
 
 	}
