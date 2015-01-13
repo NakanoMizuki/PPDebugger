@@ -24,8 +24,13 @@ public class LineVariable {
 	public StatementData getStatementData(){
 		return sd;
 	}
+	
 	public List<Variable> getVariables(){
 		return variables;
+	}
+	
+	public Variable getVariable(int index){
+		return variables.get(index);
 	}
 
 	public void reset(){

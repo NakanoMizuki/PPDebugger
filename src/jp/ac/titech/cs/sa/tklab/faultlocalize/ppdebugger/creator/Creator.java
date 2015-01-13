@@ -60,7 +60,7 @@ public class Creator {
 			scope.entry(NameCreator.createMethodName(node.getMethodEntry()));
 			if(!lineStack.empty()){		//メインメソッドはempty
 				lineVar = lineStack.peek();
-				MethodEntryCreator.create(model,node.getMethodEntry(),lineVar,factory);
+				MethodEntryCreator.create(model,node.getMethodEntry(),lineVar,scope);
 			}
 			lineStack.push(new LineVariable());
 			break;
