@@ -6,7 +6,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Executi
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class VariableDefinitionCreator {
-	static void create(ExecutionModel em,VariableDefinition def,String scope,StatementDataFactory factory){
+	static void create(ExecutionModel em,VariableDefinition def,Scope scope,StatementDataFactory factory){
 		if(isSkip(def)) return;
 		Variable variable = new Variable(NameCreator.createVariableName(def, scope),def);
 		em.getVariableSet().updateVariable(variable);

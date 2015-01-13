@@ -51,15 +51,18 @@ public class Creator {
 		LineVariable lineVar;
 		switch(kind){
 		case VARIABLE_REFERENCE:
-			VariableReferenceCreator.create(model,node.getVariableReference(),scope.toString(),lineStack.peek(),factory);
+			VariableReferenceCreator.create(model,node.getVariableReference(),scope,lineStack.peek(),factory);
 			break;
 		case VARIABLE_DEFINITION:
-			VariableDefinitionCreator.create(model, node.getVariableDefinition(),scope.toString(),factory);
+			VariableDefinitionCreator.create(model, node.getVariableDefinition(),scope,factory);
 			break;
 		case METHOD_ENTRY:
+			scope.entry(NameCreator.createMethodName(node.getMethodEntry()));
+			if(!lineStack.empty()){		//メインメソッドはempty
+				lineVar = lineStack.peek();
+				MethodEntryCreator.create(model,node.getMethodEntry(),lineVar,factory);
+			}
 			lineStack.push(new LineVariable());
-			scope.entry();
-			MethodEntryCreator.create(model,node.getMethodEntry());
 			break;
 		case METHOD_EXIT:
 			lineVar = lineStack.pop();
@@ -68,7 +71,7 @@ public class Creator {
 			break;
 		case CONSTRUCTOR_ENTRY:
 			lineStack.push(new LineVariable());
-			scope.entry();
+			scope.entry(NameCreator.createMethodName(node.getConstructorEntry()));
 			ConstructorEntryCreator.create(model,node.getConstructorEntry());
 			break;
 		case CONSTRUCTOR_EXIT:

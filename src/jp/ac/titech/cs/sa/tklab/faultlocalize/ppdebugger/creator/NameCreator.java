@@ -9,40 +9,53 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableReference;
 
 public class NameCreator {
 	private static final String DELIMITER = "#";
-	private static final String STATIC = "st";
+	private static final String METHODNAME_DELIMITER = ":";
+	private static final String STATIC = "Static";
 	
 	
 	public static String getOriginalName(String name){
 		return name.replaceAll(DELIMITER + ".+$", "");
 	}
 	
-	/*
 	public static String createMethodName(MethodEntry entry){
-		String name = entry.getCallerSourcePath();
-		name += DELIMITER + entry.getMethodSignature().getMethodName();
-		name += DELIMITER + entry.getMethodSignature().getReturnType();
-		name += DELIMITER + entry.getMethodSignature().getArgumentTypes();
+		String name = "";
+		if(entry.getCallerSourcePath() != null){
+			name += entry.getCallerSourcePath();
+		}else{	//mainメソッドはCallerSourcePathを持たない
+			name += entry.getCalleeSourcePath();
+		}
+		name += METHODNAME_DELIMITER + entry.getMethodSignature().getMethodName();
+		name += METHODNAME_DELIMITER + entry.getMethodSignature().getReturnType();
+		name += METHODNAME_DELIMITER;
 		return name;
 	}
 	
 	public static String createMethodName(ConstructorEntry entry){
-		String name = entry.getCallerSourcePath();
-		name += DELIMITER + entry.getMethodSignature().getMethodName();
-		name += DELIMITER + entry.getMethodSignature().getReturnType();
-		name += DELIMITER + entry.getMethodSignature().getArgumentTypes();
+		String name = "";
+		if(entry.getCallerSourcePath() != null){
+			name += entry.getCallerSourcePath();
+		}else{	//mainメソッドはCallerSourcePathを持たない
+			name += entry.getCalleeSourcePath();
+		}
+		name += METHODNAME_DELIMITER + entry.getMethodSignature().getMethodName();
+		name += METHODNAME_DELIMITER + entry.getMethodSignature().getReturnType();
+		name += METHODNAME_DELIMITER;
 		return name;
 	}
-	*/
 	
-	public static String createVariableName(VariableDefinition def,String scope){
+	public static String createVariableName(VariableDefinition def,Scope scope){
 		return createVariableName(def.getDefinedVariable().getFieldInfo(),def.getDefinedVariable().getLocalVariableInfo(), scope);
 	}
 	
-	public static String createVariableName(VariableReference ref,String scope){
+	public static String createVariableName(VariableReference ref,Scope scope){
 		return createVariableName(ref.getReferredVariable().getFieldInfo(),ref.getReferredVariable().getLocalVariableInfo(),scope);
 	}
 	
-	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,String scope){
+	public static String createVariableName(Scope scope,int argNo){
+		return scope.getMethodName() + argNo + DELIMITER + scope.getScope();
+	}
+	
+	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,Scope scope){
 		if(fieldInfo != null){
 			if(fieldInfo.getOwnerObject() != null){	//普通のフィールド
 				if(fieldInfo.getOwnerObject().getObjectId() != null){
@@ -54,7 +67,7 @@ public class NameCreator {
 				return fieldInfo.getVariableName();
 			}
 		}else if(localInfo != null){
-			return localInfo.getVariableName() + DELIMITER + scope;
+			return scope.getMethodName() + localInfo.getVariableName() + DELIMITER + scope.getScope();
 		}
 		return null;
 	}

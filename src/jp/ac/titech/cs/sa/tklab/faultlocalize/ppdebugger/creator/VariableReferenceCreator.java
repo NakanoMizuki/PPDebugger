@@ -11,12 +11,11 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Executi
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 
 public class VariableReferenceCreator {
-	static void create(ExecutionModel em,VariableReference ref,String scope,LineVariable lineVar,StatementDataFactory factory){
+	static void create(ExecutionModel em,VariableReference ref,Scope scope,LineVariable lineVar,StatementDataFactory factory){
 		if(isSkip(ref)) return;
 		
 		String varName = NameCreator.createVariableName(ref, scope);
-		if(em.getVariable(varName) == null){
-			//System.out.println("Reference not existing variable.");
+		if(em.getVariable(varName) == null){		//メソッドの引数などは定義なしに参照され得る
 			return;
 		}
 		

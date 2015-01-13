@@ -1,7 +1,7 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 
@@ -13,18 +13,18 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
  */
 public class LineVariable {
 	private StatementData sd;
-	private Set<Variable> variables;
+	private List<Variable> variables;
 	
 	
 	public LineVariable(){
 		sd = null;
-		variables = new HashSet<Variable>();
+		variables = new ArrayList<Variable>();
 	}
 	
 	public StatementData getStatementData(){
 		return sd;
 	}
-	public Set<Variable> getVariables(){
+	public List<Variable> getVariables(){
 		return variables;
 	}
 
