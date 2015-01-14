@@ -123,7 +123,7 @@ class MethodEntryCreator {
 			}else if(varInfo.getLocalVariableInfo() != null){
 				current = varInfo.getLocalVariableInfo().getValue().getPrimitiveValueInfo();
 			}
-			if(current == null || current.getPrimitiveValue() == null){ continue;}
+			if(current == null || current.getPrimitiveValue() == null) continue;
 			if(isSameType(valueInfo.getPrimitiveTypeName(), current.getPrimitiveTypeName())
 						&& isSameValue(valueInfo.getPrimitiveValue(), current.getPrimitiveValue()))
 					return i;
@@ -131,6 +131,17 @@ class MethodEntryCreator {
 		return -1;
 	}
 	private static int match(ObjectInfoType valueInfo,List<Variable> variables){
+		for(int i=0; i < variables.size(); i++){
+			VariableInfoLeafType varInfo = variables.get(i).getLatestDefinition().getDefinedVariable();
+			ObjectInfoType current = null;
+			if(varInfo.getFieldInfo() != null){
+				current = varInfo.getFieldInfo().getValue().getObjectInfo();
+			}else if(varInfo.getLocalVariableInfo() != null){
+				current = varInfo.getLocalVariableInfo().getValue().getObjectInfo();
+			}
+			if(current == null) continue;
+			return i;
+		}
 		return -1;
 	}
 	
