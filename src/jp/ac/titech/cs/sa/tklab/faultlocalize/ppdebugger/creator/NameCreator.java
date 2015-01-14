@@ -48,7 +48,7 @@ public class NameCreator {
 		return createVariableName(ref.getReferredVariable().getFieldInfo(),ref.getReferredVariable().getLocalVariableInfo(),scope);
 	}
 	
-	public static String createVariableName(Scope scope,int stackAddress){
+	public static String createArgsName(Scope scope,int stackAddress){
 		return scope.getMethodName() + LOCALNAME + stackAddress + DELIMITER + scope.getScope();
 	}
 	

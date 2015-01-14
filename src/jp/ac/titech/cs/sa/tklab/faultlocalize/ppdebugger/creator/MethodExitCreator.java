@@ -21,7 +21,7 @@ class MethodExitCreator {
 			DataDependency dd = new DataDependency(variable.getVarName(),fromSd);
 			DataDependencySet dds = new DataDependencySet(toSd, dd,Integer.valueOf(me.getEventNumber()));
 			em.addDataDependencySet(toSd, dds);
-			calleeLine.add(toSd,variable);
+			callerLine.add(toSd,variable);
 		}
 	}
 	

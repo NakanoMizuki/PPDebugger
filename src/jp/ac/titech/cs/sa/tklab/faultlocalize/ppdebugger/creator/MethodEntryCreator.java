@@ -1,6 +1,7 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodEntry;
@@ -74,6 +75,8 @@ class MethodEntryCreator {
 		MethodSignature signature = me.getMethodSignature();
 		List<String> argumentTypes = signature.getArgumentTypes().getTypeNames();
 		List<Object> argumentValues = me.getArgumentValues().getPrimitiveValueInfosAndObjectInfos();
+		List<Variable> variables = new ArrayList<Variable>();
+		variables.addAll(lineVar.getVariables());	//リストのディープコピー
 		
 		int start = (isStaticMethod(signature)) ? 0:1;
 		int stackAddress = start;		//スタックの何番目に格納される引数か。
@@ -82,14 +85,15 @@ class MethodEntryCreator {
 			int index = -1;
 			if(isPrimitiveType(type)){
 				PrimitiveValueInfo value = (PrimitiveValueInfo)argumentValues.get(i);
-				index = match(value, lineVar.getVariables());
+				index = match(value, variables);
 			}else{
 				ObjectInfoType value = (ObjectInfoType) argumentValues.get(i);
-				index = match(value, lineVar.getVariables());
+				index = match(value, variables);
 			}
 			if(index != -1){
-				Variable variable = new Variable(NameCreator.createVariableName(scope, stackAddress), lineVar.getVariable(i).getLatestDefinition());
-				model.getVariableSet().updateVariable(variable);
+				Variable var = new Variable(NameCreator.createArgsName(scope, stackAddress), variables.get(i).getLatestDefinition());
+				model.getVariableSet().updateVariable(var);
+				variables.remove(index);
 			}
 			stackAddress += getByteSize(type);
 		}
