@@ -130,11 +130,11 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(label){
 			str += "L";
 		}
-		str += ":\n";
+		str += ":" + System.lineSeparator();
 		List<DataDependency> ddList = new ArrayList<DataDependency>(set);
 		Collections.sort(ddList);
 		for(DataDependency dd : ddList){
-			str += "\t" + dd.toString() + ",\n";
+			str += "\t" + dd.toString() + "," + System.lineSeparator();
 		}
 		return str;
 	}

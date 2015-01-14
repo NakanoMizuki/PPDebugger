@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -28,18 +29,24 @@ public class Propagator {
 					continue;
 				}
 				for(DataDependency dependency :propagatable.getSet()){
-					//eventNumberが最新のものをとる
-					SortedSet<DataDependencySet> originals = em.getStatement(dependency.getStatementData()).getOriginals();
-					originals = originals.headSet(propagatable);
+					StatementData targetSd = dependency.getStatementData();
+					String targetVarName = dependency.getVarName();
+					SortedSet<DataDependencySet> originals = em.getStatement(targetSd).getOriginals();
+					originals = originals.tailSet(propagatable);		//現在のイベント以前に起きたものだけをとる
 					if(originals.isEmpty()) continue;
-					DataDependencySet original = originals.last();
 					
-					Set<DataDependency> set = new HashSet<DataDependency>();
-					for(DataDependency dd: original.getSet()){
-						set.add(dd);
+					Set<DataDependency> newDDset = new HashSet<DataDependency>();
+					Set<String> registerdVars = new HashSet<String>();
+					for(DataDependencySet dds:originals){
+						for(DataDependency dd: dds.getSet()){
+							if(registerdVars.contains(dd.getVarName())) continue;	//同じ変数名の依存はひとつだけ。セットが新しいイベント順で並んでいるので、これで最新の依存のみ取れる
+							newDDset.add(new DataDependency(dd.getVarName(), dd.getStatementData()));
+							registerdVars.add(dd.getVarName());
+						}
 					}
-					if(!set.isEmpty()){
-						st.addNextPropagation(new DataDependencySet(dependency.getStatementData(),dependency.getVarName(),original.getEventNumber(),set,original.isLabeled()));
+					if(newDDset != null){
+						DataDependencySet newDds = new DataDependencySet(targetSd, targetVarName,propagatable.getEventNumber(),newDDset,false);
+						st.addNextPropagation(newDds);
 					}
 				}
 			}

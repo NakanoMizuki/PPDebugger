@@ -43,10 +43,10 @@ public class Statement {
 		this.sd = sd;
 		originals = new TreeSet<DataDependencySet>(new Comparator<DataDependencySet>() {
 			@Override
-			public int compare(DataDependencySet dds1,DataDependencySet dds2){
+			public int compare(DataDependencySet dds1,DataDependencySet dds2){		//eventNumberの降順
 				if(dds1.getEventNumber() == dds2.getEventNumber()) return 0;
-				if(dds1.getEventNumber() < dds2.getEventNumber()) return -1;
-				return 1;
+				if(dds1.getEventNumber() < dds2.getEventNumber()) return 1;
+				return -1;
 			}
 		});
 		ddsList = new ArrayList<DataDependencySet>();
