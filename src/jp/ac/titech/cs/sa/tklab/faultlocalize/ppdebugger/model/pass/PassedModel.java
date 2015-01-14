@@ -77,7 +77,8 @@ public class PassedModel {
 		for(StatementState ss : statementStates){
 			ss.printState(out);
 		}
-		out.println("----------\n");
+		out.println("----------");
+		out.print("");
 	}
 
 }

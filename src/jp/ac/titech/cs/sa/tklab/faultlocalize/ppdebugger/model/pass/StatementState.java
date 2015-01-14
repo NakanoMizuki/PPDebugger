@@ -54,8 +54,9 @@ public class StatementState implements Comparable<StatementState> {
 		out.println(sd.toString());
 		List<DataDependencySet> ddslist = new ArrayList<DataDependencySet>(ddsMap.keySet());
 		Collections.sort(ddslist);
+		String sep = System.lineSeparator();
 		for(DataDependencySet dds: ddslist ){
-			out.println("\t" + dds.toString().replaceAll("\n", "\n\t") + "\tcount=" + ddsMap.get(dds));
+			out.println("\t" + dds.toString().replaceAll(sep, sep + "\t") + "\tcount=" + ddsMap.get(dds));
 		}
 	}
 	

@@ -46,10 +46,11 @@ public class Result {
 	
 	@Override
 	public String toString(){
-		String str = fileName + " Result----------\n";
+		String sep = System.lineSeparator();
+		String str = fileName + " Result----------" + sep;
 		for(int i=0; i < stProbs.size(); i ++){
 			StatementProb stProb = stProbs.get(i);
-			str += (i+1) + ":\t" + stProb.toString() + "\n";
+			str += (i+1) + ":\t" + stProb.toString() + sep;
 		}
 		return str;
 	}
