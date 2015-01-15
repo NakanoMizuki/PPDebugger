@@ -20,7 +20,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 2;
+	private static final int HOPNUM = 0;
 	private final PPDebugger ppdebugger;
 	private final String tracePath;
 	private final String faultPath;
@@ -38,7 +38,7 @@ public class CUIMain {
 				file.delete();
 			}
 		}else{
-			dir.mkdir();
+			dir.mkdirs();
 		}
 	}
 
@@ -73,6 +73,7 @@ public class CUIMain {
 		int verNum = new File(tracePath).listFiles().length;
 		File resultScore = new File(resultPath + "/score.txt");
 		try {
+			resultScore.createNewFile();
 			@SuppressWarnings("resource")
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(resultScore)));
 			for(int i=1; i <= verNum; i++){
