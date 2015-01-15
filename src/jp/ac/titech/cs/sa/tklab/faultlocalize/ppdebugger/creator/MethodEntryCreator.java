@@ -95,7 +95,7 @@ class MethodEntryCreator {
 				model.getVariableSet().updateVariable(var);
 				variables.remove(index);
 			}
-			stackAddress += getByteSize(type);
+			stackAddress += getBlockSize(type);
 		}
 	}
 	
@@ -181,12 +181,12 @@ class MethodEntryCreator {
 	}
 	
 	/**
-	 * スタック上で何バイト必要とするか
-	 * 通常１バイトだが、Doubleなどでは２バイト
+	 * スタック上のブロックをいくつ必要とするか
+	 * 通常4バイトだが、Doubleなどでは8バイト
 	 * @param type 型名 "int" "double" ...
 	 * @return バイト数(1 or 2)
 	 */
-	private static int getByteSize(String type){
+	private static int getBlockSize(String type){
 		switch (type) {
 		case "boolean":
 		case "byte":
