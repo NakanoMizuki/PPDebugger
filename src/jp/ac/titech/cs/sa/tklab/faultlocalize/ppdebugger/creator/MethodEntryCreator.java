@@ -23,7 +23,7 @@ class MethodEntryCreator {
 		if(me.getMethodSignature() == null) return true;
 		MethodSignature signature = me.getMethodSignature();
 		if(signature.getReturnType() == null) return true;
-		
+		if(getArgsNum(signature.getReturnType()) == 0) return true;
 		return false;
 	}
 
@@ -49,12 +49,14 @@ class MethodEntryCreator {
 			case 'Z':
 				count ++;
 				index += 1;
+				index = Math.min(index, args.length());
 				args = args.substring(index);
 				break;
 			case 'L':
 				count ++;
-				index = args.charAt(';') +1;
-				args.substring(index);
+				index = args.indexOf(';')+1;
+				index = Math.min(index, args.length());
+				args = args.substring(index);
 				break;
 			default:
 				throw new RuntimeException("Method Return Type is Illegal!");	
@@ -78,7 +80,12 @@ class MethodEntryCreator {
 		List<Variable> variables = new ArrayList<Variable>();
 		variables.addAll(lineVar.getVariables());	//リストのディープコピー
 		
-		int start = (isStaticMethod(signature)) ? 0:1;
+		int start;
+		if(isStaticMethod(signature)){
+			start = 0;
+		}else{
+			start = 1;
+		}
 		int stackAddress = start;		//スタックの何番目に格納される引数か。
 		for(int i=start; i < argumentTypes.size(); i++){
 			String type = argumentTypes.get(i);
@@ -91,7 +98,7 @@ class MethodEntryCreator {
 				index = match(value, variables);
 			}
 			if(index != -1){
-				Variable var = new Variable(NameCreator.createActuallArgsName(scope, stackAddress), variables.get(i).getLatestDefinition());
+				Variable var = new Variable(NameCreator.createActuallArgsName(scope, stackAddress), variables.get(index).getLatestDefinition());
 				model.addVariable(var);
 				variables.remove(index);
 			}
