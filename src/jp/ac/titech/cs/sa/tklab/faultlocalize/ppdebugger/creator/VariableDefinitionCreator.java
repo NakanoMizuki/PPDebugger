@@ -9,7 +9,7 @@ class VariableDefinitionCreator {
 	static void create(ExecutionModel em,VariableDefinition def,Scope scope,StatementDataFactory factory){
 		if(isSkip(def)) return;
 		Variable variable = new Variable(NameCreator.createVariableName(def, scope),def);
-		em.getVariableSet().updateVariable(variable);
+		em.addVariable(variable);
 		em.addStatementData(factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread()));
 	}
 	

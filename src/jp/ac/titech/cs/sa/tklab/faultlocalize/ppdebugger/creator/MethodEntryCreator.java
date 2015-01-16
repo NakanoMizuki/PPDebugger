@@ -91,8 +91,8 @@ class MethodEntryCreator {
 				index = match(value, variables);
 			}
 			if(index != -1){
-				Variable var = new Variable(NameCreator.createArgsName(scope, stackAddress), variables.get(i).getLatestDefinition());
-				model.getVariableSet().updateVariable(var);
+				Variable var = new Variable(NameCreator.createActuallArgsName(scope, stackAddress), variables.get(i).getLatestDefinition());
+				model.addVariable(var);
 				variables.remove(index);
 			}
 			stackAddress += getBlockSize(type);

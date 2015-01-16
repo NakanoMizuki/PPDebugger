@@ -36,8 +36,9 @@ public class ExecutionModel {
 		}
 		return null;
 	}
-	public VariableSet getVariableSet(){
-		return vs;
+	
+	public void addVariable(Variable v){
+		vs.updateVariable(v);
 	}
 	
 	public Variable getVariable(String varName){
