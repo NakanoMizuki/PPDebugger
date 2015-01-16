@@ -1,6 +1,7 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
 /**
  * 村松さんの論文の　d(x)=l(x)　に対応するクラス
@@ -43,7 +44,7 @@ public class DataDependency implements Comparable<DataDependency>{
 	}
 	@Override
 	public String toString(){
-		return "d(" + varName + ")=" + sd.toString();
+		return "d(" + NameCreator.compressMethodName(varName) + ")=" + sd.toString();
 	}
 
 	@Override

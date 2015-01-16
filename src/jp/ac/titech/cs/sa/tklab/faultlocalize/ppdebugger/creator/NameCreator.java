@@ -16,10 +16,6 @@ public class NameCreator {
 	private static final String RETURN_NAME = "*Return";
 	
 	
-	public static String getCompressdName(String name){
-		return compressMethodName(removeSuffix(name));
-	}
-	
 	public static String compressMethodName(String name){
 		int index = name.lastIndexOf(METHODNAME_DELIMITER);
 		if(index == -1) return name;

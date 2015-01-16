@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
 	private String varName;
@@ -126,7 +127,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	@Override
 	public String toString(){
-		String str = "D("+varName + "," + sd.toString() +")";
+		String str = "D(" + NameCreator.compressMethodName(varName) + "," + sd.toString() +")";
 		if(label){
 			str += "L";
 		}
