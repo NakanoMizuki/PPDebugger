@@ -14,16 +14,14 @@ public class VariableReferenceCreator {
 	static void create(ExecutionModel em,VariableReference ref,Scope scope,LineVariable lineVar,StatementDataFactory factory){
 		if(isSkip(ref)) return;
 		
+		StatementData currentSd = factory.genStatementData(ref.getSourcePath(),ref.getLineNumber(),ref.getThread());
 		String varName = NameCreator.createVariableName(ref, scope);
 		if(em.getVariable(varName) == null){		//メソッドの引数などは定義なしに参照され得る
+			em.addStatementData(currentSd);
 			return;
 		}
 		
-		//参照イベントの起きた行をデータ依存先の対象ステートメントとする
-		StatementData currentSd = factory.genStatementData(ref.getSourcePath(),ref.getLineNumber(),ref.getThread());
-		
 		//最後の定義情報から依存元のステートメントを得る
-		
 		VariableDefinition vd = em.getVariable(varName).getLatestDefinition();
 		StatementData fromSd = factory.genStatementData(vd.getSourcePath(),vd.getLineNumber(),vd.getThread());
 		
