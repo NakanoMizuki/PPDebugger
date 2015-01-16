@@ -8,15 +8,32 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableReference;
 
 public class NameCreator {
-	private static final String DELIMITER = "#";
-	private static final String METHODNAME_DELIMITER = ":";
+	private static final char DELIMITER = '#';
+	private static final char METHODNAME_DELIMITER = ':';
 	private static final String STATIC = "Static";
 	private static final String LOCAL_NAME = "*Local";
 	private static final String PARAM_NAME = "*Param";
 	private static final String RETURN_NAME = "*Return";
 	
 	
-	public static String getOriginalName(String name){
+	public static String getCompressdName(String name){
+		return compressMethodName(removeSuffix(name));
+	}
+	
+	public static String compressMethodName(String name){
+		int index = name.lastIndexOf(METHODNAME_DELIMITER);
+		if(index == -1) return name;
+		String prefix = name.substring(0,index);
+		prefix = prefix.substring(0,prefix.lastIndexOf(METHODNAME_DELIMITER));
+		index = prefix.indexOf(METHODNAME_DELIMITER);
+		if(index != -1){
+			prefix = prefix.substring(index+1);
+		}
+		String latter = name.substring(name.lastIndexOf(METHODNAME_DELIMITER) +1);
+		return prefix + METHODNAME_DELIMITER + latter;
+	}
+	
+	public static String removeSuffix(String name){
 		return name.replaceAll(DELIMITER + ".+$", "");
 	}
 	

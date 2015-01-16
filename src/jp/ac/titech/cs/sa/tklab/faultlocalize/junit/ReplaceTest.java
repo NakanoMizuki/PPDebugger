@@ -10,10 +10,10 @@ public class ReplaceTest {
 	@Test
 	public void test() {
 		String name = "test#static";
-		assertEquals("test", NameCreator.getOriginalName(name));
+		assertEquals("test", NameCreator.removeSuffix(name));
 		
 		name = "test#fea#fae";
-		assertEquals("test", NameCreator.getOriginalName(name));
+		assertEquals("test", NameCreator.removeSuffix(name));
 	}
 
 }

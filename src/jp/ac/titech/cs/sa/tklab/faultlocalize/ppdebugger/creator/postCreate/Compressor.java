@@ -19,10 +19,10 @@ public class Compressor {
 			for(DataDependencySet dds :st.getDataDependencySets()){
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
 				for(DataDependency dd : dds.getSet()){
-					dd.setVarName(NameCreator.getOriginalName(dd.getVarName()));
+					dd.setVarName(NameCreator.getCompressdName(dd.getVarName()));
 					ddSet.add(dd);
 				}
-				dds.setVarName(NameCreator.getOriginalName(dds.getVarName()));
+				dds.setVarName(NameCreator.getCompressdName(dds.getVarName()));
 				dds.setDDSet(ddSet);
 				ddsList.add(dds);
 			}
