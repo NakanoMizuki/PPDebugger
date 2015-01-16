@@ -21,7 +21,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class PPDebugger{
-	private final int NUM_THREAD = 8;
+	private final int NUM_THREAD = 4;
 	
 	private final int hopNum;
 	private final PassedModel passedModel;
