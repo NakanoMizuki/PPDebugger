@@ -1,7 +1,12 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.LocalVariableInfo;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodExit;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableInfoLeafType;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
@@ -11,19 +16,27 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodExitVisitor {
-	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,StatementDataFactory factory){
+	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,Scope scope,StatementDataFactory factory){
 		if(isSkip(me, calleeLine,factory))return;
 		
-		StatementData toSd = factory.genStatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
+		
+		VariableDefinition definition = createVariableDefinition(me,scope);
+		Variable returnVariable = new Variable(NameCreator.createReturnName(scope), definition);
+		StatementData currentSD = factory.genStatementData(me.getCalleeSourcePath(),me.getCalleeLineNumber(),me.getThread());
+		StatementData callerSD = factory.genStatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
+		Set<DataDependency> set = new HashSet<DataDependency>();
 		for(Variable variable: calleeLine.getVariables()){
 			VariableDefinition def = variable.getLatestDefinition();
 			StatementData fromSd = factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread());
 			DataDependency dd = new DataDependency(variable.getVarName(),fromSd);
-			DataDependencySet dds = new DataDependencySet(toSd, dd,Integer.valueOf(me.getEventNumber()));
-			em.addDataDependencySet(toSd, dds);
-			callerLine.add(toSd,variable);
-			argsLine.add(toSd,variable);
+			set.add(dd);
 		}
+		DataDependencySet dds = new DataDependencySet(currentSD,returnVariable.getVarName(),Long.valueOf(me.getEventNumber()),set,false);
+		em.addDataDependencySet(currentSD, dds);
+		DataDependency returnDependency = new DataDependency(returnVariable.getVarName(), currentSD);
+		em.addDataDependencySet(callerSD, new DataDependencySet(callerSD,returnDependency, Long.valueOf(me.getEventNumber())));
+		callerLine.add(callerSD,returnVariable);
+		argsLine.add(callerSD,returnVariable);
 	}
 	
 	private static boolean isSkip(MethodExit me,LineVariable lineVar,StatementDataFactory factory){
@@ -36,5 +49,20 @@ class MethodExitVisitor {
 		}
 
 		return false;
+	}
+	
+	private static VariableDefinition createVariableDefinition(MethodExit methodExit,Scope scope){
+		VariableDefinition definition = new VariableDefinition();
+		definition.setEventNumber(methodExit.getEventNumber());
+		definition.setLineNumber(methodExit.getCalleeLineNumber());
+		definition.setSourcePath(methodExit.getCalleeSourcePath());
+		definition.setThread(methodExit.getThread());
+		VariableInfoLeafType variableInfo = new VariableInfoLeafType();
+		LocalVariableInfo localInfo = new LocalVariableInfo();
+		localInfo.setVariableName(NameCreator.createReturnName(scope));
+		variableInfo.setLocalVariableInfo(localInfo);
+		definition.setDefinedVariable(variableInfo);
+		
+		return definition;
 	}
 }

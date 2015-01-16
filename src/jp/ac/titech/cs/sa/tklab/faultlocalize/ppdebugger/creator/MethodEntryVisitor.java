@@ -72,11 +72,11 @@ class MethodEntryVisitor {
 		return true;
 	}
 	
-	private static void createDataDependency(ExecutionModel model,MethodEntry me,LineVariable lineVar,Scope scope){
+	private static void createDataDependency(ExecutionModel model,MethodEntry me,LineVariable argsLine,Scope scope){
 		MethodSignature signature = me.getMethodSignature();
 		List<String> argumentTypes = signature.getArgumentTypes().getTypeNames();
 		List<Object> argumentValues = me.getArgumentValues().getPrimitiveValueInfosAndObjectInfos();
-		List<Variable> variables = lineVar.getVariables();
+		List<Variable> variables = argsLine.getVariables();
 		
 		int start;
 		if(isStaticMethod(signature)){
@@ -123,9 +123,9 @@ class MethodEntryVisitor {
 		for(int i= 0; i < variables.size(); i++){
 			VariableInfoLeafType varInfo = variables.get(i).getLatestDefinition().getDefinedVariable();
 			PrimitiveValueInfo current = null;
-			if(varInfo.getFieldInfo() != null){
+			if(varInfo.getFieldInfo() != null && varInfo.getFieldInfo().getValue() != null){
 				current = varInfo.getFieldInfo().getValue().getPrimitiveValueInfo();
-			}else if(varInfo.getLocalVariableInfo() != null){
+			}else if(varInfo.getLocalVariableInfo() != null && varInfo.getLocalVariableInfo().getValue() != null){
 				current = varInfo.getLocalVariableInfo().getValue().getPrimitiveValueInfo();
 			}
 			if(current == null || current.getPrimitiveValue() == null) continue;
@@ -139,9 +139,9 @@ class MethodEntryVisitor {
 		for(int i=0; i < variables.size(); i++){
 			VariableInfoLeafType varInfo = variables.get(i).getLatestDefinition().getDefinedVariable();
 			ObjectInfoType current = null;
-			if(varInfo.getFieldInfo() != null){
+			if(varInfo.getFieldInfo() != null && varInfo.getFieldInfo().getValue() != null){
 				current = varInfo.getFieldInfo().getValue().getObjectInfo();
-			}else if(varInfo.getLocalVariableInfo() != null){
+			}else if(varInfo.getLocalVariableInfo() != null && varInfo.getLocalVariableInfo().getValue() != null){
 				current = varInfo.getLocalVariableInfo().getValue().getObjectInfo();
 			}
 			if(current == null) continue;

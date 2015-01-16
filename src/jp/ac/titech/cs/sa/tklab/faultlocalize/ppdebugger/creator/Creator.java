@@ -74,7 +74,7 @@ public class Creator {
 			argsStack.pop();
 			scope.exit();
 			if(!refStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
-				MethodExitVisitor.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),factory);
+				MethodExitVisitor.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),scope,factory);
 			}
 			break;
 		case CONSTRUCTOR_ENTRY:
