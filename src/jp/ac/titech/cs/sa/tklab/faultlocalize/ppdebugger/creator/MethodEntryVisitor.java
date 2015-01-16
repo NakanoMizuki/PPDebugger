@@ -1,7 +1,6 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodEntry;
@@ -13,7 +12,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Executi
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
-class MethodEntryCreator {
+class MethodEntryVisitor {
 	static void create(ExecutionModel em,MethodEntry me,LineVariable argsLine,Scope scope){
 		if(isSkip(me)) return;
 		createDataDependency(em,me,argsLine,scope);
@@ -77,8 +76,7 @@ class MethodEntryCreator {
 		MethodSignature signature = me.getMethodSignature();
 		List<String> argumentTypes = signature.getArgumentTypes().getTypeNames();
 		List<Object> argumentValues = me.getArgumentValues().getPrimitiveValueInfosAndObjectInfos();
-		List<Variable> variables = new ArrayList<Variable>();
-		variables.addAll(lineVar.getVariables());	//リストのディープコピー
+		List<Variable> variables = lineVar.getVariables();
 		
 		int start;
 		if(isStaticMethod(signature)){

@@ -55,16 +55,16 @@ public class Creator {
 		LineVariable refLine;
 		switch(kind){
 		case VARIABLE_REFERENCE:
-			VariableReferenceCreator.create(model,node.getVariableReference(),scope,refStack.peek(),argsStack.peek(),factory);
+			VariableReferenceVisitor.create(model,node.getVariableReference(),scope,refStack.peek(),argsStack.peek(),factory);
 			break;
 		case VARIABLE_DEFINITION:
-			VariableDefinitionCreator.create(model, node.getVariableDefinition(),scope,factory);
+			VariableDefinitionVisitor.create(model, node.getVariableDefinition(),scope,factory);
 			break;
 		case METHOD_ENTRY:
 			scope.entry(NameCreator.createMethodName(node.getMethodEntry()));
 			if(!argsStack.empty()){		//メインメソッドはempty
 				argsLine = argsStack.peek();
-				MethodEntryCreator.create(model,node.getMethodEntry(),argsLine,scope);
+				MethodEntryVisitor.create(model,node.getMethodEntry(),argsLine,scope);
 			}
 			refStack.push(new LineVariable());
 			argsStack.push(new LineVariable());
@@ -74,20 +74,20 @@ public class Creator {
 			argsStack.pop();
 			scope.exit();
 			if(!refStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
-				MethodExitCreator.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),factory);
+				MethodExitVisitor.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),factory);
 			}
 			break;
 		case CONSTRUCTOR_ENTRY:
 			refStack.push(new LineVariable());
 			argsStack.push(new LineVariable());
 			scope.entry(NameCreator.createMethodName(node.getConstructorEntry()));
-			ConstructorEntryCreator.create(model,node.getConstructorEntry());
+			ConstructorEntryVisitor.create(model,node.getConstructorEntry());
 			break;
 		case CONSTRUCTOR_EXIT:
 			refStack.pop();
 			argsStack.pop();
 			scope.exit();
-			ConstructorExitCreator.create(model, node.getConstructorExit());
+			ConstructorExitVisitor.create(model, node.getConstructorExit());
 			break;
 		default:
 			break;

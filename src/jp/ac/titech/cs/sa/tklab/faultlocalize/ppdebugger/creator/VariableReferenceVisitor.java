@@ -10,7 +10,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 
-public class VariableReferenceCreator {
+public class VariableReferenceVisitor {
 	static void create(ExecutionModel em,VariableReference ref,Scope scope,LineVariable refLine,LineVariable argsLine,StatementDataFactory factory){
 		if(isSkip(ref)) return;
 		

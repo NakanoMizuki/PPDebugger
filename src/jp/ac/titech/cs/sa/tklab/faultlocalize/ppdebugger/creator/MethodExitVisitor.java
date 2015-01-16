@@ -10,7 +10,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Executi
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
-class MethodExitCreator {
+class MethodExitVisitor {
 	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,StatementDataFactory factory){
 		if(isSkip(me, calleeLine,factory))return;
 		
