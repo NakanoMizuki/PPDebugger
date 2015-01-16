@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -21,6 +22,7 @@ public class Propagator {
 	}
 	private static void propagate(ExecutionModel em){
 		List<Statement> statements = em.getStatements();
+		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		
 		//全ステートメントに対して、今回伝搬されるデータ依存を追加
 		for(Statement st :statements){
@@ -40,7 +42,7 @@ public class Propagator {
 					for(DataDependencySet dds:originals){
 						for(DataDependency dd: dds.getSet()){
 							if(registerdVars.contains(dd.getVarName())) continue;	//同じ変数名の依存はひとつだけ。セットが新しいイベント順で並んでいるので、これで最新の依存のみ取れる
-							newDDset.add(new DataDependency(dd.getVarName(), dd.getStatementData()));
+							newDDset.add(ddFactory.genDataDependency(dd.getVarName(), dd.getStatementData()));
 							registerdVars.add(dd.getVarName());
 						}
 					}

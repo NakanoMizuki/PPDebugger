@@ -20,14 +20,12 @@ public class Creator {
 	private Stack<LineVariable> refStack;
 	private Stack<LineVariable> argsStack;
 	private Scope scope;
-	private StatementDataFactory factory;
 	
 	public Creator(StatementDataFactory factory){
 		model = new ExecutionModel();
 		refStack = new Stack<LineVariable>();
 		argsStack = new Stack<LineVariable>();
 		scope = new Scope();
-		this.factory = factory;
 	}
 	
 	public ExecutionModel createExecutionModel(File file,int hopNum) throws JAXBException{
@@ -55,10 +53,10 @@ public class Creator {
 		LineVariable refLine;
 		switch(kind){
 		case VARIABLE_REFERENCE:
-			VariableReferenceVisitor.create(model,node.getVariableReference(),scope,refStack.peek(),argsStack.peek(),factory);
+			VariableReferenceVisitor.create(model,node.getVariableReference(),scope,refStack.peek(),argsStack.peek());
 			break;
 		case VARIABLE_DEFINITION:
-			VariableDefinitionVisitor.create(model, node.getVariableDefinition(),scope,factory);
+			VariableDefinitionVisitor.create(model, node.getVariableDefinition(),scope);
 			break;
 		case METHOD_ENTRY:
 			scope.entry(NameCreator.createMethodName(node.getMethodEntry()));
@@ -74,7 +72,7 @@ public class Creator {
 			argsStack.pop();
 			scope.exit();
 			if(!refStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
-				MethodExitVisitor.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),scope,factory);
+				MethodExitVisitor.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),scope);
 			}
 			break;
 		case CONSTRUCTOR_ENTRY:

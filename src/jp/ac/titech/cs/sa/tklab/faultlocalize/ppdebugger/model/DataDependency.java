@@ -10,7 +10,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
  *
  */
 public class DataDependency implements Comparable<DataDependency>{
-	private String varName;
+	private final String varName;
 	private final StatementData sd;
 	
 	
@@ -24,10 +24,6 @@ public class DataDependency implements Comparable<DataDependency>{
 	}
 	public StatementData getStatementData(){
 		return sd;
-	}
-	
-	public void setVarName(String varName) {
-		this.varName = varName;
 	}
 	
 	@Override

@@ -15,7 +15,7 @@ public class StatementData implements Comparable<StatementData>{
 	private final Thread thread;
 	
 	
-	StatementData(String sourcePath,String lineNumber,Thread thread){
+	public StatementData(String sourcePath,String lineNumber,Thread thread){
 		this.sourcePath = sourcePath;
 		this.lineNumber = Integer.valueOf(lineNumber);
 		this.thread = thread;

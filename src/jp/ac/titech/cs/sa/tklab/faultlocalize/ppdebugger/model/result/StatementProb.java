@@ -1,8 +1,6 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result;
 
 
-import javax.management.InstanceAlreadyExistsException;
-
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 
 public class StatementProb implements Comparable<StatementProb>{
