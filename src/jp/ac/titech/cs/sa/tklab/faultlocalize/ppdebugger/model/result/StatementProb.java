@@ -1,6 +1,8 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result;
 
 
+import javax.management.InstanceAlreadyExistsException;
+
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 
 public class StatementProb implements Comparable<StatementProb>{
@@ -41,5 +43,18 @@ public class StatementProb implements Comparable<StatementProb>{
 				return statementData.getSourcePath().compareTo(o.statementData.getSourcePath());
 			}
 		}
+	}
+	
+	@Override
+	public int hashCode(){
+		return statementData.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o ==null || ! (o instanceof StatementProb)) return false;
+		StatementProb compare = (StatementProb) o;
+		if(prob == compare.prob && statementData.equals(compare.statementData)) return true;
+		return false;
 	}
 }
