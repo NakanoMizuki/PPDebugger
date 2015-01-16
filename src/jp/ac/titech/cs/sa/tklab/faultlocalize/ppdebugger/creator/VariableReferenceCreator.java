@@ -11,7 +11,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Executi
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 
 public class VariableReferenceCreator {
-	static void create(ExecutionModel em,VariableReference ref,Scope scope,LineVariable lineVar,StatementDataFactory factory){
+	static void create(ExecutionModel em,VariableReference ref,Scope scope,LineVariable refLine,LineVariable argsLine,StatementDataFactory factory){
 		if(isSkip(ref)) return;
 		
 		StatementData currentSd = factory.genStatementData(ref.getSourcePath(),ref.getLineNumber(),ref.getThread());
@@ -32,7 +32,8 @@ public class VariableReferenceCreator {
 		
 		//依存先のステートメントにデータ依存を追加
 		em.addDataDependencySet(currentSd, dds);
-		lineVar.add(currentSd, em.getVariable(varName));
+		refLine.add(currentSd, em.getVariable(varName));
+		argsLine.add(currentSd, em.getVariable(varName));
 	}
 	
 	/**

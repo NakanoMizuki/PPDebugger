@@ -11,7 +11,9 @@ public class NameCreator {
 	private static final String DELIMITER = "#";
 	private static final String METHODNAME_DELIMITER = ":";
 	private static final String STATIC = "Static";
-	private static final String LOCALNAME = "*Local";
+	private static final String LOCAL_NAME = "*Local";
+	private static final String PARAM_NAME = "*Param";
+	private static final String RETURN_NAME = "*Return";
 	
 	
 	public static String getOriginalName(String name){
@@ -48,10 +50,6 @@ public class NameCreator {
 		return createVariableName(ref.getReferredVariable().getFieldInfo(),ref.getReferredVariable().getLocalVariableInfo(),scope);
 	}
 	
-	public static String createArgsName(Scope scope,int stackAddress){
-		return scope.getMethodName() + LOCALNAME + stackAddress + DELIMITER + scope.getScope();
-	}
-	
 	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,Scope scope){
 		if(fieldInfo != null){
 			if(fieldInfo.getOwnerObject() != null){	//普通のフィールド
@@ -67,5 +65,17 @@ public class NameCreator {
 			return scope.getMethodName() + localInfo.getVariableName() + DELIMITER + scope.getScope();
 		}
 		return null;
+	}
+	
+	public static String createParamArgsName(Scope scope,int paramNo){
+		return scope.getMethodName() + PARAM_NAME + paramNo + DELIMITER + scope.getScope();
+	}
+	
+	public static String createActuallArgsName(Scope scope,int stackAddress){
+		return scope.getMethodName() + LOCAL_NAME + stackAddress + DELIMITER + scope.getScope();
+	}
+	
+	public static String createReturnName(Scope scope){
+		return scope.getMethodName() + RETURN_NAME + DELIMITER + scope.getScope();
 	}
 }

@@ -14,9 +14,9 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodEntryCreator {
-	static void create(ExecutionModel em,MethodEntry me,LineVariable lineVar,Scope scope){
+	static void create(ExecutionModel em,MethodEntry me,LineVariable argsLine,Scope scope){
 		if(isSkip(me)) return;
-		createDataDependency(em,me,lineVar,scope);
+		createDataDependency(em,me,argsLine,scope);
 	}
 	
 	private static boolean isSkip(MethodEntry me){

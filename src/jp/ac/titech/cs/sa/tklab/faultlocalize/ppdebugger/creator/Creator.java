@@ -17,13 +17,15 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 
 public class Creator {
 	private ExecutionModel model;
-	private Stack<LineVariable> lineStack;
+	private Stack<LineVariable> refStack;
+	private Stack<LineVariable> argsStack;
 	private Scope scope;
 	private StatementDataFactory factory;
 	
 	public Creator(StatementDataFactory factory){
 		model = new ExecutionModel();
-		lineStack = new Stack<LineVariable>();
+		refStack = new Stack<LineVariable>();
+		argsStack = new Stack<LineVariable>();
 		scope = new Scope();
 		this.factory = factory;
 	}
@@ -36,7 +38,8 @@ public class Creator {
 		}
 		file = null;
 		holder = null;
-		lineStack.clear();
+		refStack.clear();
+		argsStack.clear();
 		scope.clear();
 		
 		//データ依存を伝搬させる
@@ -48,36 +51,41 @@ public class Creator {
 	
 	private void createDataDependency(Node node){
 		NodeKind kind = BXModelUtility.getNodeKind(node);
-		LineVariable lineVar;
+		LineVariable argsLine;
+		LineVariable refLine;
 		switch(kind){
 		case VARIABLE_REFERENCE:
-			VariableReferenceCreator.create(model,node.getVariableReference(),scope,lineStack.peek(),factory);
+			VariableReferenceCreator.create(model,node.getVariableReference(),scope,refStack.peek(),argsStack.peek(),factory);
 			break;
 		case VARIABLE_DEFINITION:
 			VariableDefinitionCreator.create(model, node.getVariableDefinition(),scope,factory);
 			break;
 		case METHOD_ENTRY:
 			scope.entry(NameCreator.createMethodName(node.getMethodEntry()));
-			if(!lineStack.empty()){		//メインメソッドはempty
-				lineVar = lineStack.peek();
-				MethodEntryCreator.create(model,node.getMethodEntry(),lineVar,scope);
+			if(!argsStack.empty()){		//メインメソッドはempty
+				argsLine = argsStack.peek();
+				MethodEntryCreator.create(model,node.getMethodEntry(),argsLine,scope);
 			}
-			lineStack.push(new LineVariable());
+			refStack.push(new LineVariable());
+			argsStack.push(new LineVariable());
 			break;
 		case METHOD_EXIT:
-			lineVar = lineStack.pop();
+			refLine = refStack.pop();
+			argsStack.pop();
 			scope.exit();
-			if(!lineStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
-				MethodExitCreator.create(model,node.getMethodExit(),lineVar,lineStack.peek(),factory);
+			if(!refStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
+				MethodExitCreator.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),factory);
 			}
 			break;
 		case CONSTRUCTOR_ENTRY:
-			lineStack.push(new LineVariable());
+			refStack.push(new LineVariable());
+			argsStack.push(new LineVariable());
 			scope.entry(NameCreator.createMethodName(node.getConstructorEntry()));
 			ConstructorEntryCreator.create(model,node.getConstructorEntry());
 			break;
 		case CONSTRUCTOR_EXIT:
-			lineVar = lineStack.pop();
+			refStack.pop();
+			argsStack.pop();
 			scope.exit();
 			ConstructorExitCreator.create(model, node.getConstructorExit());
 			break;

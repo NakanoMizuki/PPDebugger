@@ -11,7 +11,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodExitCreator {
-	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,StatementDataFactory factory){
+	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,StatementDataFactory factory){
 		if(isSkip(me, calleeLine,factory))return;
 		
 		StatementData toSd = factory.genStatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
@@ -22,6 +22,7 @@ class MethodExitCreator {
 			DataDependencySet dds = new DataDependencySet(toSd, dd,Integer.valueOf(me.getEventNumber()));
 			em.addDataDependencySet(toSd, dds);
 			callerLine.add(toSd,variable);
+			argsLine.add(toSd,variable);
 		}
 	}
 	
