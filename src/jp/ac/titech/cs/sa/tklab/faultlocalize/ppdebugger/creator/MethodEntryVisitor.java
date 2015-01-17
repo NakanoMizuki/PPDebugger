@@ -42,7 +42,7 @@ class MethodEntryVisitor {
 		for(int i=start; i < argumentTypes.size(); i++){
 			String type = argumentTypes.get(i);
 			int index = -1;
-			if(isPrimitiveType(type)){
+			if(EntryUtil.isPrimitiveType(type)){
 				PrimitiveValueInfo value = (PrimitiveValueInfo)argumentValues.get(i);
 				index = EntryUtil.match(value, variables);
 			}else{
@@ -57,14 +57,6 @@ class MethodEntryVisitor {
 			}
 			stackAddress += EntryUtil.getBlockSize(type);
 		}
-	}
-	
-	private static boolean isPrimitiveType(String type){
-		if(type.equals("byte") || type.equals("char") || type.equals("double") || type.equals("float")
-				|| type.equals("int") || type.equals("long") || type.equals("short") || type.equals("boolean"))
-			return true;
-		
-		return false;
 	}
 	
 	

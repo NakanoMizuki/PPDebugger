@@ -136,6 +136,14 @@ public class EntryUtil {
 		}
 	}
 	
+	static boolean isPrimitiveType(String type){
+		if(type.equals("byte") || type.equals("char") || type.equals("double") || type.equals("float")
+				|| type.equals("int") || type.equals("long") || type.equals("short") || type.equals("boolean"))
+			return true;
+		
+		return false;
+	}
+	
 	/**
 	 * スタック上のブロックをいくつ必要とするか
 	 * 通常4バイトだが、Doubleなどでは8バイト
