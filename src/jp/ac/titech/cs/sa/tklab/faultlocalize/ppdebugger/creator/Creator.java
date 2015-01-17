@@ -76,7 +76,7 @@ public class Creator {
 			}
 			break;
 		case CONSTRUCTOR_ENTRY:
-			scope.entry(NameCreator.createMethodName(node.getConstructorEntry()));
+			scope.entry(NameCreator.createConstructorName(node.getConstructorEntry()));
 			ConstructorEntryVisitor.create(model,node.getConstructorEntry(),argsStack.peek(),scope);
 			argsStack.push(new LineVariable());
 			returnStack.push(new LineVariable());

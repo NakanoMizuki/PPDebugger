@@ -21,7 +21,10 @@ class MethodEntryVisitor {
 		if(me.getMethodSignature() == null) return true;
 		MethodSignature signature = me.getMethodSignature();
 		if(signature.getReturnType() == null) return true;
-		if(EntryUtil.getArgsNum(signature.getReturnType()) == 0) return true;
+		if(signature.getArgumentTypes() == null) return true;
+		List<String> types = signature.getArgumentTypes().getTypeNames();
+		if(types.size() == 0) return true;
+		if(types.size() == 1 && !EntryUtil.isStaticMethod(signature)) return true;
 		return false;
 	}
 

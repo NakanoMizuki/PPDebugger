@@ -11,6 +11,7 @@ public class NameCreator {
 	private static final char DELIMITER = '#';
 	private static final char METHODNAME_DELIMITER = ':';
 	private static final String STATIC = "Static";
+	private static final String CONSTRUCTOR_NAME = "Constructor";
 	private static final String LOCAL_NAME = "*Local";
 	private static final String PARAM_NAME = "*Param";
 	private static final String RETURN_NAME = "*Return";
@@ -44,12 +45,12 @@ public class NameCreator {
 		return name;
 	}
 	
-	public static String createMethodName(ConstructorEntry entry){
+	public static String createConstructorName(ConstructorEntry entry){
 		String name = "";
 		if(entry.getCallerSourcePath() != null){	//mainメソッドはCallerSourcePathを持たない
 			name += entry.getCallerSourcePath() + METHODNAME_DELIMITER;
 		}
-		name += entry.getMethodSignature().getMethodName();
+		name += CONSTRUCTOR_NAME;
 		name += METHODNAME_DELIMITER + entry.getMethodSignature().getReturnType();
 		name += METHODNAME_DELIMITER;
 		return name;

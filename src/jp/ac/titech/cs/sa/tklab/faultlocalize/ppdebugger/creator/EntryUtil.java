@@ -16,7 +16,15 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variabl
  */
 public class EntryUtil {
 	
-	static int getArgsNum(String returnType){
+	static boolean isStaticMethod(MethodSignature signature){
+		String returnType = signature.getReturnType();
+		if(getArgsNum(returnType) != signature.getArgumentTypes().getTypeNames().size()){	//スタティックメソッド以外だと最初の引数がインスタンス自身になる
+			return false;
+		}
+		return true;
+	}
+	
+	private static int getArgsNum(String returnType){
 		String args = returnType.replaceAll("\\).*", "");
 		args = args.replaceAll("\\(", "");
 		if(args.length() == 0) return 0;
@@ -48,18 +56,9 @@ public class EntryUtil {
 				args = args.substring(index);
 				break;
 			default:
-				throw new RuntimeException("Method Return Type is Illegal!");	
 			}
 		}
 		return count;
-	}
-	
-	static boolean isStaticMethod(MethodSignature signature){
-		String returnType = signature.getReturnType();
-		if(getArgsNum(returnType) != signature.getArgumentTypes().getTypeNames().size()){	//スタティックメソッド以外だと最初の引数がインスタンス自身になる
-			return false;
-		}
-		return true;
 	}
 	
 	
