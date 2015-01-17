@@ -34,9 +34,7 @@ class MethodExitVisitor {
 			set.add(dd);
 		}
 		DataDependencySet dds = new DataDependencySet(currentSD,returnVariable.getVarName(),Long.valueOf(me.getEventNumber()),set,false);
-		em.addDataDependencySet(currentSD, dds);
-		DataDependency returnDependency = ddFactory.genDataDependency(returnVariable.getVarName(), currentSD);
-		em.addDataDependencySet(callerSD, new DataDependencySet(callerSD,returnDependency, Long.valueOf(me.getEventNumber())));
+		em.addDataDependencySet(callerSD, dds);
 		callerLine.add(callerSD,returnVariable);
 		argsLine.add(callerSD,returnVariable);
 	}
