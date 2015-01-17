@@ -17,9 +17,9 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodExitVisitor {
-	static void create(ExecutionModel model,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,Scope scope){
+	static void create(ExecutionModel model,MethodExit me,LineVariable returnLine,LineVariable callerLine,LineVariable argsLine,Scope scope){
 		StatementDataFactory sdFactory = StatementDataFactory.getInstance();
-		if(isSkip(me, calleeLine,sdFactory))return;
+		if(isSkip(me, returnLine,sdFactory))return;
 		
 		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		VariableDefinition definition = createVariableDefinition(me,scope);
@@ -27,7 +27,7 @@ class MethodExitVisitor {
 		StatementData currentSD = sdFactory.genStatementData(me.getCalleeSourcePath(),me.getCalleeLineNumber(),me.getThread());
 		StatementData callerSD = sdFactory.genStatementData(me.getCallerSourcePath(),me.getCallerLineNumber(),me.getThread());
 		Set<DataDependency> set = new HashSet<DataDependency>();
-		for(Variable variable: calleeLine.getVariables()){
+		for(Variable variable: returnLine.getVariables()){
 			VariableDefinition def = variable.getLatestDefinition();
 			StatementData fromSd = sdFactory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread());
 			DataDependency dd = ddFactory.genDataDependency(variable.getVarName(),fromSd);
@@ -42,14 +42,13 @@ class MethodExitVisitor {
 		argsLine.add(callerSD,returnVariable);
 	}
 	
-	private static boolean isSkip(MethodExit me,LineVariable lineVar,StatementDataFactory factory){
-		if(lineVar.getVariables().isEmpty()) return true;
-		if(me.getCalleeSourcePath() == null || me.getCalleeLineNumber() == null){		//メインメソッドなどはcalleeが存在しない
-			return true;
-		}else{
-			StatementData current =  factory.genStatementData(me.getCalleeSourcePath(),me.getCalleeLineNumber(),me.getThread());
-			if(!lineVar.getStatementData().equals(current)) return true;
-		}
+	private static boolean isSkip(MethodExit me,LineVariable returnline,StatementDataFactory factory){
+		if(returnline.getVariables().isEmpty()) return true;
+		//メインメソッドなどはcalleeが存在しない
+		if(me.getCalleeSourcePath() == null || me.getCalleeLineNumber() == null) return true;
+		
+		StatementData current =  factory.genStatementData(me.getCalleeSourcePath(),me.getCalleeLineNumber(),me.getThread());
+		if(!returnline.getStatementData().equals(current)) return true;	//現在の行でない
 
 		return false;
 	}
