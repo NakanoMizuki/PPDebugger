@@ -17,14 +17,14 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 
 public class Creator {
 	private ExecutionModel model;
-	private Stack<LineVariable> refStack;
 	private Stack<LineVariable> argsStack;
+	private Stack<LineVariable> returnStack;
 	private Scope scope;
 	
 	public Creator(StatementDataFactory factory){
 		model = new ExecutionModel();
-		refStack = new Stack<LineVariable>();
 		argsStack = new Stack<LineVariable>();
+		returnStack = new Stack<LineVariable>();
 		scope = new Scope();
 	}
 	
@@ -36,8 +36,8 @@ public class Creator {
 		}
 		file = null;
 		holder = null;
-		refStack.clear();
 		argsStack.clear();
+		returnStack.clear();
 		scope.clear();
 		
 		//データ依存を伝搬させる
@@ -53,7 +53,7 @@ public class Creator {
 		LineVariable refLine;
 		switch(kind){
 		case VARIABLE_REFERENCE:
-			VariableReferenceVisitor.create(model,node.getVariableReference(),scope,refStack.peek(),argsStack.peek());
+			VariableReferenceVisitor.create(model,node.getVariableReference(),scope,returnStack.peek(),argsStack.peek());
 			break;
 		case VARIABLE_DEFINITION:
 			VariableDefinitionVisitor.create(model, node.getVariableDefinition(),scope);
@@ -64,26 +64,26 @@ public class Creator {
 				argsLine = argsStack.peek();
 				MethodEntryVisitor.create(model,node.getMethodEntry(),argsLine,scope);
 			}
-			refStack.push(new LineVariable());
 			argsStack.push(new LineVariable());
+			returnStack.push(new LineVariable());
 			break;
 		case METHOD_EXIT:
-			refLine = refStack.pop();
+			refLine = returnStack.pop();
 			argsStack.pop();
 			scope.exit();
-			if(!refStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
-				MethodExitVisitor.create(model,node.getMethodExit(),refLine,refStack.peek(),argsStack.peek(),scope);
+			if(!returnStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
+				MethodExitVisitor.create(model,node.getMethodExit(),refLine,returnStack.peek(),argsStack.peek(),scope);
 			}
 			break;
 		case CONSTRUCTOR_ENTRY:
-			refStack.push(new LineVariable());
-			argsStack.push(new LineVariable());
 			scope.entry(NameCreator.createMethodName(node.getConstructorEntry()));
-			ConstructorEntryVisitor.create(model,node.getConstructorEntry());
+			ConstructorEntryVisitor.create(model,node.getConstructorEntry(),argsStack.peek(),scope);
+			argsStack.push(new LineVariable());
+			returnStack.push(new LineVariable());
 			break;
 		case CONSTRUCTOR_EXIT:
-			refStack.pop();
 			argsStack.pop();
+			returnStack.pop();
 			scope.exit();
 			ConstructorExitVisitor.create(model, node.getConstructorExit());
 			break;
