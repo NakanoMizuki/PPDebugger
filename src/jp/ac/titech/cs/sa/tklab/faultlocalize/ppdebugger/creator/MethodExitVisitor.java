@@ -17,7 +17,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 class MethodExitVisitor {
-	static void create(ExecutionModel em,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,Scope scope){
+	static void create(ExecutionModel model,MethodExit me,LineVariable calleeLine,LineVariable callerLine,LineVariable argsLine,Scope scope){
 		StatementDataFactory sdFactory = StatementDataFactory.getInstance();
 		if(isSkip(me, calleeLine,sdFactory))return;
 		
@@ -33,8 +33,11 @@ class MethodExitVisitor {
 			DataDependency dd = ddFactory.genDataDependency(variable.getVarName(),fromSd);
 			set.add(dd);
 		}
-		DataDependencySet dds = new DataDependencySet(currentSD,returnVariable.getVarName(),Long.valueOf(me.getEventNumber()),set,false);
-		em.addDataDependencySet(callerSD, dds);
+		//呼び出し元に追加
+		DataDependency returnDependency = ddFactory.genDataDependency(returnVariable.getVarName(), currentSD);
+		DataDependencySet callerDDS = new DataDependencySet(callerSD,returnDependency, Long.valueOf(me.getEventNumber()));
+		model.addDataDependencySet(callerSD, callerDDS);
+		
 		callerLine.add(callerSD,returnVariable);
 		argsLine.add(callerSD,returnVariable);
 	}
