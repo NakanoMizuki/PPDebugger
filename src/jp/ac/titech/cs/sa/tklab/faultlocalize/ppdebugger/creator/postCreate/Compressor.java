@@ -41,7 +41,7 @@ public class Compressor {
 		for(DataDependencySet dds: ddsList){
 			if(target == dds) continue;
 			if(dds.hashCode() != hash) continue;
-			if(target.isSame(dds)){
+			if(target.isSameName(dds)){
 				for(DataDependency dd: dds.getSet()){
 					target.addDataDependency(dd);
 				}

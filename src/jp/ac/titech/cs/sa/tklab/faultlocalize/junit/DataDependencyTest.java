@@ -43,10 +43,10 @@ public class DataDependencyTest {
 		
 		dds1.addDataDependency(dd3);
 		assertNotEquals(dds1,dds2);				//イコールではないが
-		assertTrue(dds1.isSame(dds2));		//名前は同じ
+		assertTrue(dds1.isSameName(dds2));		//名前は同じ
 		dds2.addDataDependency(dd3);
 		assertEquals(dds1,dds2);
-		assertTrue(dds1.isSame(dds2));
+		assertTrue(dds1.isSameName(dds2));
 	
 		
 	}

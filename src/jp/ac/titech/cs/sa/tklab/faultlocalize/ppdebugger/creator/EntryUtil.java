@@ -2,10 +2,16 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
 import java.util.List;
 
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.ConstructorEntry;
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.LocalVariableInfo;
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodEntry;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodSignature;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.ObjectInfoType;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.PrimitiveValueInfo;
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableInfoLeafType;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 
 /**
@@ -15,6 +21,9 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variabl
  *
  */
 public class EntryUtil {
+	private static StatementDataFactory sdFactory = StatementDataFactory.getInstance();
+	private static final String PREFIX = "*Params:";
+
 	
 	static boolean isStaticMethod(MethodSignature signature){
 		String returnType = signature.getReturnType();
@@ -62,6 +71,43 @@ public class EntryUtil {
 		return count;
 	}
 	
+	static StatementData getCallerStatementData(MethodEntry entry){
+		return sdFactory.genStatementData(entry.getCallerSourcePath(),entry.getCallerLineNumber(),entry.getThread());
+	}
+	static StatementData getCallerStatementData(ConstructorEntry entry){
+		return sdFactory.genStatementData(entry.getCallerSourcePath(),entry.getCallerLineNumber(),entry.getThread());
+	}
+	
+	static StatementData createFormalParamSD(MethodEntry entry,String methodName,int argsNo,String paramName){
+		return sdFactory.genStatementData(PREFIX + methodName, Integer.toString(argsNo), entry.getThread());
+	}
+	static StatementData createFormalParamSD(ConstructorEntry entry,String methodName,int argsNo,String paramName){
+		return sdFactory.genStatementData(paramName + methodName, Integer.toString(argsNo), entry.getThread());
+	}
+	
+	static VariableDefinition createParamDefinition(MethodEntry entry,String methodName,int argsNo,String paramName){
+		VariableDefinition definition = new VariableDefinition();
+		definition.setEventNumber(entry.getEventNumber());
+		definition.setLineNumber(Integer.toString(argsNo));
+		definition.setSourcePath(PREFIX + methodName);
+		definition.setThread(entry.getThread());
+		definition.setDefinedVariable(new VariableInfoLeafType());
+		definition.getDefinedVariable().setLocalVariableInfo(new LocalVariableInfo());
+		definition.getDefinedVariable().getLocalVariableInfo().setVariableName(paramName);
+		return definition;
+	}
+	static VariableDefinition createParamDefinition(ConstructorEntry entry,String methodName,int argsNo,String paramName){
+		VariableDefinition definition = new VariableDefinition();
+		definition.setEventNumber(entry.getEventNumber());
+		definition.setLineNumber(Integer.toString(argsNo));
+		definition.setSourcePath(PREFIX + methodName);
+		definition.setThread(entry.getThread());
+		definition.setDefinedVariable(new VariableInfoLeafType());
+		definition.getDefinedVariable().setLocalVariableInfo(new LocalVariableInfo());
+		definition.getDefinedVariable().getLocalVariableInfo().setVariableName(paramName);
+		return definition;
+		
+	}
 	
 	/**
 	 * valueと等しいものがvariables内にあるか調べる。

@@ -17,6 +17,7 @@ class ConstructorEntryVisitor {
 	}
 	
 	private static boolean isSkip(ConstructorEntry ce){
+		if(ce.getCalleeSourcePath() == null || ce.getCalleeLineNumber() == null) return true;
 		if(ce.getMethodSignature() == null) return true;
 		MethodSignature signature = ce.getMethodSignature();
 		if(signature.getReturnType() == null) return true;
@@ -43,7 +44,7 @@ class ConstructorEntryVisitor {
 				index = EntryUtil.match(value, variables);
 			}
 			if(index != -1){
-				Variable var = new Variable(NameCreator.createActuallArgsName(scope, stackAddress), variables.get(index).getLatestDefinition());
+				Variable var = new Variable(NameCreator.createFormalParamName(scope, stackAddress), variables.get(index).getLatestDefinition());
 				model.addVariable(var);
 				variables.remove(index);
 			}

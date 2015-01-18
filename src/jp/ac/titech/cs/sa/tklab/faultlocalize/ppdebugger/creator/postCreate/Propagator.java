@@ -33,6 +33,7 @@ public class Propagator {
 				for(DataDependency dependency :propagatable.getSet()){
 					StatementData targetSd = dependency.getStatementData();
 					String targetVarName = dependency.getVarName();
+					if(em.getStatement(targetSd) == null) continue;
 					SortedSet<DataDependencySet> originals = em.getStatement(targetSd).getOriginals();
 					originals = originals.tailSet(propagatable);		//現在のイベント以前に起きたものだけをとる
 					if(originals.isEmpty()) continue;

@@ -13,6 +13,7 @@ public class NameCreator {
 	private static final String STATIC = "Static";
 	private static final String CONSTRUCTOR_NAME = "Constructor";
 	private static final String LOCAL_NAME = "*Local";
+	private static final String PARAM_NAME = "*Param";
 	private static final String RETURN_NAME = "*Return";
 	
 	
@@ -75,11 +76,16 @@ public class NameCreator {
 				return fieldInfo.getVariableName();
 			}
 		}else if(localInfo != null){
-			return scope.getMethodName() + localInfo.getVariableName() + DELIMITER + scope.getScope();
+			String localName = scope.getMethodName() + localInfo.getVariableName() + DELIMITER + scope.getScope();
+			if(scope.isParam(localName)) return scope.getParamName(localName);
+			return localName;
 		}
 		return null;
 	}
 	
+	public static String createActualParamName(Scope scope,int paramNo){
+		return scope.getMethodName() + PARAM_NAME + paramNo + DELIMITER + scope.getScope();
+	}
 	
 	public static String createFormalParamName(Scope scope,int stackAddress){
 		return scope.getMethodName() + LOCAL_NAME + stackAddress + DELIMITER + scope.getScope();
