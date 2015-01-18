@@ -17,6 +17,7 @@ public class Compressor {
 		List<Statement> statements = em.getStatements();
 		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		for(Statement st : statements){
+			//名前の圧縮（スコープをなくす）
 			List<DataDependencySet> ddsList = new ArrayList<DataDependencySet>();
 			for(DataDependencySet dds :st.getDataDependencySets()){
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
