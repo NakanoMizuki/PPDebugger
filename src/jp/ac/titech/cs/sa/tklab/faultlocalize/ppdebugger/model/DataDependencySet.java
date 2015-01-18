@@ -92,9 +92,10 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 * @param dds 比較するインスタンス
 	 * @return 同様ならtrue、それ以外でfalse
 	 */
-	public boolean isSameName(DataDependencySet comparedds){
+	public boolean isSame(DataDependencySet comparedds){
 		if(comparedds.label != label) return false;
-		if(!sd.equals(comparedds.sd) ||  !varName.equals(comparedds.varName)) return false;
+		if(!sd.equals(comparedds.sd)) return false;
+		if(!varName.equals(comparedds.varName)) return false;
 		
 		//セットの中身の比較
 		if(set.size() != comparedds.set.size()) return false;
@@ -118,7 +119,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(! (o instanceof DataDependencySet)) return false;
 		DataDependencySet comparedds = (DataDependencySet) o;
 		if(eventNumber != comparedds.eventNumber) return false;
-		return isSameName(comparedds);
+		return isSame(comparedds);
 	}
 	
 	@Override

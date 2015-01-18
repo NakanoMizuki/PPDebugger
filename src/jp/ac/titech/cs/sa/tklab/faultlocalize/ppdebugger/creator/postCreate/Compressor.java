@@ -28,10 +28,10 @@ public class Compressor {
 				dds.setDDSet(ddSet);
 				ddsList.add(dds);
 			}
-			for(DataDependencySet dds: st.getDataDependencySets()){
-				while(compressSameDDS(dds, ddsList));
-				dds.setEventNumber(0);
-			}
+//			for(DataDependencySet dds: st.getDataDependencySets()){
+//				while(compressSameDDS(dds, ddsList));
+//				dds.setEventNumber(0);
+//			}
 			st.setDataDependencySets(ddsList);
 		}
 	}
@@ -41,7 +41,7 @@ public class Compressor {
 		for(DataDependencySet dds: ddsList){
 			if(target == dds) continue;
 			if(dds.hashCode() != hash) continue;
-			if(target.isSameName(dds)){
+			if(target.isSame(dds)){
 				for(DataDependency dd: dds.getSet()){
 					target.addDataDependency(dd);
 				}

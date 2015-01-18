@@ -79,7 +79,7 @@ public class Statement {
 	 */
 	private boolean addDuplication(DataDependencySet dds){
 		for(DataDependencySet contentdds : ddsList){
-			if(contentdds.isSameName(dds)){
+			if(contentdds.equals(dds)){
 				for(DataDependency dd :dds.getSet()){
 					contentdds.addDataDependency(dd);
 				}

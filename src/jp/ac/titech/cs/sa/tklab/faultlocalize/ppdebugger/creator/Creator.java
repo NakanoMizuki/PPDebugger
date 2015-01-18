@@ -70,10 +70,10 @@ public class Creator {
 		case METHOD_EXIT:
 			refLine = returnStack.pop();
 			argsStack.pop();
-			scope.exit();
 			if(!returnStack.isEmpty()){	//メインメソッドの終了時はスタックが空になる。このときはデータ依存を考慮する必要はない
 				MethodExitVisitor.create(model,node.getMethodExit(),refLine,returnStack.peek(),argsStack.peek(),scope);
 			}
+			scope.exit();
 			break;
 		case CONSTRUCTOR_ENTRY:
 			scope.entry(NameCreator.createConstructorName(node.getConstructorEntry()));
@@ -84,8 +84,8 @@ public class Creator {
 		case CONSTRUCTOR_EXIT:
 			argsStack.pop();
 			returnStack.pop();
-			scope.exit();
 			ConstructorExitVisitor.create(model, node.getConstructorExit());
+			scope.exit();
 			break;
 		default:
 			break;
