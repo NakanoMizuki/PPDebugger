@@ -2,6 +2,8 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodSignature;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.ObjectInfoType;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.PrimitiveValueInfo;
@@ -56,6 +58,7 @@ public class EntryUtil {
 				args = args.substring(index);
 				break;
 			default:
+				throw new RuntimeException("Illegal returnType!");
 			}
 		}
 		return count;
