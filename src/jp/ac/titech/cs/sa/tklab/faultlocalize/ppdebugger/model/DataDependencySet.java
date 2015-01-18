@@ -34,6 +34,10 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 			label = false;
 		}
 	}
+	public DataDependencySet(StatementData sd,DataDependency dd,String eventNumber) {
+		this(sd, dd, Long.valueOf(eventNumber));
+	}
+	
 	
 	/**
 	 * 依存伝播時に使われるコンストラクタ 

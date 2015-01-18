@@ -35,7 +35,7 @@ class MethodExitVisitor {
 		}
 		//呼び出し元に追加
 		DataDependency returnDependency = ddFactory.genDataDependency(returnVariable.getVarName(), currentSD);
-		DataDependencySet callerDDS = new DataDependencySet(callerSD,returnDependency, Long.valueOf(me.getEventNumber()));
+		DataDependencySet callerDDS = new DataDependencySet(callerSD,returnDependency,me.getEventNumber());
 		model.addDataDependencySet(callerSD, callerDDS);
 		
 		callerLine.add(callerSD,returnVariable);
