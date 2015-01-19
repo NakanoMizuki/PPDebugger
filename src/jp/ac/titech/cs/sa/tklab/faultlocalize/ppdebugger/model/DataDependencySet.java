@@ -149,8 +149,15 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	public int compareTo(DataDependencySet o) {
 		if(sd.equals(o.sd)){
 			if(varName.equals(o.varName)){
-				if (set.size() < o.set.size()) return 1;
-				else return -1;
+				if(set.size() == o.set.size()){
+					if(label == o.label) return 0;
+					if(label == true) return 1;
+					return -1;
+				}else if (set.size() < o.set.size()){ 
+					return 1;
+				}else{
+					return-1;
+				}
 			}else{
 				return varName.compareTo(o.varName);
 			}
