@@ -1,7 +1,6 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,14 +40,7 @@ public class Statement {
 	
 	public Statement(StatementData sd){
 		this.sd = sd;
-		originals = new TreeSet<DataDependencySet>(new Comparator<DataDependencySet>() {
-			@Override
-			public int compare(DataDependencySet dds1,DataDependencySet dds2){		//eventNumberの降順
-				if(dds1.getEventNumber() == dds2.getEventNumber()) return 0;
-				if(dds1.getEventNumber() < dds2.getEventNumber()) return 1;
-				return -1;
-			}
-		});
+		originals = new TreeSet<DataDependencySet>(new EventNumberComparator());
 		ddsList = new ArrayList<DataDependencySet>();
 		propagatables = new HashSet<DataDependencySet>();
 		nextPropagations = new HashSet<DataDependencySet>();
@@ -64,9 +56,11 @@ public class Statement {
 	public StatementData getStatementData(){
 		return sd;
 	}
+	
 	public SortedSet<DataDependencySet> getOriginals(){
 		return originals;
 	}
+	
 	public Set<DataDependencySet> getPropagatables(){
 		return propagatables;
 	}
