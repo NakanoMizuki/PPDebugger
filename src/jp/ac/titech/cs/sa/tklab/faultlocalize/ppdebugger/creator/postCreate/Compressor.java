@@ -29,27 +29,33 @@ public class Compressor {
 				dds.setDDSet(ddSet);
 				ddsList.add(dds);
 			}
-//			for(DataDependencySet dds: st.getDataDependencySets()){
-//				while(compressSameDDS(dds, ddsList));
-//				dds.setEventNumber(0);
-//			}
+			int target = 0;
+			while(target < ddsList.size()){
+				int index = getDuplicateIndex(ddsList.get(target), ddsList, target +1);
+				if(index != -1){
+					ddsList.remove(index);
+				}else{
+					target++;
+				}
+			}
 			st.setDataDependencySets(ddsList);
 		}
 	}
 	
-	private static boolean compressSameDDS(DataDependencySet target,List<DataDependencySet> ddsList){
-		int hash = target.hashCode();
-		for(DataDependencySet dds: ddsList){
-			if(target == dds) continue;
-			if(dds.hashCode() != hash) continue;
-			if(target.isSame(dds)){
-				for(DataDependency dd: dds.getSet()){
-					target.addDataDependency(dd);
-				}
-				ddsList.remove(dds);
-				return true;
-			}
+	/**
+	 * リスト内の重複する要素のインデックスを返す
+	 * @param target
+	 * @param ddsList
+	 * @param start
+	 * @return 重複があればインデックス、なければ-1
+	 */
+	private static int getDuplicateIndex(DataDependencySet target,List<DataDependencySet> ddsList,int start){
+		if(start >= ddsList.size()) return -1;
+		for(int i=start; i < ddsList.size(); i++){
+			DataDependencySet dds = ddsList.get(i);
+			if(dds == target) continue;	//参照値が等しい==target自身
+			if(dds.isSame(target)) return i;
 		}
-		return false;
+		return -1;
 	}
 }
