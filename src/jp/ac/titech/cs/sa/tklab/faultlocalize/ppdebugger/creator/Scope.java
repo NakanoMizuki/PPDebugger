@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Scope {
-	private static final String DELIMITER="-";
+	private static final char DELIMITER='-';
 	private Stack<String> methodNameStack;
 	private Stack<Map<String, String>> paramMapStack; 
 	private List<Integer> list;
@@ -56,10 +56,12 @@ public class Scope {
 	}
 	
 	public String getScope(){
-		String str="";
+		StringBuilder sb = new StringBuilder();
 		for(int value : list){
-			str += DELIMITER + value;
+			sb.append(Integer.toHexString(value));
+			sb.append(DELIMITER);
 		}
-		return str;
+		sb.deleteCharAt(sb.length()-1);		//最後のDELIMITERを削除
+		return sb.toString();
 	}
 }
