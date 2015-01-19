@@ -8,6 +8,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodEntry;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodSignature;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.ObjectInfoType;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.PrimitiveValueInfo;
+import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableInfoLeafType;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
@@ -85,28 +86,23 @@ public class EntryUtil {
 		return sdFactory.genStatementData(paramName + methodName, Integer.toString(argsNo), entry.getThread());
 	}
 	
+	
 	static VariableDefinition createParamDefinition(MethodEntry entry,String methodName,int argsNo,String paramName){
-		VariableDefinition definition = new VariableDefinition();
-		definition.setEventNumber(entry.getEventNumber());
-		definition.setLineNumber(Integer.toString(argsNo));
-		definition.setSourcePath(PREFIX + methodName);
-		definition.setThread(entry.getThread());
-		definition.setDefinedVariable(new VariableInfoLeafType());
-		definition.getDefinedVariable().setLocalVariableInfo(new LocalVariableInfo());
-		definition.getDefinedVariable().getLocalVariableInfo().setVariableName(paramName);
-		return definition;
+		return createParamDefinition(entry.getEventNumber(), entry.getThread(), methodName, argsNo, paramName);
 	}
 	static VariableDefinition createParamDefinition(ConstructorEntry entry,String methodName,int argsNo,String paramName){
+		return createParamDefinition(entry.getEventNumber(), entry.getThread(), methodName, argsNo, paramName);
+	}
+	static VariableDefinition createParamDefinition(String eventNumber,Thread thread,String methodName,int argsNo,String paramName){
 		VariableDefinition definition = new VariableDefinition();
-		definition.setEventNumber(entry.getEventNumber());
+		definition.setEventNumber(eventNumber);
 		definition.setLineNumber(Integer.toString(argsNo));
 		definition.setSourcePath(PREFIX + methodName);
-		definition.setThread(entry.getThread());
+		definition.setThread(thread);
 		definition.setDefinedVariable(new VariableInfoLeafType());
 		definition.getDefinedVariable().setLocalVariableInfo(new LocalVariableInfo());
 		definition.getDefinedVariable().getLocalVariableInfo().setVariableName(paramName);
 		return definition;
-		
 	}
 	
 	/**
