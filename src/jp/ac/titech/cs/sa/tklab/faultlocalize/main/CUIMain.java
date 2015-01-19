@@ -51,9 +51,9 @@ public class CUIMain {
 		if(args.length == 2){
 			main = new CUIMain(args[0], Integer.valueOf(args[1]));
 		}else{
-			System.out.println("Illeagal arguments");
+			System.out.println("Illeagal arguments.");
 			System.out.println("arg[0] = projectPath");
-			System.out.println("(arg[1] = hopNum)");
+			System.out.println("arg[1] = hopNum");
 			return;
 		}
 		
