@@ -13,6 +13,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Executi
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Statement;
 
 public class Compressor {
+	
 	public static void compress(ExecutionModel em){
 		List<Statement> statements = em.getStatements();
 		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
