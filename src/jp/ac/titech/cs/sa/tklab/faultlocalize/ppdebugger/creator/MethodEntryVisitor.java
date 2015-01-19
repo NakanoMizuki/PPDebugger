@@ -36,10 +36,10 @@ class MethodEntryVisitor {
 	}
 
 	
-	private static void createDataDependency(ExecutionModel model,MethodEntry me,LineVariable argsLine,Scope scope){
-		MethodSignature signature = me.getMethodSignature();
+	private static void createDataDependency(ExecutionModel model,MethodEntry entry,LineVariable argsLine,Scope scope){
+		MethodSignature signature = entry.getMethodSignature();
 		List<String> argumentTypes = signature.getArgumentTypes().getTypeNames();
-		List<Object> argumentValues = me.getArgumentValues().getPrimitiveValueInfosAndObjectInfos();
+		List<Object> argumentValues = entry.getArgumentValues().getPrimitiveValueInfosAndObjectInfos();
 		List<Variable> variables = argsLine.getVariables();
 		StatementDataFactory sdFactory = StatementDataFactory.getInstance();
 		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
@@ -72,15 +72,15 @@ class MethodEntryVisitor {
 				variables.remove(index);
 				
 				//仮引数として新たな変数を追加
-				VariableDefinition definition = EntryUtil.createParamDefinition(me,scope.getMethodName(), i, paramName);
+				VariableDefinition definition = EntryUtil.createParamDefinition(entry,scope.getMethodName(), i, paramName);
 				Variable actualVariable = new Variable(paramName, definition);
 				model.addVariable(actualVariable);
 				
 				//実引数から仮引数へのデータ依存
-				StatementData formalParamSD = EntryUtil.createFormalParamSD(me,scope.getMethodName(), i, paramName);
+				StatementData formalParamSD = EntryUtil.createFormalParamSD(entry,scope.getMethodName(), i, paramName);
 				StatementData sdData = sdFactory.genStatementData(refferedVariable.getLatestDefinition().getSourcePath(), refferedVariable.getLatestDefinition().getLineNumber(),refferedVariable.getLatestDefinition().getThread());
 				DataDependency dd = ddFactory.genDataDependency(refferedVariable.getVarName(),sdData );
-				DataDependencySet dds = new DataDependencySet(formalParamSD,dd, me.getEventNumber());
+				DataDependencySet dds = new DataDependencySet(formalParamSD,dd, entry.getEventNumber());
 				model.addDataDependencySet(formalParamSD, dds);
 			}
 			
