@@ -6,7 +6,6 @@ import java.util.Stack;
 import javax.xml.bind.JAXBException;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Node;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BPDGHolder;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BXModelUtility;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.NodeKind;
@@ -21,7 +20,7 @@ public class Creator {
 	private Stack<LineVariable> returnStack;
 	private Scope scope;
 	
-	public Creator(StatementDataFactory factory){
+	public Creator(){
 		model = new ExecutionModel();
 		argsStack = new Stack<LineVariable>();
 		returnStack = new Stack<LineVariable>();

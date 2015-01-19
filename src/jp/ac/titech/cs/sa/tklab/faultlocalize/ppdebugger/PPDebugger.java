@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 
 import javax.xml.bind.JAXBException;
 
-import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass.PassedModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
@@ -25,13 +24,11 @@ public class PPDebugger{
 	
 	private final int hopNum;
 	private final PassedModel passedModel;
-	private final StatementDataFactory factory;
 	
 	
 	public PPDebugger(int hopNum){
 		this.hopNum = Math.max(hopNum,0);
 		passedModel = new PassedModel();
-		this.factory = StatementDataFactory.getInstance();
 	}
 	
 	
@@ -42,7 +39,8 @@ public class PPDebugger{
 		//成功実行の学習(複数スレッド)
 		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 		for(File file : passedFiles){
-			executorService.submit(new Executor(passedModel,file,factory,hopNum));
+			executorService.submit(new Executor(passedModel,file,hopNum));
+			file = null;
 		}
 		passedFiles = null;
 		
@@ -64,7 +62,8 @@ public class PPDebugger{
 		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 		List<Future<Result>> futures = new ArrayList<Future<Result>>();
 		for(File file:failedFailes){
-			futures.add(executorService.submit(new CreateResult(passedModel,file,factory,hopNum)));
+			futures.add(executorService.submit(new CreateResult(passedModel,file,hopNum)));
+			file = null;
 		}
 		failedFailes = null;
 		executorService.shutdown();
