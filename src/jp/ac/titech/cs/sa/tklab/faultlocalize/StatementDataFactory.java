@@ -8,12 +8,14 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 
 public class StatementDataFactory {
+	private static final int DATA_NUM = 10000;
+	
 	private static StatementDataFactory instance = null;
 	private Map<StatementData,StatementData> pool;
 	
 	
 	private StatementDataFactory(){
-		pool = new Hashtable<StatementData,StatementData>();
+		pool = new Hashtable<StatementData,StatementData>(DATA_NUM * 4/3);
 	}
 	
 	public static StatementDataFactory getInstance(){

@@ -7,12 +7,14 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 
 public class DataDependencyFactory {
+	private static final int DATA_NUM = 10000;
+	
 	private static DataDependencyFactory instance = null;
 	private Map<DataDependency,DataDependency> pool;
 	
 	
 	private DataDependencyFactory() {
-		pool = new Hashtable<DataDependency,DataDependency>();
+		pool = new Hashtable<DataDependency,DataDependency>(DATA_NUM *4/3);
 	}
 	
 	public static DataDependencyFactory getInstance(){

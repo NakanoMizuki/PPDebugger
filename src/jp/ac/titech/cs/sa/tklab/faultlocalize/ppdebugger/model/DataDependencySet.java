@@ -66,7 +66,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	}
 	
 	public void setVarName(String name){
-		varName = name.intern();
+		varName = (name==null)? null : name.intern();
 	}
 	
 	public Set<DataDependency> getSet(){
