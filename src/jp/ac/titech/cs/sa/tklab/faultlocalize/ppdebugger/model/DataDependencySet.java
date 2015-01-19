@@ -131,18 +131,19 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	@Override
 	public String toString(){
-		String str = "D(" + NameCreator.compressMethodName(varName) + "," + sd.toString() +")";
+		StringBuilder sb = new StringBuilder();
+		sb.append("D(" + NameCreator.compressMethodName(varName) + "," + sd.toString() +")");
 		if(label){
-			str += "L";
+			sb.append("L");
 		}
-		str += "= {" + System.lineSeparator();
+		sb.append("= {" + System.lineSeparator());
 		List<DataDependency> ddList = new ArrayList<DataDependency>(set);
 		Collections.sort(ddList);
 		for(DataDependency dd : ddList){
-			str += "\t" + dd.toString() + "," + System.lineSeparator();
+			sb.append("\t" + dd.toString() + "," + System.lineSeparator());
 		}
-		str += "}";
-		return str;
+		sb.append("}");
+		return sb.toString();
 	}
 
 	@Override
