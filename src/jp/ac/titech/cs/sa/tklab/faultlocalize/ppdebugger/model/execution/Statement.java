@@ -60,6 +60,15 @@ public class Statement {
 	public SortedSet<DataDependencySet> getOriginals(){
 		return originals;
 	}
+	public SortedSet<DataDependencySet> getOriginals(String varName){
+		SortedSet<DataDependencySet> newSet = new TreeSet<DataDependencySet>(new EventNumberComparator());
+		for(DataDependencySet dds: originals){
+			if(dds.getVarName().equals(varName)){
+				newSet.add(dds);
+			}
+		}
+		return newSet;
+	}
 	
 	public Set<DataDependencySet> getPropagatables(){
 		return propagatables;

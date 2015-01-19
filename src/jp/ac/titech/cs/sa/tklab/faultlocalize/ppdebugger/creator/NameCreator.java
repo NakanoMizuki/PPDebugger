@@ -83,6 +83,11 @@ public class NameCreator {
 		return null;
 	}
 	
+	public static boolean isParam(String varName){
+		if(varName.contains(PARAM_NAME)) return true;
+		return false;
+	}
+	
 	public static String createActualParamName(Scope scope,int paramNo){
 		return scope.getMethodName() + PARAM_NAME + paramNo + DELIMITER + scope.getScope();
 	}

@@ -3,11 +3,13 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.postCreate;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -35,7 +37,15 @@ public class Propagator {
 					String targetVarName = dependency.getVarName();
 					if(em.getStatement(targetSd) == null) continue;
 					SortedSet<DataDependencySet> originals = em.getStatement(targetSd).getOriginals();
-					originals = originals.tailSet(propagatable);		//現在のイベント以前に起きたものだけをとる
+					try{
+						originals = originals.tailSet(propagatable);		//現在のイベント以前に起きたものだけをとる
+						if(NameCreator.isParam(targetVarName)){
+							DataDependencySet dummy = new DataDependencySet(null, null,originals.first().getEventNumber()-1,null,false);	//イベントナンバーが１だけ違うものを作る
+							originals = originals.headSet(dummy);	//最新のイベントナンバーのものだけを取る。引数の場合は実行毎に使われる変数が異なるのでこうしている
+						}
+					}catch(NoSuchElementException e){
+						continue;
+					}
 					if(originals.isEmpty()) continue;
 					
 					Set<DataDependency> newDDset = new HashSet<DataDependency>();

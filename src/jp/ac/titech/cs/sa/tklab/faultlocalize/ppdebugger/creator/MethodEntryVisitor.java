@@ -78,10 +78,9 @@ class MethodEntryVisitor {
 				
 				//実引数から仮引数へのデータ依存
 				StatementData formalParamSD = EntryUtil.createFormalParamSD(me,scope.getMethodName(), i, paramName);
-				
 				StatementData sdData = sdFactory.genStatementData(refferedVariable.getLatestDefinition().getSourcePath(), refferedVariable.getLatestDefinition().getLineNumber(),refferedVariable.getLatestDefinition().getThread());
 				DataDependency dd = ddFactory.genDataDependency(refferedVariable.getVarName(),sdData );
-				DataDependencySet dds = new DataDependencySet(formalParamSD,paramName, dd, me.getEventNumber());
+				DataDependencySet dds = new DataDependencySet(formalParamSD,dd, me.getEventNumber());
 				model.addDataDependencySet(formalParamSD, dds);
 			}
 			
