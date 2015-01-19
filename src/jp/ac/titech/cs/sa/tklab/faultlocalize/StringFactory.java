@@ -26,6 +26,7 @@ public class StringFactory {
 	}
 	
 	public String genString(String newString){
+		if(newString == null) return null;
 		int hashCode = newString.hashCode();
 		synchronized (set) {
 			try{
