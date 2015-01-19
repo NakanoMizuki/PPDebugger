@@ -15,7 +15,7 @@ public class DataDependency implements Comparable<DataDependency>{
 	
 	
 	public DataDependency(String varName,StatementData sd){
-		this.varName = varName;
+		this.varName = varName.intern();
 		this.sd = sd;
 	}
 	

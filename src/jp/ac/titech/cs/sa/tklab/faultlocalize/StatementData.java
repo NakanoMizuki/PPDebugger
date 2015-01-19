@@ -16,12 +16,12 @@ public class StatementData implements Comparable<StatementData>{
 	
 	
 	public StatementData(String sourcePath,String lineNumber,Thread thread){
-		this.sourcePath = sourcePath;
+		this.sourcePath = sourcePath.intern();
 		this.lineNumber = Integer.valueOf(lineNumber);
 		this.thread = thread;
 	}
 	StatementData(String sourcePath,String lineNumber){
-		this.sourcePath = sourcePath;
+		this.sourcePath = sourcePath.intern();
 		this.lineNumber = Integer.valueOf(lineNumber);
 		thread = null;
 	}

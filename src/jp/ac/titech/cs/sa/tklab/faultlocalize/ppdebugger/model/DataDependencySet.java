@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.StringFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
-	private static StringFactory stringFactory = StringFactory.getInstance();
-	
 	private String varName;
 	private final StatementData sd;
 	private Set<DataDependency> set;
@@ -25,7 +22,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 */
 	public DataDependencySet(StatementData sd,DataDependency dd,int eventNumber){
 		this.sd = sd;
-		this.varName = stringFactory.genString(dd.getVarName());
+		setVarName(dd.getVarName());
 		set = new HashSet<DataDependency>();
 		set.add(dd);
 		this.eventNumber = eventNumber;
@@ -50,7 +47,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 */
 	public DataDependencySet(StatementData sd,String varName,int eventNumber ,Set<DataDependency> set,boolean label){
 		this.sd = sd;
-		this.varName = stringFactory.genString(varName);
+		setVarName(varName);
 		this.eventNumber = eventNumber;
 		this.set = set;
 		this.label = label;
@@ -69,7 +66,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	}
 	
 	public void setVarName(String name){
-		varName = stringFactory.genString(name);
+		varName = name.intern();
 	}
 	
 	public Set<DataDependency> getSet(){

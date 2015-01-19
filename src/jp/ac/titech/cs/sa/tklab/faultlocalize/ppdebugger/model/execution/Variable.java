@@ -7,7 +7,7 @@ public class Variable {
 	private VariableDefinition latestdef;
 
 	public Variable(String varName,VariableDefinition def) {
-		this.varName = varName;
+		this.varName = varName.intern();
 		latestdef = def;
 	}
 	
