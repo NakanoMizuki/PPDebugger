@@ -72,6 +72,11 @@ class MethodEntryVisitor {
 				variables.remove(index);
 				
 				//仮引数として新たな変数を追加
+				Variable actualVariable = new Variable(paramName, refferedVariable.getLatestDefinition());
+				model.addVariable(actualVariable);
+				
+				/*
+				//仮引数として新たな変数を追加
 				VariableDefinition definition = EntryUtil.createParamDefinition(entry,scope.getMethodName(), i, paramName);
 				Variable actualVariable = new Variable(paramName, definition);
 				model.addVariable(actualVariable);
@@ -82,6 +87,7 @@ class MethodEntryVisitor {
 				DataDependency dd = ddFactory.genDataDependency(refferedVariable.getVarName(),sdData );
 				DataDependencySet dds = new DataDependencySet(formalParamSD,dd, entry.getEventNumber());
 				model.addDataDependencySet(formalParamSD, dds);
+				*/
 			}
 			
 			stackAddress += EntryUtil.getBlockSize(type);
