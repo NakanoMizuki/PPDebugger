@@ -5,14 +5,17 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StringFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 
 public class DataDependencyFactory {
 	private static DataDependencyFactory instance = null;
 	private SortedSet<DataDependency> dataDependencies;
+	private StringFactory stringFactory;
 	
 	
 	private DataDependencyFactory() {
+		stringFactory = StringFactory.getInstance();
 		dataDependencies = new TreeSet<DataDependency>(new Comparator<DataDependency>() {
 			@Override
 			public int compare(DataDependency dd1,DataDependency dd2){	//hashCodeの昇順
@@ -30,7 +33,7 @@ public class DataDependencyFactory {
 	}
 	
 	public DataDependency genDataDependency(String varName,StatementData sd){
-		DataDependency newdd = new DataDependency(varName, sd);	
+		DataDependency newdd = new DataDependency(stringFactory.genString(varName), sd);	
 		//hashCodeが1だけ異なるインスタンスを生成。これは比較のためだけに用いる
 		StatementData dummySd = new StatementData(sd.getSourcePath(),Integer.toString(sd.getLineNumber() +1),sd.getThread());
 		DataDependency dummy = new DataDependency(varName, dummySd);

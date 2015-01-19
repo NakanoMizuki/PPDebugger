@@ -11,9 +11,11 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 public class StatementDataFactory {
 	private static StatementDataFactory instance = null;
 	private SortedSet<StatementData> sdSet;
+	private StringFactory stringFactory;
 	
 	
 	private StatementDataFactory(){
+		stringFactory = StringFactory.getInstance();
 		sdSet = new TreeSet<StatementData>(new Comparator<StatementData>() {
 			@Override
 			public int compare(StatementData sd1,StatementData sd2){	//hashCodeの昇順
@@ -32,7 +34,7 @@ public class StatementDataFactory {
 	}
 	
 	public StatementData genStatementData(String sourcePath,int lineNumber,Thread thread){
-		StatementData newSD = new StatementData(sourcePath,Integer.toString(lineNumber),thread);
+		StatementData newSD = new StatementData(stringFactory.genString(sourcePath),stringFactory.genString(Integer.toString(lineNumber)),thread);
 		//hashCodeが1だけ異なるインスタンスを生成。これは比較のためだけに用いる
 		StatementData dummy = new StatementData(sourcePath, Integer.toString(lineNumber+1),thread);
 		synchronized (sdSet) {
