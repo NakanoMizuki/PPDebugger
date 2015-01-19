@@ -20,7 +20,6 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
  *
  */
 public class CUIMain {
-	private static final int HOPNUM = 0;
 	private final PPDebugger ppdebugger;
 	private final String tracePath;
 	private final String faultPath;
@@ -49,9 +48,7 @@ public class CUIMain {
 	 */
 	public static void main(String[] args) throws JAXBException {
 		CUIMain main = null;
-		if(args.length == 1){
-			main = new CUIMain(args[0],HOPNUM);
-		}else if(args.length == 2){
+		if(args.length == 2){
 			main = new CUIMain(args[0], Integer.valueOf(args[1]));
 		}else{
 			System.out.println("Illeagal arguments");
@@ -61,8 +58,8 @@ public class CUIMain {
 		}
 		
 		long start = System.currentTimeMillis();
-		main.execute(1);
-		//main.executeAllVersion();
+		//main.execute(1);
+		main.executeAllVersion();
 		
 		long end = System.currentTimeMillis();
 		System.out.println("Time:" + (end - start)+ " (ms)." );
