@@ -1,5 +1,7 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model;
 
+import java.util.Objects;
+
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
@@ -11,16 +13,19 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
  */
 public class DataDependency implements Comparable<DataDependency>{
 	private final String varName;
+	private final String suffix;
 	private final StatementData sd;
 	
 	
 	public DataDependency(String varName,StatementData sd){
-		this.varName = varName.intern();
+		String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
+		this.varName = tokens[0].intern();
+		this.suffix = (tokens.length == 2) ? tokens[1].intern() : "".intern();
 		this.sd = sd;
 	}
 	
 	public String getVarName(){
-		return varName;
+		return varName + NameCreator.DELIMITER + suffix;
 	}
 	public StatementData getStatementData(){
 		return sd;
@@ -28,15 +33,16 @@ public class DataDependency implements Comparable<DataDependency>{
 	
 	@Override
 	public boolean equals(Object o){
+		if(Objects.isNull(o)) return false;
 		if(! (o instanceof DataDependency)) return false;
 		DataDependency dd = (DataDependency) o;
-		if(varName.equals(dd.varName) && sd.equals(dd.sd)) return true;
+		if(varName.equals(dd.varName) && (suffix.equals(dd.suffix)) && sd.equals(dd.sd)) return true;
 		
 		return false;
 	}
 	@Override
 	public int hashCode(){
-		return varName.hashCode() + sd.hashCode();
+		return varName.hashCode() ^ suffix.hashCode() ^ sd.hashCode();
 	}
 	@Override
 	public String toString(){
@@ -45,10 +51,14 @@ public class DataDependency implements Comparable<DataDependency>{
 
 	@Override
 	public int compareTo(DataDependency o) {
-		if(sd.equals(o.sd)){
-			return varName.compareTo(o.varName);
-		}else{
-			return sd.compareTo(o.sd);
-		}
+		int sdComp = sd.compareTo(o.sd);
+		if(sdComp != 0) 
+			return sdComp;
+		
+		int comp = varName.compareTo(o.varName);
+		if(comp == 0)
+			return suffix.compareTo(o.suffix);
+		
+		return varName.compareTo(o.varName);
 	}
 }

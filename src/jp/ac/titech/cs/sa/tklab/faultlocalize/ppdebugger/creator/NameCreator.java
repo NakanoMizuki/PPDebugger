@@ -8,7 +8,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableReference;
 
 public class NameCreator {
-	private static final char DELIMITER = '#';
+	public static final char DELIMITER = '#';
 	private static final char METHODNAME_DELIMITER = ':';
 	private static final String STATIC = "Static";
 	private static final String CONSTRUCTOR_NAME = "Constructor";

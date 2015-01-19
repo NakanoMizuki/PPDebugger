@@ -11,6 +11,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
 	private String varName;
+	private String suffix;
 	private final StatementData sd;
 	private Set<DataDependency> set;
 	private final boolean label;
@@ -62,11 +63,18 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		return sd;
 	}
 	public String getVarName(){
-		return varName;
+		return varName + NameCreator.DELIMITER + suffix;
 	}
 	
-	public void setVarName(String name){
-		varName = (name==null)? null : name.intern();
+	public void setVarName(String varName){
+		if(varName == null){
+			this.varName = "".intern();
+			suffix = "".intern();
+		}else{
+			String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
+			this.varName = tokens[0].intern();
+			suffix =  (tokens.length == 2) ? tokens[1].intern() : "".intern();
+		}
 	}
 	
 	public Set<DataDependency> getSet(){
@@ -98,6 +106,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(comparedds.label != label) return false;
 		if(!sd.equals(comparedds.sd)) return false;
 		if(!varName.equals(comparedds.varName)) return false;
+		if(!suffix.equals(comparedds.suffix)) return false;
 		
 		//セットの中身の比較
 		if(set.size() != comparedds.set.size()) return false;
@@ -126,7 +135,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	@Override
 	public int hashCode(){
-		return sd.hashCode() + varName.hashCode();
+		return sd.hashCode() ^ varName.hashCode() ^ suffix.hashCode();
 	}
 	
 	@Override
@@ -153,23 +162,17 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 
 	@Override
 	public int compareTo(DataDependencySet o) {
-		if(sd.equals(o.sd)){
-			if(varName.equals(o.varName)){
-				if(set.size() == o.set.size()){
-					if(label == o.label) return 0;
-					if(label == true) return 1;
-					return -1;
-				}else if (set.size() < o.set.size()){ 
-					return 1;
-				}else{
-					return-1;
-				}
-			}else{
-				return varName.compareTo(o.varName);
-			}
-		}else{
-			return sd.compareTo(o.sd);
-		}
+		int sdComp = sd.compareTo(o.sd);
+		if(sdComp != 0) return sdComp;
+		
+		int varComp = varName.compareTo(o.varName);
+		if(varComp != 0) return varComp;
+		if(label == true && o.label == false) return -1;
+		if(label == false && o.label == true) return 1;
+		int suffixComp = suffix.compareTo(o.suffix);
+		if(suffixComp != 0) return suffixComp;
+		
+		return set.size() - o.set.size();
 	}
 
 }
