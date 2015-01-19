@@ -58,8 +58,10 @@ public class PassedModel {
 	public Result createResults(ExecutionModel executionModel,String fileName){
 		Set<StatementProb> stPbs = new HashSet<StatementProb>();
 		for(Statement statement :executionModel.getStatements()){
+			if(statement.getStatementData().getSourcePath().charAt(0) == '*') continue;
 			if(statement.getDataDependencySets().isEmpty()){
 				stPbs.add(new StatementProb(statement.getStatementData(), 1D));
+				continue;
 			}
 			int minNum = numCase;
 			for(DataDependencySet dds : statement.getDataDependencySets()){
