@@ -10,6 +10,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableInfoLeafType;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -30,11 +31,11 @@ class MethodExitVisitor {
 		for(Variable variable: returnLine.getVariables()){
 			VariableDefinition def = variable.getLatestDefinition();
 			StatementData fromSd = sdFactory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread());
-			DataDependency dd = ddFactory.genDataDependency(variable.getVarName(),fromSd);
+			DataDependency dd = ddFactory.genDataDependency(variable.getVarName(),scope.getTreeNode(),fromSd);
 			set.add(dd);
 		}
 		//呼び出し元に追加
-		DataDependency returnDependency = ddFactory.genDataDependency(returnVariable.getVarName(), currentSD);
+		DataDependency returnDependency = ddFactory.genDataDependency(returnVariable.getVarName(),scope.getTreeNode(), currentSD);
 		DataDependencySet callerDDS = new DataDependencySet(callerSD,returnDependency,me.getEventNumber());
 		model.addDataDependencySet(callerSD, callerDDS);
 		

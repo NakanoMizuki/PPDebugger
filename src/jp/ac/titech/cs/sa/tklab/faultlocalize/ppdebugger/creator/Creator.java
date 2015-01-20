@@ -11,6 +11,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BXModelUtility;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.NodeKind;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.postCreate.Compressor;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.postCreate.Propagator;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVariable;
 

@@ -5,6 +5,7 @@ import java.util.Objects;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.TreeNode;
 
 /**
  * 村松さんの論文の　d(x)=l(x)　に対応するクラス
@@ -14,21 +15,17 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
  */
 public class DataDependency implements Comparable<DataDependency>{
 	private final String varName;
-	private String suffix;
+	private final TreeNode scope;
 	private final StatementData sd;
 	
 	
-	public DataDependency(String varName,StatementData sd){
-		String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
-		this.varName = FastIntern.get(tokens[0]);
-		this.suffix = (tokens.length == 2) ? FastIntern.get(tokens[1]): FastIntern.get("");
+	public DataDependency(String varName,TreeNode scopeNode,StatementData sd){
+		this.varName = FastIntern.get(varName);
+		this.scope = scopeNode;
 		this.sd = sd;
 	}
 	
 	public String getVarName(){
-		return varName + NameCreator.DELIMITER + suffix;
-	}
-	public String getVarNameWithoutSuffix(){
 		return varName;
 	}
 	
@@ -36,22 +33,23 @@ public class DataDependency implements Comparable<DataDependency>{
 		return sd;
 	}
 	
-	public void removeSuffix(){
-		suffix = FastIntern.get("");
+	public TreeNode getTreeNode(){
+		return scope;
 	}
+	
 	
 	@Override
 	public boolean equals(Object o){
 		if(Objects.isNull(o)) return false;
 		if(! (o instanceof DataDependency)) return false;
 		DataDependency dd = (DataDependency) o;
-		if(varName.equals(dd.varName) && (suffix.equals(dd.suffix)) && sd.equals(dd.sd)) return true;
+		if(varName.equals(dd.varName) && (scope == dd.scope) && sd.equals(dd.sd)) return true;
 		
 		return false;
 	}
 	@Override
 	public int hashCode(){
-		return varName.hashCode() ^ suffix.hashCode() ^ sd.hashCode();
+		return varName.hashCode() ^ sd.hashCode();
 	}
 	@Override
 	public String toString(){
@@ -63,10 +61,6 @@ public class DataDependency implements Comparable<DataDependency>{
 		int sdComp = sd.compareTo(o.sd);
 		if(sdComp != 0) 
 			return sdComp;
-		
-		int comp = varName.compareTo(o.varName);
-		if(comp == 0)
-			return suffix.compareTo(o.suffix);
 		
 		return varName.compareTo(o.varName);
 	}

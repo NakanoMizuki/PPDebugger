@@ -1,48 +1,50 @@
-package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
+package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 
 public class Scope {
-	private static final char DELIMITER='-';
 	private Stack<String> methodNameStack;
 	private Stack<Map<String, String>> paramMapStack; 
-	private List<Integer> list;
 	private int next;
+	private TreeNode treeNode;
 	
 	public Scope(){
+		treeNode = TreeNode.ROOT;
 		methodNameStack = new Stack<String>();
 		paramMapStack = new Stack<Map<String,String>>();
-		list = new ArrayList<Integer>();
 		clear();
 	}
 	
 	public void clear(){
-		list.clear();
 		next = 0;
+		treeNode = TreeNode.ROOT;
 	}
 	
 	public void entry(String methodName){
+		treeNode = treeNode.getChildNode(next);
 		methodNameStack.push(FastIntern.get(methodName));
 		paramMapStack.add(new HashMap<String, String>());
-		list.add(next);
+		next = 0;
 	}
 
 	public void exit(){
 		methodNameStack.pop();
 		paramMapStack.pop();
-		next = list.get(list.size()-1) +1;
-		list.remove(list.size() -1);
+		next = treeNode.getValue() +1;
+		treeNode = treeNode.getParent();
 	}
 	
 	
 	public String getMethodName(){
 		return methodNameStack.peek();
+	}
+	
+	public TreeNode getTreeNode(){
+		return treeNode;
 	}
 	
 	public void putParam(String localName,String paramName){
@@ -57,13 +59,4 @@ public class Scope {
 		return paramMapStack.peek().get(localName);
 	}
 	
-	public String getScope(){
-		StringBuilder sb = new StringBuilder();
-		for(int value : list){
-			sb.append(Integer.toHexString(value));
-			sb.append(DELIMITER);
-		}
-		sb.deleteCharAt(sb.length()-1);		//最後のDELIMITERを削除
-		return sb.toString();
-	}
 }

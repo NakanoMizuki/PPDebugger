@@ -10,6 +10,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -69,7 +70,7 @@ class ConstructorEntryVisitor {
 				//実引数から仮引数へのデータ依存
 				StatementData formalParamSD = EntryUtil.createFormalParamSD(entry,scope.getMethodName(), i, paramName);
 				StatementData sdData = sdFactory.genStatementData(refferedVariable.getLatestDefinition().getSourcePath(), refferedVariable.getLatestDefinition().getLineNumber(),refferedVariable.getLatestDefinition().getThread());
-				DataDependency dd = ddFactory.genDataDependency(refferedVariable.getVarName(),sdData );
+				DataDependency dd = ddFactory.genDataDependency(refferedVariable.getVarName(),scope.getTreeNode(),sdData );
 				DataDependencySet dds = new DataDependencySet(formalParamSD,dd, entry.getEventNumber());
 				model.addDataDependencySet(formalParamSD, dds);
 			}

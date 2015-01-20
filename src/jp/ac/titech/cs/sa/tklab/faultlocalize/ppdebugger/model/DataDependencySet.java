@@ -9,10 +9,11 @@ import java.util.Set;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.TreeNode;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
 	private String varName;
-	private String suffix;
+	private TreeNode scope;
 	private final StatementData sd;
 	private Set<DataDependency> set;
 	private final boolean label;
@@ -47,9 +48,10 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 * @param set
 	 * @param label
 	 */
-	public DataDependencySet(StatementData sd,String varName,int eventNumber ,Set<DataDependency> set,boolean label){
+	public DataDependencySet(StatementData sd,String varName,TreeNode scope,int eventNumber ,Set<DataDependency> set,boolean label){
 		this.sd = sd;
 		setVarName(varName);
+		this.scope = scope;
 		this.eventNumber = eventNumber;
 		this.set = set;
 		this.label = label;
@@ -59,11 +61,8 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	private void setVarName(String varName){
 		if(varName == null){
 			this.varName = FastIntern.get("");
-			suffix = FastIntern.get("");
 		}else{
-			String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
-			this.varName = FastIntern.get(tokens[0]);
-			suffix =  (tokens.length == 2) ? FastIntern.get(tokens[1]) : FastIntern.get("");
+			this.varName = FastIntern.get(varName);
 		}
 	}
 	
@@ -72,9 +71,6 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	}
 	
 	public String getVarName(){
-		return varName + NameCreator.DELIMITER + suffix;
-	}
-	public String getVarNameWithoutSuffix(){
 		return varName;
 	}
 	
@@ -102,8 +98,8 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	/** 伝播終了後不要なものをなくす  */
 	public void compress(){
-		suffix = FastIntern.get("");
 		eventNumber = 0;
+		scope = null;
 	}
 	
 	/**
@@ -115,7 +111,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(comparedds.label != label) return false;
 		if(!sd.equals(comparedds.sd)) return false;
 		if(!varName.equals(comparedds.varName)) return false;
-		if(!suffix.equals(comparedds.suffix)) return false;
+		if(!(scope == comparedds.scope)) return false;
 		
 		//セットの中身の比較
 		if(set.size() != comparedds.set.size()) return false;
@@ -145,7 +141,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	@Override
 	public int hashCode(){
-		return sd.hashCode() ^ varName.hashCode() ^ suffix.hashCode();
+		return sd.hashCode() ^ varName.hashCode();
 	}
 	
 	@Override
@@ -179,10 +175,14 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(varComp != 0) return varComp;
 		if(label == true && o.label == false) return -1;
 		if(label == false && o.label == true) return 1;
-		int suffixComp = suffix.compareTo(o.suffix);
-		if(suffixComp != 0) return suffixComp;
 		
-		return set.size() - o.set.size();
+		
+		int setComp = set.size() - o.set.size();
+		if(setComp != 0) return setComp;
+		if(scope == null && o.scope == null) return 0;
+		if(scope == null) return -1;
+		if(o.scope == null) return 1;
+		return Integer.compare(scope.getValue(), o.scope.getValue());
 	}
 
 }

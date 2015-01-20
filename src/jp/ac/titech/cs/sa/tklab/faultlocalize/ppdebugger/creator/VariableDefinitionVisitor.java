@@ -2,6 +2,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variable;
 

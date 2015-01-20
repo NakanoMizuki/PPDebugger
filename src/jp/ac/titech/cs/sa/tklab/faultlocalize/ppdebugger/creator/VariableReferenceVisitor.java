@@ -6,6 +6,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableReference;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -30,7 +31,7 @@ public class VariableReferenceVisitor {
 		
 		
 		//データ依存を作成
-		DataDependency dd = ddFactory.genDataDependency(NameCreator.createVariableName(ref, scope),fromSd);
+		DataDependency dd = ddFactory.genDataDependency(NameCreator.createVariableName(ref, scope),scope.getTreeNode(),fromSd);
 		DataDependencySet dds = new DataDependencySet(currentSd,dd,ref.getEventNumber());
 		
 		//依存先のステートメントにデータ依存を追加

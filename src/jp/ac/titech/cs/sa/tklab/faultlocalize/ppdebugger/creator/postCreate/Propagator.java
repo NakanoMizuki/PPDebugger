@@ -40,7 +40,7 @@ public class Propagator {
 					try{
 						originals = originals.tailSet(propagatable);		//現在のイベント以前に起きたものだけをとる
 						if(NameCreator.isParam(targetVarName)){
-							DataDependencySet dummy = new DataDependencySet(null, null,originals.first().getEventNumber()-1,null,false);	//イベントナンバーが１だけ違うものを作る
+							DataDependencySet dummy = new DataDependencySet(null, null,null,originals.first().getEventNumber()-1,null,false);	//イベントナンバーが１だけ違うものを作る
 							originals = originals.headSet(dummy);	//最新のイベントナンバーのものだけを取る。引数の場合は実行毎に使われる変数が異なるのでこうしている
 						}
 					}catch(NoSuchElementException e){
@@ -49,16 +49,17 @@ public class Propagator {
 					if(originals.isEmpty()) continue;
 					
 					Set<DataDependency> newDDset = new HashSet<DataDependency>();
-					Set<String> registerdVars = new HashSet<String>();
+					Set<VarName> registerdVars = new HashSet<VarName>();
 					for(DataDependencySet dds:originals){
 						for(DataDependency dd: dds.getSet()){
-							if(registerdVars.contains(dd.getVarName())) continue;	//同じ変数名の依存はひとつだけ。セットが新しいイベント順で並んでいるので、これで最新の依存のみ取れる
-							newDDset.add(ddFactory.genDataDependency(dd.getVarName(), dd.getStatementData()));
-							registerdVars.add(dd.getVarName());
+							VarName currentVar = new VarName(dd.getVarName(),dd.getTreeNode());
+							if(registerdVars.contains(currentVar)) continue;	//同じ変数名の依存はひとつだけ。セットが新しいイベント順で並んでいるので、これで最新の依存のみ取れる
+							newDDset.add(ddFactory.genDataDependency(dd.getVarName(),dd.getTreeNode(), dd.getStatementData()));
+							registerdVars.add(currentVar);
 						}
 					}
 					if(newDDset != null){
-						DataDependencySet newDds = new DataDependencySet(targetSd, targetVarName,propagatable.getEventNumber(),newDDset,false);
+						DataDependencySet newDds = new DataDependencySet(targetSd, targetVarName,dependency.getTreeNode(),propagatable.getEventNumber(),newDDset,false);
 						st.addNextPropagation(newDds);
 					}
 				}

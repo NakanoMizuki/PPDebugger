@@ -22,7 +22,7 @@ public class Compressor {
 			for(DataDependencySet dds :st.getDataDependencySets()){
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
 				for(DataDependency dd : dds.getSet()){
-					DataDependency newdd = ddFactory.genDataDependency(dd.getVarNameWithoutSuffix(), dd.getStatementData());
+					DataDependency newdd = ddFactory.genDataDependency(dd.getVarName(), null,dd.getStatementData());	//スコープを考慮しないインスタンスを作る
 					ddSet.add(newdd);
 				}
 				dds.compress();

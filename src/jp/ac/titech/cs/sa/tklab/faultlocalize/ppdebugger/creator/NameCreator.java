@@ -6,6 +6,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.LocalVariableInfo;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.MethodEntry;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableReference;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 
 public class NameCreator {
 	public static final char DELIMITER = '#';
@@ -29,10 +30,6 @@ public class NameCreator {
 		}
 		String latter = name.substring(name.lastIndexOf(METHODNAME_DELIMITER) +1);
 		return prefix + METHODNAME_DELIMITER + latter;
-	}
-	
-	public static String removeSuffix(String name){
-		return name.replaceAll(DELIMITER + ".+$", "");
 	}
 	
 	public static String createMethodName(MethodEntry entry){
@@ -81,7 +78,7 @@ public class NameCreator {
 				return fieldInfo.getVariableName();
 			}
 		}else if(localInfo != null){
-			String localName = scope.getMethodName() + localInfo.getVariableName() + DELIMITER + scope.getScope();
+			String localName = scope.getMethodName() + localInfo.getVariableName();
 			if(scope.isParam(localName)) return scope.getParamName(localName);
 			return localName;
 		}
@@ -94,14 +91,14 @@ public class NameCreator {
 	}
 	
 	public static String createActualParamName(Scope scope,int paramNo){
-		return scope.getMethodName() + PARAM_NAME + paramNo + DELIMITER + scope.getScope();
+		return scope.getMethodName() + PARAM_NAME + paramNo;
 	}
 	
 	public static String createFormalParamName(Scope scope,int stackAddress){
-		return scope.getMethodName() + LOCAL_NAME + stackAddress + DELIMITER + scope.getScope();
+		return scope.getMethodName() + LOCAL_NAME + stackAddress;
 	}
 	
 	public static String createReturnName(Scope scope){
-		return scope.getMethodName() + RETURN_NAME + DELIMITER + scope.getScope();
+		return scope.getMethodName() + RETURN_NAME;
 	}
 }
