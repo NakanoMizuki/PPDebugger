@@ -91,14 +91,8 @@ public class StatementData implements Comparable<StatementData>{
 
 	@Override
 	public int compareTo(StatementData o) {
-		if(sourcePath.equals(o.sourcePath)){
-			if(lineNumber < o.lineNumber){
-				return -1;
-			}else{
-				return 1;
-			}
-		}else{
-			return sourcePath.compareTo(o.sourcePath);
-		}
+		int sourceComp = sourcePath.compareTo(o.sourcePath);
+		if(sourceComp != 0) return sourceComp;
+		return lineNumber - o.lineNumber;
 	}
 }
