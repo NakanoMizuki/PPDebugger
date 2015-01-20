@@ -17,18 +17,20 @@ public class Compressor {
 		List<Statement> statements = em.getStatements();
 		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		for(Statement st : statements){
-			//名前の圧縮（スコープをなくす）
-			List<DataDependencySet> ddsList = new ArrayList<DataDependencySet>();
+			//依存終了後には必要ないデータを削除する。その上で同一なものはまとめる
+			Set<DataDependencySet> ddsSet = new HashSet<DataDependencySet>();
 			for(DataDependencySet dds :st.getDataDependencySets()){
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
 				for(DataDependency dd : dds.getSet()){
 					DataDependency newdd = ddFactory.genDataDependency(dd.getVarNameWithoutSuffix(), dd.getStatementData());
 					ddSet.add(newdd);
 				}
-				dds.setVarName(dds.getVarNameWithoutSuffix());
+				dds.compress();
 				dds.setDDSet(ddSet);
-				ddsList.add(dds);
+				ddsSet.add(dds);
 			}
+			
+			List<DataDependencySet> ddsList = new ArrayList<DataDependencySet>(ddsSet);
 			int target = 0;
 			while(target < ddsList.size()){
 				int index = getDuplicateIndex(ddsList.get(target), ddsList, target +1);

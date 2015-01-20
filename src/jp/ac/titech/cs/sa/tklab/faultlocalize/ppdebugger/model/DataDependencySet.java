@@ -56,8 +56,15 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	}
 	
 	
-	public void addDataDependency(DataDependency dd){
-		set.add(dd);
+	private void setVarName(String varName){
+		if(varName == null){
+			this.varName = FastIntern.get("");
+			suffix = FastIntern.get("");
+		}else{
+			String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
+			this.varName = FastIntern.get(tokens[0]);
+			suffix =  (tokens.length == 2) ? FastIntern.get(tokens[1]) : FastIntern.get("");
+		}
 	}
 	
 	public StatementData getStatementData(){
@@ -71,43 +78,36 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		return varName;
 	}
 	
-	public void setVarName(String varName){
-		if(varName == null){
-			this.varName = FastIntern.get("");
-			suffix = FastIntern.get("");
-		}else{
-			String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
-			this.varName = FastIntern.get(tokens[0]);
-			suffix =  (tokens.length == 2) ? FastIntern.get(tokens[1]) : FastIntern.get("");
-		}
-	}
 	
 	public Set<DataDependency> getSet(){
 		return set;
 	}
 	
-	public void setDDSet(Set<DataDependency> set){
-		this.set = set;
-	}
-
 	public boolean isLabeled(){
 		return label;
-	}
-	
-	public void removeSuffix(){
-		suffix = "";
-	}
-	
-	public void setEventNumber(int eventNumber){
-		this.eventNumber = eventNumber;
 	}
 	
 	public int getEventNumber(){
 		return eventNumber;
 	}
 	
+	public void addDataDependency(DataDependency dd){
+		set.add(dd);
+	}
+	
+	public void setDDSet(Set<DataDependency> set){
+		this.set = set;
+	}
+
+	
+	/** 伝播終了後不要なものをなくす  */
+	public void compress(){
+		suffix = FastIntern.get("");
+		eventNumber = 0;
+	}
+	
 	/**
-	 * eventNumbersは異なってよい
+	 * eventNumberは異なってよい
 	 * @param dds 比較するインスタンス
 	 * @return 同様ならtrue、それ以外でfalse
 	 */
@@ -119,10 +119,10 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		
 		//セットの中身の比較
 		if(set.size() != comparedds.set.size()) return false;
-		label:for(DataDependency dd1 :set){
+		loop:for(DataDependency dd1 :set){
 			for(DataDependency dd2 : comparedds.set){			//同一のDataDependencyが存在するか
 				if(dd1.equals(dd2)){
-					continue label;
+					continue loop;
 				}
 			}
 			return false;				//中身のDataDependencyがひとつでも違ったら別の物
@@ -141,6 +141,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(eventNumber != comparedds.eventNumber) return false;
 		return isSame(comparedds);
 	}
+	
 	
 	@Override
 	public int hashCode(){
