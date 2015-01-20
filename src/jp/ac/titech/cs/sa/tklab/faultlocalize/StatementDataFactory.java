@@ -27,9 +27,11 @@ public class StatementDataFactory {
 	
 	public StatementData genStatementData(String sourcePath,int lineNumber,Thread thread){
 		StatementData newSD = new StatementData(sourcePath,Integer.toString(lineNumber),thread);
-		synchronized (this) {
-			StatementData sd = pool.get(newSD);
-			if(sd != null) return newSD;
+		StatementData ret = pool.get(newSD);
+		if(ret != null) return ret;
+		synchronized (pool) {
+			ret = pool.get(newSD);
+			if(ret != null) return ret;
 			pool.put(newSD, newSD);
 			return newSD;
 		}

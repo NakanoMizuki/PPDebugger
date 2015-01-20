@@ -26,9 +26,11 @@ public class DataDependencyFactory {
 	
 	public DataDependency genDataDependency(String varName,StatementData sd){
 		DataDependency newdd = new DataDependency(varName, sd);
-		synchronized (this) {
-			DataDependency dd = pool.get(newdd);
-			if(dd != null) return dd;
+		DataDependency ret = pool.get(newdd);
+		if(ret != null) return ret;
+		synchronized (pool) {
+			ret = pool.get(newdd);
+			if(ret != null) return ret;
 			pool.put(newdd, newdd);
 			return newdd;
 		}
