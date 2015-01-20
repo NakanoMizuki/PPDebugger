@@ -3,6 +3,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +14,13 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Stateme
 
 public class StatementState implements Comparable<StatementState> {
 	private final StatementData sd;
-	private Map<DataDependencySet,Integer> ddsMap;
+	private final Map<DataDependencySet,DataDependencySet> ddsMap;
+	private final Map<DataDependencySet,Integer> countMap;
 	
 	public StatementState(StatementData sd){
 		this.sd = sd;
-		ddsMap = new HashMap<DataDependencySet,Integer>();
+		ddsMap = new Hashtable<DataDependencySet,DataDependencySet>();
+		countMap = new HashMap<DataDependencySet,Integer>();
 	}
 	
 	public StatementData getStatementData(){
@@ -25,18 +28,19 @@ public class StatementState implements Comparable<StatementState> {
 	}
 	
 	public int getNum(DataDependencySet dds){
-		if(ddsMap.containsKey(dds)){
-			return ddsMap.get(dds);
-		}
-		return 0;
+		DataDependencySet content = ddsMap.get(dds);
+		if(content == null) return 0;
+		return countMap.get(content);
 	}
 	
 	private void addDataDependencySet(DataDependencySet dds){
-		if(ddsMap.containsKey(dds)){
-			int tmp = ddsMap.get(dds) +1;
-			ddsMap.put(dds,tmp);
+		DataDependencySet content = ddsMap.get(dds);
+		if(content != null){
+			int count = countMap.get(content) + 1;
+			countMap.put(content, count);
 		}else{
-			ddsMap.put(dds, 1);
+			ddsMap.put(dds, dds);
+			countMap.put(dds, 1);
 		}
 	}
 	
@@ -52,11 +56,11 @@ public class StatementState implements Comparable<StatementState> {
 	 */
 	public void printState(IOut out){
 		out.println(sd.toString());
-		List<DataDependencySet> ddslist = new ArrayList<DataDependencySet>(ddsMap.keySet());
+		List<DataDependencySet> ddslist = new ArrayList<DataDependencySet>(countMap.keySet());
 		Collections.sort(ddslist);
 		String sep = System.lineSeparator();
 		for(DataDependencySet dds: ddslist ){
-			out.println("\t" + dds.toString().replaceAll(sep, sep + "\t") + "\tcount=" + ddsMap.get(dds));
+			out.println("\t" + dds.toString().replaceAll(sep, sep + "\t") + "\tcount=" + countMap.get(dds));
 		}
 	}
 	

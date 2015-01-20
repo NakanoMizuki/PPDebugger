@@ -15,6 +15,7 @@ public class NameCreator {
 	private static final String LOCAL_NAME = "*Local";
 	private static final String PARAM_NAME = "*Param";
 	private static final String RETURN_NAME = "*Return";
+	private static final String ARRAY_NAME = "*ARRAY";
 	
 	
 	public static String compressMethodName(String name){
@@ -67,10 +68,14 @@ public class NameCreator {
 	private static String createVariableName(FieldInfo fieldInfo,LocalVariableInfo localInfo,Scope scope){
 		if(fieldInfo != null){
 			if(fieldInfo.getOwnerObject() != null){	//普通のフィールド
+				String varName = fieldInfo.getVariableName();
+				if(varName.startsWith(ARRAY_NAME)){
+					varName = varName.replaceAll("-.+$", "");		//配列の場合、配列のID-添え字　の形で名前が与えられる
+				}
 				if(fieldInfo.getOwnerObject().getObjectId() != null){
-					return fieldInfo.getVariableName() + DELIMITER + fieldInfo.getOwnerObject().getObjectId();
+					return varName + DELIMITER + fieldInfo.getOwnerObject().getObjectId();
 				}else{
-					return fieldInfo.getVariableName() + DELIMITER  + fieldInfo.getOwnerObject().getClassName() + DELIMITER + STATIC;
+					return varName + DELIMITER  + fieldInfo.getOwnerObject().getClassName() + DELIMITER + STATIC;
 				}
 			}else{
 				return fieldInfo.getVariableName();

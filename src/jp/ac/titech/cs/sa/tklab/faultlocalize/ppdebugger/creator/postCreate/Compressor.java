@@ -40,7 +40,7 @@ public class Compressor {
 					target++;
 				}
 			}
-			st.setDataDependencySets(ddsList);
+			st.compress(ddsList);
 		}
 	}
 	

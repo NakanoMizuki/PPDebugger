@@ -13,15 +13,11 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet
 
 public class Statement {
 	private final StatementData sd;
-	/**
-	 * 一段階のデータ依存で作られたものを保存する。
-	 * イベント番号順に並べて保存
-	 */
+	
+	/** 一段階のデータ依存で作られたものを保存する。イベント番号順に並べて保存 */
 	private SortedSet<DataDependencySet> originals;
 	
-	/**
-	 * すべてのデータ依存を保存。伝播後の結果も持つ
-	 */
+	/**	 すべてのデータ依存を保存。伝播後の結果も持つ */
 	private List<DataDependencySet> ddsList;
 	
 	/**
@@ -30,10 +26,7 @@ public class Statement {
 	 */
 	private Set<DataDependencySet> propagatables;
 	
-	/**
-	 * 伝播された依存情報を持つ
-	 * ここに保存されたものがddlistに追加される
-	 */
+	/** 伝播された依存情報を持つ. ここに保存されたものがddlistに追加される */
 	private Set<DataDependencySet> nextPropagations;
 	
 	
@@ -50,9 +43,6 @@ public class Statement {
 		return ddsList;
 	}
 	
-	public void setDataDependencySets(List<DataDependencySet> lists){
-		ddsList = lists;
-	}
 	public StatementData getStatementData(){
 		return sd;
 	}
@@ -76,7 +66,7 @@ public class Statement {
 	
 	
 	/**
-	 * 要素の追加、重複する要素があった場合には中身のみ追加する
+	 * 要素の追加.重複する要素があった場合には中身のみ追加する
 	 * @param dds　追加したい要素
 	 * @return　重複する要素がすでに存在するときにtrue、初めての要素ならfalseを返す
 	 */
@@ -106,8 +96,6 @@ public class Statement {
 		}
 	}
 	
-	
-	
 	public void addNextPropagation(DataDependencySet dds){
 		nextPropagations.add(dds);
 	}
@@ -125,6 +113,18 @@ public class Statement {
 			}
 		}
 		nextPropagations.clear();
+	}
+	
+	
+	/**
+	 * 必要な情報以外を消去.伝播終了後に呼ばれる
+	 * @param lists
+	 */
+	public void compress(List<DataDependencySet> lists){
+		ddsList = lists;
+		originals = null;
+		propagatables = null;
+		nextPropagations = null;
 	}
 	
 	@Override
