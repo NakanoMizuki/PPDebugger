@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
+
 public class Scope {
 	private static final char DELIMITER='-';
 	private Stack<String> methodNameStack;
@@ -26,7 +28,7 @@ public class Scope {
 	}
 	
 	public void entry(String methodName){
-		methodNameStack.push(methodName.intern());
+		methodNameStack.push(FastIntern.get(methodName));
 		paramMapStack.add(new HashMap<String, String>());
 		list.add(next);
 	}
@@ -44,7 +46,7 @@ public class Scope {
 	}
 	
 	public void putParam(String localName,String paramName){
-		paramMapStack.peek().put(localName.intern(), paramName.intern());
+		paramMapStack.peek().put(FastIntern.get(localName),FastIntern.get(paramName));
 	}
 	
 	public boolean isParam(String localName){

@@ -2,6 +2,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize;
 
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 
 /**
  * ステートメントの基本情報を保存するクラス
@@ -16,7 +17,7 @@ public class StatementData implements Comparable<StatementData>{
 	
 	
 	StatementData(String sourcePath,String lineNumber,Thread thread){
-		this.sourcePath = sourcePath.intern();
+		this.sourcePath = FastIntern.get(sourcePath);
 		this.lineNumber = Integer.valueOf(lineNumber);
 		this.thread = thread;
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
@@ -72,12 +73,12 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	public void setVarName(String varName){
 		if(varName == null){
-			this.varName = "".intern();
-			suffix = "".intern();
+			this.varName = FastIntern.get("");
+			suffix = FastIntern.get("");
 		}else{
 			String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
-			this.varName = tokens[0].intern();
-			suffix =  (tokens.length == 2) ? tokens[1].intern() : "".intern();
+			this.varName = FastIntern.get(tokens[0]);
+			suffix =  (tokens.length == 2) ? FastIntern.get(tokens[1]) : FastIntern.get("");
 		}
 	}
 	

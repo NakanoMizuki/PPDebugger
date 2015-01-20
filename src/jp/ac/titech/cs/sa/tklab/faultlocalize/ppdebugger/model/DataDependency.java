@@ -3,6 +3,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model;
 import java.util.Objects;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 
 /**
@@ -19,8 +20,8 @@ public class DataDependency implements Comparable<DataDependency>{
 	
 	public DataDependency(String varName,StatementData sd){
 		String[] tokens = varName.split(Character.toString(NameCreator.DELIMITER)); 
-		this.varName = tokens[0].intern();
-		this.suffix = (tokens.length == 2) ? tokens[1].intern() : "".intern();
+		this.varName = FastIntern.get(tokens[0]);
+		this.suffix = (tokens.length == 2) ? FastIntern.get(tokens[1]): FastIntern.get("");
 		this.sd = sd;
 	}
 	
@@ -36,7 +37,7 @@ public class DataDependency implements Comparable<DataDependency>{
 	}
 	
 	public void removeSuffix(){
-		suffix = "".intern();
+		suffix = FastIntern.get("");
 	}
 	
 	@Override

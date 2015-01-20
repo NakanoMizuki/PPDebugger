@@ -1,13 +1,14 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableDefinition;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 
 public class Variable {
 	private final String varName;
 	private VariableDefinition latestdef;
 
 	public Variable(String varName,VariableDefinition def) {
-		this.varName = varName.intern();
+		this.varName = FastIntern.get(varName);
 		latestdef = def;
 	}
 	
