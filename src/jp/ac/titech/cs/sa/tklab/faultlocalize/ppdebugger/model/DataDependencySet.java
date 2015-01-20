@@ -98,6 +98,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	/** 伝播終了後不要なものをなくす  */
 	public void compress(){
+		varName = NameCreator.removeObjectID(varName);
 		eventNumber = 0;
 		scope = null;
 	}

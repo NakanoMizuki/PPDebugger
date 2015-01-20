@@ -19,6 +19,10 @@ public class NameCreator {
 	private static final String ARRAY_NAME = "*ARRAY";
 	
 	
+	public static String removeObjectID(String name){
+		return name.replaceAll(DELIMITER + ".+$", "");
+	}
+	
 	public static String compressMethodName(String name){
 		int index = name.lastIndexOf(METHODNAME_DELIMITER);
 		if(index == -1) return name;
