@@ -62,8 +62,12 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	public StatementData getStatementData(){
 		return sd;
 	}
+	
 	public String getVarName(){
 		return varName + NameCreator.DELIMITER + suffix;
+	}
+	public String getVarNameWithoutSuffix(){
+		return varName;
 	}
 	
 	public void setVarName(String varName){
@@ -87,6 +91,10 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 
 	public boolean isLabeled(){
 		return label;
+	}
+	
+	public void removeSuffix(){
+		suffix = "";
 	}
 	
 	public void setEventNumber(int eventNumber){

@@ -13,7 +13,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
  */
 public class DataDependency implements Comparable<DataDependency>{
 	private final String varName;
-	private final String suffix;
+	private String suffix;
 	private final StatementData sd;
 	
 	
@@ -27,8 +27,16 @@ public class DataDependency implements Comparable<DataDependency>{
 	public String getVarName(){
 		return varName + NameCreator.DELIMITER + suffix;
 	}
+	public String getVarNameWithoutSuffix(){
+		return varName;
+	}
+	
 	public StatementData getStatementData(){
 		return sd;
+	}
+	
+	public void removeSuffix(){
+		suffix = "".intern();
 	}
 	
 	@Override

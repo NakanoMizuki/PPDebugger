@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
@@ -23,10 +22,10 @@ public class Compressor {
 			for(DataDependencySet dds :st.getDataDependencySets()){
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
 				for(DataDependency dd : dds.getSet()){
-					DataDependency newdd = ddFactory.genDataDependency(NameCreator.removeSuffix(dd.getVarName()), dd.getStatementData());
+					DataDependency newdd = ddFactory.genDataDependency(dd.getVarNameWithoutSuffix(), dd.getStatementData());
 					ddSet.add(newdd);
 				}
-				dds.setVarName(NameCreator.removeSuffix(dds.getVarName()));
+				dds.setVarName(dds.getVarNameWithoutSuffix());
 				dds.setDDSet(ddSet);
 				ddsList.add(dds);
 			}

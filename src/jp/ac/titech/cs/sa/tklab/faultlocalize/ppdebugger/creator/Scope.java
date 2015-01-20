@@ -26,7 +26,7 @@ public class Scope {
 	}
 	
 	public void entry(String methodName){
-		methodNameStack.push(methodName);
+		methodNameStack.push(methodName.intern());
 		paramMapStack.add(new HashMap<String, String>());
 		list.add(next);
 	}
@@ -44,7 +44,7 @@ public class Scope {
 	}
 	
 	public void putParam(String localName,String paramName){
-		paramMapStack.peek().put(localName, paramName);
+		paramMapStack.peek().put(localName.intern(), paramName.intern());
 	}
 	
 	public boolean isParam(String localName){
