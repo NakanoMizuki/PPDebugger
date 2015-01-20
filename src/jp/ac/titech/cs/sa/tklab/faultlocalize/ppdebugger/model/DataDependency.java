@@ -43,9 +43,11 @@ public class DataDependency implements Comparable<DataDependency>{
 		if(Objects.isNull(o)) return false;
 		if(! (o instanceof DataDependency)) return false;
 		DataDependency dd = (DataDependency) o;
-		if(varName.equals(dd.varName) && (scope == dd.scope) && sd.equals(dd.sd)) return true;
+		if(!varName.equals(dd.varName)) return false;
+		if(scope != dd.scope) return false;
+		if(!sd.equals(dd.sd)) return false;
 		
-		return false;
+		return true;
 	}
 	@Override
 	public int hashCode(){
@@ -59,8 +61,7 @@ public class DataDependency implements Comparable<DataDependency>{
 	@Override
 	public int compareTo(DataDependency o) {
 		int sdComp = sd.compareTo(o.sd);
-		if(sdComp != 0) 
-			return sdComp;
+		if(sdComp != 0) return sdComp;
 		
 		return varName.compareTo(o.varName);
 	}

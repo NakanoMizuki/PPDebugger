@@ -25,19 +25,20 @@ public class Compressor {
 					DataDependency newdd = ddFactory.genDataDependency(dd.getVarName(), null,dd.getStatementData());	//スコープを考慮しないインスタンスを作る
 					ddSet.add(newdd);
 				}
-				dds.compress();
 				dds.setDDSet(ddSet);
+				dds.compress();
 				ddsSet.add(dds);
 			}
 			
 			List<DataDependencySet> ddsList = new ArrayList<DataDependencySet>(ddsSet);
 			int target = 0;
-			while(target < ddsList.size()){
-				int index = getDuplicateIndex(ddsList.get(target), ddsList, target +1);
-				if(index != -1){
-					ddsList.remove(index);
-				}else{
-					target++;
+			for(int i =0; i < ddsList.size(); i++){
+				int index = target+1;
+				while(index != -1){
+					index = getDuplicateIndex(ddsList.get(target), ddsList, index);
+					if(index != -1){
+						ddsList.remove(index);
+					}
 				}
 			}
 			st.compress(ddsList);

@@ -182,7 +182,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		if(scope == null && o.scope == null) return 0;
 		if(scope == null) return -1;
 		if(o.scope == null) return 1;
-		return Integer.compare(scope.getValue(), o.scope.getValue());
+		return scope.getValue() - o.scope.getValue();
 	}
 
 }
