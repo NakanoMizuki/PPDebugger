@@ -31,10 +31,10 @@ public class ResultCreator implements Callable<Result>{
 	@Override
 	public Result call() throws Exception {
 		ExecutionModel em = new Creator().createExecutionModel(failedFile,hopNum);
-		return createResult(passedModel,em,failedFile.getName());
+		return createResult(em);
 	}
 	
-	private Result createResult(PassedModel passedModel,ExecutionModel executionModel,String fileName){
+	private Result createResult(ExecutionModel executionModel){
 		int numCase = passedModel.getNumCase();
 		Set<StatementProb> stPbs = new HashSet<StatementProb>();
 		for(Statement statement :executionModel.getStatements()){
@@ -61,6 +61,6 @@ public class ResultCreator implements Callable<Result>{
 			stPbs.add(stPb);
 		}
 		
-		return new Result(fileName,new ArrayList<StatementProb>(stPbs));
+		return new Result(failedFile.getName(),new ArrayList<StatementProb>(stPbs));
 	}
 }
