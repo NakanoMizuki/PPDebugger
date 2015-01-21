@@ -22,7 +22,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	
 	private DataDependencySet(StatementData sd,String varName,TreeNode scope,boolean label,int eventNumber){
 		this.sd = sd;
-		this.varName = FastIntern.get(varName);
+		this.varName = (varName == null)? FastIntern.get(""): FastIntern.get(varName);
 		this.scope = (NameCreator.isField(this.varName))? null:scope;
 		this.set = new HashSet<DataDependency>();
 		this.label = label;

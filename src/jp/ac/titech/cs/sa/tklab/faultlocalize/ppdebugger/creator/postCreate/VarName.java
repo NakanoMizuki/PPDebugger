@@ -4,7 +4,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.TreeNode;
 
 public class VarName {
 	private final String name;
-	private TreeNode scope;
+	private final TreeNode scope;
 	
 	public VarName(String name,TreeNode scope){
 		this.name = name;
