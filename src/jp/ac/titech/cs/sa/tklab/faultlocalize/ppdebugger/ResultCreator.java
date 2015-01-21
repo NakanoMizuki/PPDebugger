@@ -44,13 +44,13 @@ public class ResultCreator implements Callable<Result>{
 				continue;
 			}
 			int minNum = numCase;
-			for(DataDependencySet dds : statement.getDataDependencySets()){
-				StatementState stState = passedModel.getStatementState(statement);
-				if(stState == null) {
-					minNum = 0;
-					break;
+			StatementState stState = passedModel.getStatementState(statement);
+			if(stState == null) {
+				minNum = 0;
+			}else{
+				for(DataDependencySet dds : statement.getDataDependencySets()){
+					minNum = Math.min(minNum, stState.getNum(dds));
 				}
-				minNum = Math.min(minNum, stState.getNum(dds));
 			}
 			StatementProb stPb;
 			if(minNum == 0){
