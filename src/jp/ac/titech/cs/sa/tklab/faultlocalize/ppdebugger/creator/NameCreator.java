@@ -17,10 +17,20 @@ public class NameCreator {
 	private static final String PARAM_NAME = "*Param";
 	private static final String RETURN_NAME = "*Return";
 	private static final String ARRAY_NAME = "*ARRAY";
+	private static final char ARRAY_DELIMITER = '-';
 	
+	
+	public static String createDefaultName(String name){
+		if(name.startsWith(ARRAY_NAME)){
+			return name.replaceAll(ARRAY_DELIMITER + ".+$","");
+		}
+		return name;
+	}
 	
 	public static String removeObjectID(String name){
-		return name.replaceAll(FIELD_DELIMITER + ".+$", "");
+		String newName =  name.replaceAll(FIELD_DELIMITER + ".+$", "");
+		if(newName.startsWith(ARRAY_NAME)) newName = ARRAY_NAME;
+		return newName;
 	}
 	
 	public static String compressMethodName(String name){
