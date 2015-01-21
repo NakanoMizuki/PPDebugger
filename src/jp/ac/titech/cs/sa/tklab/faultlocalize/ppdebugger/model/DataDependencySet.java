@@ -12,28 +12,29 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.TreeNode;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
+	private final StatementData sd;
 	private String varName;
 	private TreeNode scope;
-	private final StatementData sd;
 	private Set<DataDependency> set;
 	private final boolean label;
 	private int eventNumber;
 	
 	
+	private DataDependencySet(StatementData sd,String varName,TreeNode scope,boolean label,int eventNumber){
+		this.sd = sd;
+		this.varName = FastIntern.get(varName);
+		this.scope = (NameCreator.isField(this.varName))? null:scope;
+		this.set = new HashSet<DataDependency>();
+		this.label = label;
+		this.eventNumber = eventNumber;
+	}
+	
 	/**
 	 * Creatorによって呼ばれるコンストラクタ
 	 */
 	public DataDependencySet(StatementData sd,DataDependency dd,int eventNumber){
-		this.sd = sd;
-		setVarName(dd.getVarName());
-		set = new HashSet<DataDependency>();
+		this(sd, dd.getVarName(),dd.getTreeNode(), (dd.getStatementData().equals(sd)), eventNumber);
 		set.add(dd);
-		this.eventNumber = eventNumber;
-		if(dd.getStatementData().equals(sd)){
-			label = true;
-		}else{
-			label = false;
-		}
 	}
 	public DataDependencySet(StatementData sd,DataDependency dd,String eventNumber) {
 		this(sd, dd, Integer.valueOf(eventNumber));
@@ -49,21 +50,8 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	 * @param label
 	 */
 	public DataDependencySet(StatementData sd,String varName,TreeNode scope,int eventNumber ,Set<DataDependency> set,boolean label){
-		this.sd = sd;
-		setVarName(varName);
-		this.scope = scope;
-		this.eventNumber = eventNumber;
+		this(sd, varName, scope, label, eventNumber);
 		this.set = set;
-		this.label = label;
-	}
-	
-	
-	private void setVarName(String varName){
-		if(varName == null){
-			this.varName = FastIntern.get("");
-		}else{
-			this.varName = FastIntern.get(varName);
-		}
 	}
 	
 	public StatementData getStatementData(){

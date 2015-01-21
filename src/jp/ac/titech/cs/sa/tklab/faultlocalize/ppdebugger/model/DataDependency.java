@@ -21,7 +21,7 @@ public class DataDependency implements Comparable<DataDependency>{
 	
 	public DataDependency(String varName,TreeNode scopeNode,StatementData sd){
 		this.varName = FastIntern.get(varName);
-		this.scope = scopeNode;
+		this.scope = (NameCreator.isField(varName))? null:scopeNode;
 		this.sd = sd;
 	}
 	

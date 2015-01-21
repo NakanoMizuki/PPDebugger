@@ -9,7 +9,7 @@ import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.VariableReference;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.Scope;
 
 public class NameCreator {
-	public static final char DELIMITER = '#';
+	public static final char FIELD_DELIMITER = '#';
 	private static final char METHODNAME_DELIMITER = ':';
 	private static final String STATIC = "Static";
 	private static final String CONSTRUCTOR_NAME = "Constructor";
@@ -20,7 +20,7 @@ public class NameCreator {
 	
 	
 	public static String removeObjectID(String name){
-		return name.replaceAll(DELIMITER + ".+$", "");
+		return name.replaceAll(FIELD_DELIMITER + ".+$", "");
 	}
 	
 	public static String compressMethodName(String name){
@@ -74,9 +74,9 @@ public class NameCreator {
 					varName = varName.replaceAll("-.+$", "");		//配列の場合、配列のID-添え字　の形で名前が与えられる
 				}
 				if(fieldInfo.getOwnerObject().getObjectId() != null){
-					return varName + DELIMITER + fieldInfo.getOwnerObject().getObjectId();
+					return varName + FIELD_DELIMITER + fieldInfo.getOwnerObject().getObjectId();
 				}else{
-					return varName + DELIMITER  + fieldInfo.getOwnerObject().getClassName() + DELIMITER + STATIC;
+					return varName + FIELD_DELIMITER  + fieldInfo.getOwnerObject().getClassName() + FIELD_DELIMITER + STATIC;
 				}
 			}else{
 				return fieldInfo.getVariableName();
@@ -91,6 +91,11 @@ public class NameCreator {
 	
 	public static boolean isParam(String varName){
 		if(varName.contains(PARAM_NAME)) return true;
+		return false;
+	}
+	
+	public static boolean isField(String name){
+		if(name.contains(Character.toString(FIELD_DELIMITER))) return true;
 		return false;
 	}
 	
