@@ -13,6 +13,7 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.PPDebugger;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Score;
 
 /**
  * 
