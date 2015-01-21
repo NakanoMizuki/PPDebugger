@@ -1,4 +1,4 @@
-package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger;
+package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.callable;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -11,6 +11,8 @@ import java.util.concurrent.Future;
 import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.callable.Executor;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.callable.ResultCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass.PassedModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
 

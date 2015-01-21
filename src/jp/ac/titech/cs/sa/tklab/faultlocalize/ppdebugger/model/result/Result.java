@@ -20,14 +20,23 @@ public class Result {
 	}
 	
 	public int calcScore(StatementData fault){
-		int score = -1;
+		int score = 1;
+		double prob = -1;
+		int numSameScore = 0;
 		for(int i=0; i < stProbs.size() ; i++ ){
-			if(stProbs.get(i).getStatementData().isSame(fault)){
-				score = i+1;
+			StatementProb stProb = stProbs.get(i);
+			if(stProb.getProb() == prob){
+				numSameScore++;
+			}else{
+				prob = stProb.getProb();
+				score += numSameScore;
+				numSameScore = 0;
+			}
+			if(stProb.getStatementData().isSame(fault)){
 				return score;
 			}
 		}
-		return score;
+		return -1;
 	}
 	
 	//すべての欠陥行を見つけるまでの最大のスコアを返す。ひとつでも見つからない欠陥があったら-1
