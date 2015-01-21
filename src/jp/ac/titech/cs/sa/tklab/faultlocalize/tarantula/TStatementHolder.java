@@ -50,8 +50,16 @@ class TStatementHolder{
 	
 	int calcScore(StatementData fault){
 		int score=0;
+		double suspicious = -1;
+		int numSameSuspicious=0;
 		for(TStatement tst :list){
-			score ++;
+			if(suspicious != tst.getSuspicious()){
+				score += numSameSuspicious;
+				suspicious = tst.getSuspicious();
+				numSameSuspicious = 1;
+			}else{
+				numSameSuspicious ++;
+			}
 			if(tst.getStatementData().isSame(fault)){
 				return score;
 			}

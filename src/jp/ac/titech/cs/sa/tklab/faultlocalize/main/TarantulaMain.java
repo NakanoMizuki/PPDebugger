@@ -75,6 +75,7 @@ public class TarantulaMain {
 		File[] passedFiles = new File(projectPath + TRACE_DIRNAME + "/v" + ver + "/pass").listFiles();
 		File[] failedFiles = new File(projectPath + TRACE_DIRNAME + "/v" + ver + "/fail").listFiles();
 		if(failedFiles.length == 0){
+			System.out.println("degu");
 			return 0;
 		}
 		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
