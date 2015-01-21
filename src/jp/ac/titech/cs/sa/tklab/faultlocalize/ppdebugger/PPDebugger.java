@@ -62,7 +62,7 @@ public class PPDebugger{
 		ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREAD);
 		List<Future<Result>> futures = new ArrayList<Future<Result>>();
 		for(File file:failedFailes){
-			futures.add(executorService.submit(new CreateResult(passedModel,file,hopNum)));
+			futures.add(executorService.submit(new ResultCreator(passedModel,file,hopNum)));
 			file = null;
 		}
 		failedFailes = null;
