@@ -49,7 +49,7 @@ class TStatementHolder{
 	}
 	
 	int calcScore(StatementData fault){
-		int score=0;
+		int score=1;
 		double suspicious = -1;
 		int numSameSuspicious=0;
 		for(TStatement tst :list){
