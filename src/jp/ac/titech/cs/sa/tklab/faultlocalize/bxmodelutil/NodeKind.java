@@ -1,10 +1,5 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil;
 
-/**
- * 
- * @author ?
- *
- */
 public enum NodeKind {
 	METHOD_ENTRY,
 	METHOD_EXIT,

@@ -9,11 +9,6 @@ import javax.xml.bind.JAXBException;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.BPDG;
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Node;
 
-/**
- * 
- * @author ?
- *
- */
 public class BPDGHolder {
 	static final String BXMODEL_PACKAGE_NAME = "jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel";
 

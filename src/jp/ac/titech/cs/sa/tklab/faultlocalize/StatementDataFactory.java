@@ -4,7 +4,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Thread;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 
 
 public class StatementDataFactory {
@@ -42,8 +41,5 @@ public class StatementDataFactory {
 	}
 	public StatementData genStatementData(String sourcePath,String lineNumber,Thread thread){
 		return genStatementData(sourcePath, Integer.valueOf(lineNumber), thread);
-	}
-	public StatementData genStatementData(EventSignature es){
-		return genStatementData(es.getSourcePath(),es.getLineNumber(),es.getThread());
 	}
 }

@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
-
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.tarantula.Tarantula;
 
 public class TarantulaMain {
 	private final String DIRNAME = "tarantula-result";
+	private final String TRACE_DIRNAME = "tarantula-trace";
 	private final Tarantula tarantula;
 	private final String projectPath;
 	
@@ -27,7 +26,7 @@ public class TarantulaMain {
 				file.delete();
 			}
 		}else{
-			dir.mkdir();
+			dir.mkdirs();
 		}
 	}
 
@@ -52,7 +51,7 @@ public class TarantulaMain {
 		try {
 			@SuppressWarnings("resource")
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(scoreFile)));
-			int verNum = new File(projectPath + "trace").listFiles().length;
+			int verNum = new File(projectPath + TRACE_DIRNAME).listFiles().length;
 			for(int i=1; i <= verNum; i++){
 				int score = execute(i);
 				if(score == 0){
@@ -73,8 +72,8 @@ public class TarantulaMain {
 	private int execute(int ver){
 		System.out.println("Ver" + ver + "start");
 		OutToFile out = new OutToFile(projectPath + DIRNAME + "/ver" + ver + "-result.txt");
-		File[] passedFiles = new File(projectPath + "trace/v" + ver + "/pass").listFiles();
-		File[] failedFiles = new File(projectPath + "trace/v" + ver + "/fail").listFiles();
+		File[] passedFiles = new File(projectPath + TRACE_DIRNAME + "/v" + ver + "/pass").listFiles();
+		File[] failedFiles = new File(projectPath + TRACE_DIRNAME + "/v" + ver + "/fail").listFiles();
 		if(failedFiles.length == 0){
 			return 0;
 		}
@@ -82,16 +81,18 @@ public class TarantulaMain {
 		if(faults == null || faults.isEmpty()){
 			return 0;
 		}
+		
 		try {
 			tarantula.learn(passedFiles, failedFiles);
 			tarantula.printAllRanking(out);
 			out.flush();
 			return tarantula.calcScore(faults);
-			
-		} catch (JAXBException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+			
 		return -1;
 	}
 

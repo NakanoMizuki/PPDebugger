@@ -1,18 +1,12 @@
 package jp.ac.titech.cs.sa.tklab.faultlocalize.tarantula;
 
 import java.io.File;
-import java.util.HashSet;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.bind.JAXBException;
 
-import jp.ac.nagoya_u.is.i.agusa.person.knhr.bxmodel.Node;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BPDGHolder;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.BXModelUtility;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.bxmodelutil.EventSignature;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
 
 /**
@@ -22,30 +16,26 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
  */
 public class Tarantula {
 	private final TStatementHolder tsHolder;
-	private final StatementDataFactory factory;
 	
 	public Tarantula(){
 		tsHolder = new TStatementHolder();
-		factory = StatementDataFactory.getInstance();
 	}
 
-	public void learn(File[] passedFiles, File[] failedFiles) throws JAXBException{
+	public void learn(File[] passedFiles, File[] failedFiles) throws IOException{
 		System.out.println("Tarantula starts."
 						+ " (" + passedFiles.length + "passedFiles," + failedFiles.length + "failedFiles)");
 		
 		tsHolder.init();
 		//成功実行を学習
-		for(File f : passedFiles){
-			BPDGHolder holder = new BPDGHolder(f);
-			Set<StatementData> sdSet = createSDSet(holder);
+		for(File file : passedFiles){
+			Set<StatementData> sdSet = TraceReader.createSDSet(file);
 			for(StatementData sd : sdSet){
 				tsHolder.addPassedStatement(new TStatement(sd));
 			}
 		}
 		//失敗実行を学習
-		for(File f : failedFiles){
-			BPDGHolder holder = new BPDGHolder(f);
-			Set<StatementData> sdSet = createSDSet(holder);
+		for(File file : failedFiles){
+			Set<StatementData> sdSet = TraceReader.createSDSet(file);
 			for(StatementData sd : sdSet){
 				tsHolder.addFailedStatement(new TStatement(sd));
 			}
@@ -60,20 +50,6 @@ public class Tarantula {
 		System.out.println("Tarantula ended.");
 	}
 
-	//実行されたステートメントの集合を返す
-	private Set<StatementData> createSDSet(BPDGHolder holder){
-		Node node;
-		Set<StatementData> sdSet = new HashSet<StatementData>();
-		while((node = holder.getNextNode()) != null){
-			EventSignature es = BXModelUtility.getEventSignature(node);
-			if(es.getSourcePath() == null || es.getLineNumber() == null){
-				continue;
-			}
-			StatementData sd = factory.genStatementData(es);
-			sdSet.add(sd);
-		}
-		return sdSet;
-	}
 
 	public void printRanking(IOut out,int num) {
 		List<TStatement> tsList = tsHolder.getList();
