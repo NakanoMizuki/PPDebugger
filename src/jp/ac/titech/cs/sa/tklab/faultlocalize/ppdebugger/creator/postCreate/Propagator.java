@@ -39,7 +39,7 @@ public class Propagator {
 					SortedSet<DataDependencySet> originals = em.getStatement(targetSd).getOriginals();
 					try{
 						originals = originals.tailSet(propagatable);		//現在のイベント以前に起きたものだけをとる
-						if(NameCreator.isParam(targetVarName)){
+						if(NameCreator.isParam(targetVarName)){				//引数の場合
 							DataDependencySet dummy = new DataDependencySet(null, null,null,originals.first().getEventNumber()-1,null,false);	//イベントナンバーが１だけ違うものを作る
 							originals = originals.headSet(dummy);	//最新のイベントナンバーのものだけを取る。引数の場合は実行毎に使われる変数が異なるのでこうしている
 						}
