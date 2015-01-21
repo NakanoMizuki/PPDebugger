@@ -72,7 +72,7 @@ class MethodEntryVisitor {
 				Variable refferedVariable = variables.get(index);
 				variables.remove(index);
 				
-				//仮引数として新たな変数を追加
+				//仮引数は実引数が使われたとみなす
 				Variable actualVariable = new Variable(paramName, refferedVariable.getLatestDefinition());
 				model.addVariable(actualVariable);
 				
