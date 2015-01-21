@@ -30,7 +30,7 @@ public class Result {
 			}else{
 				prob = stProb.getProb();
 				score += numSameScore;
-				numSameScore = 0;
+				numSameScore = 1;
 			}
 			if(stProb.getStatementData().isSame(fault)){
 				return score;
