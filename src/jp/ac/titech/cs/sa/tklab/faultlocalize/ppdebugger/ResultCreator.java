@@ -34,7 +34,7 @@ public class ResultCreator implements Callable<Result>{
 		return createResult(passedModel,em,failedFile.getName());
 	}
 	
-	public Result createResult(PassedModel passedModel,ExecutionModel executionModel,String fileName){
+	private Result createResult(PassedModel passedModel,ExecutionModel executionModel,String fileName){
 		int numCase = passedModel.getNumCase();
 		Set<StatementProb> stPbs = new HashSet<StatementProb>();
 		for(Statement statement :executionModel.getStatements()){
