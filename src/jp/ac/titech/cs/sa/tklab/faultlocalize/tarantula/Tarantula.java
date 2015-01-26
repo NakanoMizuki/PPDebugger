@@ -55,7 +55,7 @@ public class Tarantula {
 		List<TStatement> tsList = tsHolder.getList();
 		int tmp = (num > tsList.size()) ? tsList.size() : num;
 		for(int i=0; i < tmp; i++){
-			out.println("\t" + i + ":\t" + tsList.get(i).toString());
+			out.println("\t" + (i+1) + ":\t" + tsList.get(i).toString());
 		}
 	}
 
