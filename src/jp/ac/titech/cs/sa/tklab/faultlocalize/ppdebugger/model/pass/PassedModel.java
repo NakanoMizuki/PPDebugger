@@ -30,16 +30,14 @@ public class PassedModel {
 			StatementState stState = this.getStatementState(st.getStatementData());
 			if(stState == null){
 				stState = new StatementState(st.getStatementData());
+				stState.addCount();
 				stState.addStatement(st);
 				statementStates.add(stState);
 			}else{
+				stState.addCount();
 				stState.addStatement(st);
 			}
 		}
-	}
-	
-	public int getNumCase(){
-		return numCase;
 	}
 	
 	public StatementState getStatementState(StatementData sd){

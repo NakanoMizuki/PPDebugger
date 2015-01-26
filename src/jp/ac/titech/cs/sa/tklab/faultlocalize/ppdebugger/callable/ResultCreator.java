@@ -35,7 +35,6 @@ public class ResultCreator implements Callable<Result>{
 	}
 	
 	private Result createResult(ExecutionModel executionModel){
-		int numCase = passedModel.getNumCase();
 		Set<StatementProb> stPbs = new HashSet<StatementProb>();
 		for(Statement statement :executionModel.getStatements()){
 			if(statement.getStatementData().getSourcePath().charAt(0) == '*') continue;
@@ -43,20 +42,20 @@ public class ResultCreator implements Callable<Result>{
 				stPbs.add(new StatementProb(statement.getStatementData(), 1D));
 				continue;
 			}
-			int minNum = numCase;
+			double minNum = Double.MAX_VALUE;
 			StatementState stState = passedModel.getStatementState(statement);
 			if(stState == null) {
 				minNum = 0;
 			}else{
 				for(DataDependencySet dds : statement.getDataDependencySets()){
-					minNum = Math.min(minNum, stState.getNum(dds));
+					minNum = Math.min(minNum, stState.getProb(dds));
 				}
 			}
 			StatementProb stPb;
 			if(minNum == 0){
 				stPb = new StatementProb(statement.getStatementData(),0D);
 			}else{
-				stPb = new StatementProb(statement.getStatementData(),(double)minNum/numCase);
+				stPb = new StatementProb(statement.getStatementData(), minNum);
 			}
 			stPbs.add(stPb);
 		}

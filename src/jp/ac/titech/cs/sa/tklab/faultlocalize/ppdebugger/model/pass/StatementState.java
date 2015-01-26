@@ -13,24 +13,31 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Statement;
 
 public class StatementState implements Comparable<StatementState> {
+	private int executedCount;
 	private final StatementData sd;
 	private final Map<DataDependencySet,DataDependencySet> ddsMap;
 	private final Map<DataDependencySet,Integer> countMap;
 	
 	public StatementState(StatementData sd){
+		executedCount = 0;
 		this.sd = sd;
 		ddsMap = new Hashtable<DataDependencySet,DataDependencySet>();
 		countMap = new HashMap<DataDependencySet,Integer>();
+	}
+	
+	
+	public void addCount(){
+		executedCount ++;
 	}
 	
 	public StatementData getStatementData(){
 		return sd;
 	}
 	
-	public int getNum(DataDependencySet dds){
+	public double getProb(DataDependencySet dds){
 		DataDependencySet content = ddsMap.get(dds);
 		if(content == null) return 0;
-		return countMap.get(content);
+		return (double) countMap.get(content)/executedCount;
 	}
 	
 	private void addDataDependencySet(DataDependencySet dds){
