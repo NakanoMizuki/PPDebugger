@@ -3,7 +3,6 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
