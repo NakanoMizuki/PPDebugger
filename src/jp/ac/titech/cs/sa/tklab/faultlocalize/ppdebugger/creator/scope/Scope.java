@@ -22,12 +22,14 @@ public class Scope {
 	public void clear(){
 		next = 0;
 		treeNode = TreeNode.ROOT;
+		methodNameStack.clear();
+		paramMapStack.clear();
 	}
 	
 	public void entry(String methodName){
 		treeNode = treeNode.getChildNode(next);
 		methodNameStack.push(FastIntern.get(methodName));
-		paramMapStack.add(new HashMap<String, String>());
+		paramMapStack.push(new HashMap<String, String>());
 		next = 0;
 	}
 
