@@ -1,4 +1,4 @@
-package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass;
+package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.learned;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,11 +9,11 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Statement;
 
-public class PassedModel {
+public class LearnedModel {
 	private int numCase;
 	private List<StatementState> statementStates;
 	
-	public PassedModel(){
+	public LearnedModel(){
 		numCase = 0;
 		statementStates = new ArrayList<StatementState>();
 	}
@@ -38,6 +38,10 @@ public class PassedModel {
 				stState.addStatement(st);
 			}
 		}
+	}
+	
+	public List<StatementState> getStatementStates(){
+		return statementStates;
 	}
 	
 	public StatementState getStatementState(StatementData sd){

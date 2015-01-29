@@ -27,9 +27,9 @@ public class StatementProb implements Comparable<StatementProb>{
 	@Override
 	public int compareTo(StatementProb o) {
 		if(prob < o.prob){
-			return -1;
-		}else if(prob > o.prob){
 			return 1;
+		}else if(prob > o.prob){
+			return -1;
 		}else{				// prob == o.prob
 			if(statementData.getSourcePath().equals(o.statementData.getSourcePath())){
 				if(statementData.getLineNumber() < o.statementData.getLineNumber()){

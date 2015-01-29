@@ -6,11 +6,9 @@ import java.util.List;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 
 public class Result {
-	private final String fileName;
 	private final List<StatementProb> stProbs;
 	
-	public Result(String fileName,List<StatementProb> list){
-		this.fileName = fileName;
+	public Result(List<StatementProb> list){
 		Collections.sort(list);
 		this.stProbs = list;
 	}
@@ -56,7 +54,7 @@ public class Result {
 	@Override
 	public String toString(){
 		String sep = System.lineSeparator();
-		String str = fileName + " Result----------" + sep;
+		String str = "Result----------" + sep;
 		for(int i=0; i < stProbs.size(); i ++){
 			StatementProb stProb = stProbs.get(i);
 			str += (i+1) + ":\t" + stProb.toString() + sep;

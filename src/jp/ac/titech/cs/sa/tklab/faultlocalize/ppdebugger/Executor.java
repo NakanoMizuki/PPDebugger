@@ -1,4 +1,4 @@
-package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.callable;
+package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger;
 
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -7,15 +7,15 @@ import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.Creator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.ExecutionModel;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass.PassedModel;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.learned.LearnedModel;
 
 public class Executor implements Callable<Void>{
-	private final PassedModel passedModel;
+	private final LearnedModel passedModel;
 	private File file;
 	private final int hopNum;
 	
 	
-	public Executor(PassedModel passedModel,File file,int hopNum){
+	public Executor(LearnedModel passedModel,File file,int hopNum){
 		this.passedModel = passedModel;
 		this.file = file;
 		this.hopNum = hopNum;

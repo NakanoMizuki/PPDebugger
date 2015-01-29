@@ -13,7 +13,6 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.PPDebugger;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Score;
 
 /**
  * 
@@ -75,11 +74,11 @@ public class CUIMain {
 			@SuppressWarnings("resource")
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(resultScore)));
 			for(int i=1; i <= verNum; i++){
-				Score score = execute(i);
-				if(score == null){
+				int score = execute(i);
+				if(score == -1){
 					writer.println("v" + i + " : This version doesn't have failed traces or faults.");
 				}else{
-					writer.println("v" + i + " : " + score.toString());
+					writer.println("v" + i + " score=" + score);
 				}
 			}
 			writer.flush();
@@ -89,7 +88,7 @@ public class CUIMain {
 		}
 	}
 	
-	private Score execute(int ver) throws JAXBException{
+	private int execute(int ver) throws JAXBException{
 		System.out.println("Ver" + ver + " start");
 		File[] passedFiles = new File(tracePath + "/v" + ver + "/pass").listFiles();
 		File[] failedFiles = new File(tracePath + "/v" + ver + "/fail").listFiles();
@@ -97,42 +96,23 @@ public class CUIMain {
 		if(failedFiles.length == 0){
 			System.out.println("This version doesn't have failed traces.");
 			out.println("This version doesn't have failed traces.");
-			return null;
+			return -1;
 		}
 		List<StatementData> faults = ReadFaults.genFaults(faultPath + "/v" + ver + ".txt");
 		if(faults == null || faults.isEmpty()){
 			System.out.println("This version doesn't have faults.");
 			out.println("This version doesn't have faults.");
-			return null;
+			return -1;
 		}
 		
-		ppdebugger.learn(passedFiles);
+		ppdebugger.learn(passedFiles,failedFiles);
 		passedFiles = null;
+		failedFiles = null;
 		ppdebugger.printAllRanking(out);
-
-		
-		out.println(failedFiles.length + "failedFiles----------" );
-		int max=0,min=Integer.MAX_VALUE,sum=0;
-		boolean flag=false;
-		for(Result result: ppdebugger.createResults(failedFiles)){
-			out.println(result.toString());
-			int score = result.calcScore(faults);
-			if(score != -1){
-				max = Math.max(max, score);
-				min = Math.min(min, score);
-				sum += score;
-			}else{
-				flag = true;
-			}
-		}
-		Score score;
-		if(flag == true){
-			score =  new Score(max, min);
-		}else{
-			double avg = (double)sum / failedFiles.length;
-			score= new Score(max, min, avg);
-		}
-		out.println("Score:" + score.toString());
+		Result result = ppdebugger.createResult();
+		out.println(result.toString());
+		int score = ppdebugger.createScore(result,faults);
+		out.println("Score=" + score);
 		out.flush();
 		return score;
 	}

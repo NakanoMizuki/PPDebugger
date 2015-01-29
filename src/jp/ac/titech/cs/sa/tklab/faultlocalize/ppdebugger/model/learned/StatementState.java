@@ -1,4 +1,4 @@
-package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.pass;
+package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.learned;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
@@ -49,6 +50,10 @@ public class StatementState implements Comparable<StatementState> {
 			ddsMap.put(dds, dds);
 			countMap.put(dds, 1);
 		}
+	}
+	
+	public Set<DataDependencySet> getDataDependencySets(){
+		return ddsMap.keySet();
 	}
 	
 	public void addStatement(Statement st){
