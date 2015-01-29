@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.DataDependencyFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependency;
@@ -16,6 +18,7 @@ public class Compressor {
 	
 	public static void compress(ExecutionModel em){
 		List<Statement> statements = em.getStatements();
+		StatementDataFactory sdFactory = StatementDataFactory.getInstance();
 		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		for(Statement st : statements){
 			//依存終了後には必要ないデータを削除する。その上で同一なものはまとめる
@@ -23,7 +26,9 @@ public class Compressor {
 			for(DataDependencySet dds :st.getDataDependencySets()){
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
 				for(DataDependency dd : dds.getSet()){
-					DataDependency newdd = ddFactory.genDataDependency(NameCreator.removeObjectID(dd.getVarName()), null,dd.getStatementData());	//スコープを考慮しないインスタンスを作る
+					StatementData oldsd = dd.getStatementData();
+					StatementData newsd = sdFactory.genStatementData(oldsd.getSourcePath(),oldsd.getLineNumber());	//Threadは無視
+					DataDependency newdd = ddFactory.genDataDependency(NameCreator.removeObjectID(dd.getVarName()), null,newsd);	//スコープを考慮しないインスタンスを作る
 					ddSet.add(newdd);
 				}
 				dds.setDDSet(ddSet);

@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementDataFactory;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.FastIntern;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.scope.TreeNode;
 
 public class DataDependencySet implements Comparable<DataDependencySet>{
-	private final StatementData sd;
+	private StatementData sd;
 	private String varName;
 	private TreeNode scope;
 	private Set<DataDependency> set;
@@ -87,6 +88,8 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 	/** 伝播終了後不要なものをなくす  */
 	public void compress(){
 		varName = NameCreator.removeObjectID(varName);
+		StatementData newsd = StatementDataFactory.getInstance().genStatementData(sd.getSourcePath(),sd.getLineNumber());
+		sd = newsd;
 		eventNumber = 0;
 		scope = null;
 	}
