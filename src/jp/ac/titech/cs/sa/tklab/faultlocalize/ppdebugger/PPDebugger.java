@@ -3,6 +3,7 @@ package jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -10,6 +11,7 @@ import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.creator.NameCreator;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.DataDependencySet;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.learned.LearnedModel;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.learned.StatementState;
@@ -71,6 +73,7 @@ public class PPDebugger{
 		List<StatementProb> list = new ArrayList<StatementProb>();
 		for(StatementState failedSt :failedModel.getStatementStates()){
 			StatementData sd = failedSt.getStatementData();
+			if(NameCreator.isParam(sd.getSourcePath())) continue;
 			StatementState passedSt = passedModel.getStatementState(sd);
 			double prob;
 			if(passedSt == null){
