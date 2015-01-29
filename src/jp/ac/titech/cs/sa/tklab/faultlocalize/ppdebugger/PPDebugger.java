@@ -79,7 +79,7 @@ public class PPDebugger{
 				prob = 0;
 				for(DataDependencySet dds: failedSt.getDataDependencySets()){
 					double difference = failedSt.getProb(dds) - passedSt.getProb(dds);
-					prob = Math.max(prob, difference);
+					prob = Math.max(prob, Math.abs(difference));
 				}
 			}
 			StatementProb stpb = new StatementProb(sd, prob);
