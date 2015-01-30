@@ -44,6 +44,8 @@ public class Tarantula {
 		//全てのステートメントのsuspiciousを計算
 		for(TStatement tst:tsHolder.getList()){
 			tst.calcSuspicious(passedFiles.length, failedFiles.length);
+			//tst.calcOchiai(passedFiles.length, failedFiles.length);
+			//tst.calcER5b(passedFiles.length,failedFiles.length);
 		}
 		tsHolder.sort();
 		
