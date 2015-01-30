@@ -85,10 +85,7 @@ public class PPDebugger{
 				}else{
 					prob = 0;
 					for(DataDependencySet dds: failedSt.getDataDependencySets()){
-						double current = failedSt.getProb(dds)- passedSt.getProb(dds);
-						if(current < 0){
-							current =0;
-						}
+						double current = failedSt.getProb(dds)/(failedSt.getProb(dds) + passedSt.getProb(dds));
 						prob = Math.max(prob, current);
 					}
 				}
