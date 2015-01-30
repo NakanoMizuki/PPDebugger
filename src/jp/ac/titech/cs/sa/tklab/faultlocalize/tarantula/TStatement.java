@@ -48,6 +48,14 @@ class TStatement{
 		double passedRate = (double)passedCount / (double)numPassed;
 		suspicious = failedRate / (passedRate + failedRate);
 	}
+	
+	void calcOchiai(int numPassed,int numFailed){
+		suspicious = (double) failedCount / Math.sqrt(numFailed * (failedCount+passedCount));
+	}
+	
+	void calcER5b(int numPassed,int numFailed){
+		suspicious = (double)failedCount / (double) (numFailed + numPassed);
+	}
 
 	
 	@Override
