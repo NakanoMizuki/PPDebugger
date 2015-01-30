@@ -48,6 +48,7 @@ public class Tarantula {
 			tst.calcSuspicious(passedFiles.length, failedFiles.length);
 			//tst.calcOchiai(passedFiles.length, failedFiles.length);
 			//tst.calcER5b(passedFiles.length,failedFiles.length);
+			//tst.calcER1a(passedFiles.length,failedFiles.length);
 		}
 		tsHolder.sort();
 		
