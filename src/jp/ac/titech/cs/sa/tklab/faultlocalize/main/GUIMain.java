@@ -33,7 +33,7 @@ public class GUIMain {
 		
 		try {
 			ppdebugger.learn(passedFiles,failedFiles);
-			ppdebugger.printAllRanking(out);
+			ppdebugger.printLearnedModel(out);
 			Result result = ppdebugger.createResult();
 			out.println(result.toString());
 			out.flush();

@@ -41,6 +41,10 @@ public class StatementState implements Comparable<StatementState> {
 		return (double) countMap.get(content)/executedCount;
 	}
 	
+	public int getExecutedCount(){
+		return executedCount;
+	}
+	
 	private void addDataDependencySet(DataDependencySet dds){
 		DataDependencySet content = ddsMap.get(dds);
 		if(content != null){

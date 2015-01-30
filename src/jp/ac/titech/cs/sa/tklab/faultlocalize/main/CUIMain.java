@@ -109,7 +109,7 @@ public class CUIMain {
 		ppdebugger.learn(passedFiles,failedFiles);
 		passedFiles = null;
 		failedFiles = null;
-		ppdebugger.printAllRanking(out);
+		ppdebugger.printLearnedModel(out);
 		Result result = ppdebugger.createResult();
 		out.println(result.toString());
 		Valuation valuation = result.getValuation(faults);

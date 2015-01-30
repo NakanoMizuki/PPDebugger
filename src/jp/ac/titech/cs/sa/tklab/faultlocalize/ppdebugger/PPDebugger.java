@@ -28,6 +28,7 @@ public class PPDebugger{
 	private final int hopNum;
 	private final LearnedModel passedModel;
 	private final LearnedModel failedModel;
+	private int numFailed;
 	
 	
 	public PPDebugger(int hopNum){
@@ -37,6 +38,7 @@ public class PPDebugger{
 	}
 	
 	public void learn(File[] passedFiles,File[] failedFiles) throws JAXBException{
+		numFailed = failedFiles.length;
 		learn(passedModel, passedFiles);
 		learn(failedModel, failedFiles);
 	}
@@ -73,15 +75,19 @@ public class PPDebugger{
 		for(StatementState failedSt :failedModel.getStatementStates()){
 			StatementData sd = failedSt.getStatementData();
 			if(NameCreator.isParam(sd.getSourcePath())) continue;
-			StatementState passedSt = passedModel.getStatementState(sd);
 			double prob;
-			if(passedSt == null){
-				prob = 1;
+			if(failedSt.getExecutedCount() != numFailed){		//通過しない失敗実行があった
+				prob =-1.0;
 			}else{
-				prob = 0;
-				for(DataDependencySet dds: failedSt.getDataDependencySets()){
-					double current = failedSt.getProb(dds)/(failedSt.getProb(dds) + passedSt.getProb(dds));
-					prob = Math.max(prob, current);
+				StatementState passedSt = passedModel.getStatementState(sd);
+				if(passedSt == null){		//成功実行で一度も通過していない
+					prob = 1.0;
+				}else{
+					prob = 0;
+					for(DataDependencySet dds: failedSt.getDataDependencySets()){
+						double current = failedSt.getProb(dds) / (failedSt.getProb(dds) + passedSt.getProb(dds));
+						prob = Math.max(prob, current);
+					}
 				}
 			}
 			StatementProb stpb = new StatementProb(sd, prob);
@@ -91,7 +97,10 @@ public class PPDebugger{
 	}
 
 
-	public void printAllRanking(IOut out) {
+	public void printLearnedModel(IOut out) {
+		out.println("passed Model");
 		passedModel.printAllState(out);
+		out.println("failed Model");
+		failedModel.printAllState(out);
 	}
 }
