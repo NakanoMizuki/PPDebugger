@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.Valuation;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.tarantula.Tarantula;
 
@@ -53,13 +54,11 @@ public class TarantulaMain {
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(scoreFile)));
 			int verNum = new File(projectPath + TRACE_DIRNAME).listFiles().length;
 			for(int i=1; i <= verNum; i++){
-				int score = execute(i);
-				if(score == 0){
+				Valuation valuation = execute(i);
+				if(valuation == null){
 					pw.println("v" + i + ": doesn't have fault.");
-				}else if(score == -1){
-					pw.println("v" + i + ": error!");
 				}else{
-					pw.println("v" + i + ": score=" + score);
+					pw.println("v" + i + ": " + valuation.toString());
 				}
 			}
 			pw.flush();
@@ -69,31 +68,30 @@ public class TarantulaMain {
 		}
 	}
 	
-	private int execute(int ver){
+	private Valuation execute(int ver){
 		System.out.println("Ver" + ver + "start");
 		OutToFile out = new OutToFile(projectPath + DIRNAME + "/ver" + ver + "-result.txt");
 		File[] passedFiles = new File(projectPath + TRACE_DIRNAME + "/v" + ver + "/pass").listFiles();
 		File[] failedFiles = new File(projectPath + TRACE_DIRNAME + "/v" + ver + "/fail").listFiles();
 		if(failedFiles.length == 0){
-			return 0;
+			return null;
 		}
 		List<StatementData> faults = ReadFaults.genFaults(projectPath + "faults/v" + ver + ".txt");
 		if(faults == null || faults.isEmpty()){
-			return 0;
+			return null;
 		}
 		
 		try {
 			tarantula.learn(passedFiles, failedFiles);
 			tarantula.printAllRanking(out);
 			out.flush();
-			return tarantula.calcScore(faults);
+			return tarantula.getValuation(faults);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-			
-		return -1;
+		return null;
 	}
 
 }

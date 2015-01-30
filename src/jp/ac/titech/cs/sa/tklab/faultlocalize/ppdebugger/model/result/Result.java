@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.Valuation;
 
 public class Result {
 	private final List<StatementProb> stProbs;
@@ -49,6 +50,44 @@ public class Result {
 			}
 		}
 		return score;
+	}
+	
+	public Valuation getValuation(List<StatementData> faults){
+		int rank=0;
+		int cost=0;
+		for(StatementData fault:faults){
+			Valuation valuation = getValuation(fault);
+			if(valuation == null) return null;
+			rank = Math.max(rank, valuation.getRank());
+			cost = Math.max(cost, valuation.getCost());
+		}
+		return new Valuation(rank, cost);
+	}
+	
+	private Valuation getValuation(StatementData fault){
+		int rank=1,cost=1;
+		double prob = -1;
+		int numSameProb = 0;
+		boolean rankFlag = false;
+		for(int i=0; i < stProbs.size() ; i++ ){
+			StatementProb stProb = stProbs.get(i);
+			if(stProb.getProb() == prob){
+				numSameProb++;
+			}else{
+				if(rankFlag == true){break;}
+				prob = stProb.getProb();
+				rank += numSameProb;
+				numSameProb = 1;
+			}
+			if(stProb.getStatementData().isSame(fault)){
+				rankFlag = true;
+			}
+		}
+		if(rankFlag == true){
+			cost = rank + numSameProb -1;
+			return new Valuation(rank,cost);
+		}
+		return null;
 	}
 	
 	@Override

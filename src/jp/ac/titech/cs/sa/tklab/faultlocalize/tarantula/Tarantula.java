@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 
+
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.Valuation;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.IOut;
 
 /**
@@ -64,12 +66,9 @@ public class Tarantula {
 	public void printAllRanking(IOut out) {
 		printRanking(out,tsHolder.getList().size());
 	}
-
-	public int calcScore(StatementData fault) {
-		return tsHolder.calcScore(fault);
-	}
-	public int calcScore(List<StatementData> faults) {
-		return tsHolder.calcScore(faults);
+	
+	public Valuation getValuation(List<StatementData> faults){
+		return tsHolder.getValuation(faults);
 	}
 
 }

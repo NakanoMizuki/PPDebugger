@@ -10,6 +10,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.Valuation;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.PPDebugger;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
@@ -74,11 +75,11 @@ public class CUIMain {
 			@SuppressWarnings("resource")
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(resultScore)));
 			for(int i=1; i <= verNum; i++){
-				int score = execute(i);
-				if(score == -1){
+				Valuation valuation = execute(i);
+				if(valuation == null){
 					writer.println("v" + i + " : This version doesn't have failed traces or faults.");
 				}else{
-					writer.println("v" + i + " score=" + score);
+					writer.println("v" + i + ": " + valuation.toString());
 				}
 			}
 			writer.flush();
@@ -88,7 +89,7 @@ public class CUIMain {
 		}
 	}
 	
-	private int execute(int ver) throws JAXBException{
+	private Valuation execute(int ver) throws JAXBException{
 		System.out.println("Ver" + ver + " start");
 		File[] passedFiles = new File(tracePath + "/v" + ver + "/pass").listFiles();
 		File[] failedFiles = new File(tracePath + "/v" + ver + "/fail").listFiles();
@@ -96,13 +97,13 @@ public class CUIMain {
 		if(failedFiles.length == 0){
 			System.out.println("This version doesn't have failed traces.");
 			out.println("This version doesn't have failed traces.");
-			return -1;
+			return null;
 		}
 		List<StatementData> faults = ReadFaults.genFaults(faultPath + "/v" + ver + ".txt");
 		if(faults == null || faults.isEmpty()){
 			System.out.println("This version doesn't have faults.");
 			out.println("This version doesn't have faults.");
-			return -1;
+			return null;
 		}
 		
 		ppdebugger.learn(passedFiles,failedFiles);
@@ -111,10 +112,12 @@ public class CUIMain {
 		ppdebugger.printAllRanking(out);
 		Result result = ppdebugger.createResult();
 		out.println(result.toString());
-		int score = ppdebugger.createScore(result,faults);
-		out.println("Score=" + score);
+		Valuation valuation = result.getValuation(faults);
+		if(valuation != null){
+			out.println(valuation.toString());
+		}
 		out.flush();
-		return score;
+		return valuation;
 	}
 	
 }

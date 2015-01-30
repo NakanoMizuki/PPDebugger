@@ -89,11 +89,7 @@ public class PPDebugger{
 		}
 		return new Result(list);
 	}
-	
-	public int createScore(Result result,List<StatementData> faults){
-		int score = result.calcScore(faults);
-		return score;
-	}
+
 
 	public void printAllRanking(IOut out) {
 		passedModel.printAllState(out);
