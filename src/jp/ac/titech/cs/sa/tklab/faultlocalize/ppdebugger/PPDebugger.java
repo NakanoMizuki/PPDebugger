@@ -98,9 +98,13 @@ public class PPDebugger{
 
 
 	public void printLearnedModel(IOut out) {
-		out.println("passed Model");
+		out.println("-------passed Model-------");
 		passedModel.printAllState(out);
-		out.println("failed Model");
+		out.println("----------");
+		out.println("");
+		out.println("-------failed Model-------");
 		failedModel.printAllState(out);
+		out.println("----------");
+		out.println("");
 	}
 }
