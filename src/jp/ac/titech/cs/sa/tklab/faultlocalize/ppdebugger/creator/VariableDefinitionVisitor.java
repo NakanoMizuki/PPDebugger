@@ -8,11 +8,11 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.Variabl
 
 class VariableDefinitionVisitor {
 	static void create(ExecutionModel em,VariableDefinition def,Scope scope){
+		StatementDataFactory factory = StatementDataFactory.getInstance();
+		em.addStatementData(factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread()));
 		if(isSkip(def)) return;
 		Variable variable = new Variable(NameCreator.createVariableName(def, scope),def);
 		em.addVariable(variable);
-		StatementDataFactory factory = StatementDataFactory.getInstance();
-		em.addStatementData(factory.genStatementData(def.getSourcePath(),def.getLineNumber(),def.getThread()));
 	}
 	
 	/**

@@ -14,21 +14,20 @@ import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.execution.LineVar
 
 public class VariableReferenceVisitor {
 	static void create(ExecutionModel em,VariableReference ref,Scope scope,LineVariable refLine,LineVariable argsLine){
-		if(isSkip(ref)) return;
-		
 		StatementDataFactory sdFactory = StatementDataFactory.getInstance();
-		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		StatementData currentSd = sdFactory.genStatementData(ref.getSourcePath(),ref.getLineNumber(),ref.getThread());
+		em.addStatementData(currentSd);
+		
+		if(isSkip(ref)) return;
+
+		DataDependencyFactory ddFactory = DataDependencyFactory.getInstance();
 		String varName = NameCreator.createVariableName(ref, scope);
 		if(em.getVariable(varName) == null){		//メソッドの引数などは定義なしに参照され得る
-			em.addStatementData(currentSd);
 			return;
 		}
-		
 		//最後の定義情報から依存元のステートメントを得る
 		VariableDefinition vd = em.getVariable(varName).getLatestDefinition();
 		StatementData fromSd = sdFactory.genStatementData(vd.getSourcePath(),vd.getLineNumber(),vd.getThread());
-		
 		
 		//データ依存を作成
 		DataDependency dd = ddFactory.genDataDependency(NameCreator.createVariableName(ref, scope),scope.getTreeNode(),fromSd);
