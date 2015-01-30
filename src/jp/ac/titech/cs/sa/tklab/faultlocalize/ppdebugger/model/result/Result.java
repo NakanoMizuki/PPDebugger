@@ -93,7 +93,7 @@ public class Result {
 	@Override
 	public String toString(){
 		String sep = System.lineSeparator();
-		String str = "Result----------" + sep;
+		String str = "-------Result-------" + sep;
 		for(int i=0; i < stProbs.size(); i ++){
 			StatementProb stProb = stProbs.get(i);
 			str += (i+1) + ":\t" + stProb.toString() + sep;

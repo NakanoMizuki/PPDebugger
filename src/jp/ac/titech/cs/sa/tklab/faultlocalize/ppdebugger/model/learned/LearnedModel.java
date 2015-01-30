@@ -60,7 +60,7 @@ public class LearnedModel {
 	public void printAllState(IOut out){
 		Collections.sort(statementStates);
 		
-		out.println("learned from " + numCase + "files)  ----------");
+		out.println("learned from " + numCase + "files");
 		for(StatementState ss : statementStates){
 			ss.printState(out);
 		}
