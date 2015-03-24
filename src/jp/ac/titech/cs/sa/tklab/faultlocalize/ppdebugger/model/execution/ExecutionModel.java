@@ -21,13 +21,10 @@ public class ExecutionModel {
 		vs = new VariableSet();
 	}
 	
-	public void setStatements(List<Statement> statements){
-		this.statements = statements;
-	}
-	
 	public List<Statement> getStatements(){
 		return statements;
 	}
+	
 	public Statement getStatement(StatementData sd){
 		for(Statement st :statements){
 			if(st.getStatementData().equals(sd)){

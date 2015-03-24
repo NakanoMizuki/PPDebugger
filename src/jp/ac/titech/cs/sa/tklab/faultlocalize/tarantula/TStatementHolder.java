@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.Valuation;
 
 /**
  * 
@@ -48,32 +49,43 @@ class TStatementHolder{
 		Collections.sort(list,new TStatementComparator());
 	}
 	
-	int calcScore(StatementData fault){
-		int score = 0;
-		double suspicious = -1;
-		int numSameSuspicious = 1;
-		for(TStatement tst :list){
-			if(suspicious != tst.getSuspicious()){
-				score += numSameSuspicious;
-				suspicious = tst.getSuspicious();
-				numSameSuspicious = 1;
-			}else{
-				numSameSuspicious ++;
-			}
-			if(tst.getStatementData().isSame(fault)){
-				return score;
-			}
+	
+	public Valuation getValuation(List<StatementData> faults){
+		int rank=0;
+		int cost=0;
+		for(StatementData fault:faults){
+			Valuation valuation = getValuation(fault);
+			if(valuation == null) return null;
+			rank = Math.max(rank, valuation.getRank());
+			cost = Math.max(cost, valuation.getCost());
 		}
-		return -1;
+		return new Valuation(rank, cost);
 	}
 	
-	int calcScore(List<StatementData> faults){
-		int score=0;
-		for(StatementData sd:faults){
-			int tmp =  calcScore(sd);
-			if(tmp == -1) return -1;
-			score = Math.max(score,tmp);
+	private Valuation getValuation(StatementData fault){
+		int rank=1,cost=1;
+		double sus = -1;
+		int numSameProb = 0;
+		boolean rankFlag = false;
+		for(TStatement tst : list){
+			if(tst.getSuspicious() == sus){
+				numSameProb++;
+			}else{
+				if(rankFlag == true){
+					break;
+				}
+				sus = tst.getSuspicious();
+				rank += numSameProb;
+				numSameProb = 1;
+			}
+			if(tst.getStatementData().isSame(fault)){
+				rankFlag = true;
+			}
 		}
-		return score;
+		if(rankFlag == true){
+			cost = rank + numSameProb -1;
+			return new Valuation(rank,cost);
+		}
+		return null;
 	}
 }

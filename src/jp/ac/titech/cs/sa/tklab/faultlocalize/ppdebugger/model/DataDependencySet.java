@@ -92,6 +92,7 @@ public class DataDependencySet implements Comparable<DataDependencySet>{
 		sd = newsd;
 		eventNumber = 0;
 		scope = null;
+		sd = StatementDataFactory.getInstance().genStatementData(sd.getSourcePath(),sd.getLineNumber());
 	}
 	
 	/**

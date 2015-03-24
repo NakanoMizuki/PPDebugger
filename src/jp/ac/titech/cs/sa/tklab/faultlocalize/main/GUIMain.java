@@ -32,11 +32,10 @@ public class GUIMain {
 		PPDebugger ppdebugger = new PPDebugger(HOPNUM);
 		
 		try {
-			ppdebugger.learn(passedFiles);
-			ppdebugger.printAllRanking(out);
-			for(Result result: ppdebugger.createResults(failedFiles)){
-				out.println(result.toString());
-			}
+			ppdebugger.learn(passedFiles,failedFiles);
+			ppdebugger.printLearnedModel(out);
+			Result result = ppdebugger.createResult();
+			out.println(result.toString());
 			out.flush();
 			System.out.println("end.");
 			System.out.println("Write to" + out.getFileName());

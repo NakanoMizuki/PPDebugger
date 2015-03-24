@@ -36,6 +36,9 @@ public class StatementDataFactory {
 		}
 		
 	}
+	public StatementData genStatementData(String sourcePath,int lineNumber){
+		return genStatementData(sourcePath, lineNumber,null);
+	}
 	public StatementData genStatementData(String sourcePath,String lineNumber){
 		return genStatementData(sourcePath,lineNumber,null);
 	}

@@ -53,6 +53,17 @@ class TStatement{
 		suspicious = (double) failedCount / Math.sqrt(numFailed * (failedCount+passedCount));
 	}
 	
+<<<<<<< HEAD
+=======
+	void calcER1a(int numPassed,int numFailed){
+		if(numFailed == failedCount){
+			suspicious = numPassed - passedCount;
+		}else{
+			suspicious = -1;
+		}
+	}
+	
+>>>>>>> multiFailed
 	void calcER5b(int numPassed,int numFailed){
 		suspicious = (double)failedCount / (double) (numFailed + numPassed);
 	}

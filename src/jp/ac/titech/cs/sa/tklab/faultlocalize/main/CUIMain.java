@@ -10,10 +10,10 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import jp.ac.titech.cs.sa.tklab.faultlocalize.StatementData;
+import jp.ac.titech.cs.sa.tklab.faultlocalize.Valuation;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.out.OutToFile;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.PPDebugger;
 import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Result;
-import jp.ac.titech.cs.sa.tklab.faultlocalize.ppdebugger.model.result.Score;
 
 /**
  * 
@@ -75,11 +75,11 @@ public class CUIMain {
 			@SuppressWarnings("resource")
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(resultScore)));
 			for(int i=1; i <= verNum; i++){
-				Score score = execute(i);
-				if(score == null){
+				Valuation valuation = execute(i);
+				if(valuation == null){
 					writer.println("v" + i + " : This version doesn't have failed traces or faults.");
 				}else{
-					writer.println("v" + i + " : " + score.toString());
+					writer.println("v" + i + ": " + valuation.toString());
 				}
 			}
 			writer.flush();
@@ -89,7 +89,7 @@ public class CUIMain {
 		}
 	}
 	
-	private Score execute(int ver) throws JAXBException{
+	private Valuation execute(int ver) throws JAXBException{
 		System.out.println("Ver" + ver + " start");
 		File[] passedFiles = new File(tracePath + "/v" + ver + "/pass").listFiles();
 		File[] failedFiles = new File(tracePath + "/v" + ver + "/fail").listFiles();
@@ -106,35 +106,18 @@ public class CUIMain {
 			return null;
 		}
 		
-		ppdebugger.learn(passedFiles);
+		ppdebugger.learn(passedFiles,failedFiles);
 		passedFiles = null;
-		ppdebugger.printAllRanking(out);
-
-		
-		out.println(failedFiles.length + "failedFiles----------" );
-		int max=0,min=Integer.MAX_VALUE,sum=0;
-		boolean flag=false;
-		for(Result result: ppdebugger.createResults(failedFiles)){
-			out.println(result.toString());
-			int score = result.calcScore(faults);
-			if(score != -1){
-				max = Math.max(max, score);
-				min = Math.min(min, score);
-				sum += score;
-			}else{
-				flag = true;
-			}
+		failedFiles = null;
+		ppdebugger.printLearnedModel(out);
+		Result result = ppdebugger.createResult();
+		out.println(result.toString());
+		Valuation valuation = result.getValuation(faults);
+		if(valuation != null){
+			out.println(valuation.toString());
 		}
-		Score score;
-		if(flag == true){
-			score =  new Score(max, min);
-		}else{
-			double avg = (double)sum / failedFiles.length;
-			score= new Score(max, min, avg);
-		}
-		out.println("Score:" + score.toString());
 		out.flush();
-		return score;
+		return valuation;
 	}
 	
 }

@@ -27,7 +27,11 @@ public class Compressor {
 				Set<DataDependency> ddSet = new HashSet<DataDependency>();
 				for(DataDependency dd : dds.getSet()){
 					StatementData oldsd = dd.getStatementData();
+<<<<<<< HEAD
 					StatementData newsd = sdFactory.genStatementData(oldsd.getSourcePath(),oldsd.getLineNumber());	//Threadは無視
+=======
+					StatementData newsd = sdFactory.genStatementData(oldsd.getSourcePath(),oldsd.getLineNumber());		//スレッドは無視
+>>>>>>> multiFailed
 					DataDependency newdd = ddFactory.genDataDependency(NameCreator.removeObjectID(dd.getVarName()), null,newsd);	//スコープを考慮しないインスタンスを作る
 					ddSet.add(newdd);
 				}
